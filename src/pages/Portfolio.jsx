@@ -174,7 +174,7 @@ const Portfolio = () => {
                   </div>
 
                   <motion.p
-                    className="text-gray-300 text-sm leading-relaxed mb-6 h-20 overflow-hidden"
+                    className="text-gray-300 text-xs leading-tight mb-6 line-clamp-3 overflow-hidden"
                     layoutId={`description-${project.id}`}
                   >
                     {project.description}

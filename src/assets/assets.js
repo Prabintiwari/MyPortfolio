@@ -1,6 +1,7 @@
 import { Code, Palette, Smartphone, Globe, Zap } from "lucide-react";
 import HomeImg from "./HomeImg.png";
 import MyCV from "./MyCV.pdf";
+import movieFinder from "./MovieFinder1.png";
 
 export const image = {
   HomeImg,
@@ -39,16 +40,15 @@ export const services = [
 export const projects = [
   {
     id: 1,
-    title: "React E-Commerce Store",
+    title: "React MovieFinder",
     description:
-      "Modern e-commerce frontend with shopping cart, product filtering, user authentication, and responsive design. Features smooth animations and optimized performance.",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&crop=entropy&auto=format",
+      "A responsive React movie search app with user authentication, custom hooks, and real-time search capabilities. Built with Tailwind CSS and optimized for performance.",
+    image: movieFinder,
     category: "react",
-    tags: ["React", "Redux", "Tailwind CSS", "Framer Motion"],
-    liveDemo: "https://react-ecommerce-demo.vercel.app",
-    github: "https://github.com/yourusername/react-ecommerce",
-    date: "2024",
+    tags: ["React", "Tailwind CSS", "Custon Hooks"],
+    liveDemo: "https://moviefinder2025.netlify.app/",
+    github: "https://github.com/Prabintiwari/MovieFinder",
+    date: "2025",
   },
   {
     id: 2,
