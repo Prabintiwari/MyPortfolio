@@ -27,7 +27,7 @@ const CircularProgress = () => {
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0.5 }}
-      whileHover={{ scale: 1.1 }}
+      whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.95 }}
     >
       <div className="w-full h-full rounded-full flex flex-col items-center justify-center relative">

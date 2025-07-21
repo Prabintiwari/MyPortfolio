@@ -1,19 +1,11 @@
 import React from "react";
 import { image } from "../assets/assets";
-import {  motion } from "motion/react";
-import { Github, Linkedin, Mail, Download } from "lucide-react";
+import { motion } from "motion/react";
+import { Download } from "lucide-react";
+import { social } from "../assets/assets";
+import SocialIcon from "../components/SocialIcon";
 
 const Home = () => {
-  const social = [
-    { icon: Github, href: "https://github.com/Prabintiwari", label: "GitHub" },
-    {
-      icon: Linkedin,
-      href: "https://www.linkedin.com/in/prabin-tiwari-61a95a2a2/",
-      label: "LinkedIn",
-    },
-    { icon: Mail, href: "#contact", label: "Email" },
-  ];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -117,7 +109,7 @@ const Home = () => {
                 Prabin Tiwari
               </span>
               <br />
-              <span className="text-slate-300">A Web Developer</span>
+              <span className="text-slate-300">A Web Developer (Frontend)</span>
             </motion.h1>
 
             {/* Description */}
@@ -200,25 +192,7 @@ const Home = () => {
               animate="visible"
               className="flex gap-4 justify-center lg:justify-start"
             >
-              {social.map((item, index) => (
-                <div
-                  key={index}
-                  className="relative flex flex-col items-center group"
-                >
-                  <motion.a
-                    href={item.href}
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-3 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow text-slate-600 hover:text-blue-600 cursor-pointer"
-                    aria-label={item.label}
-                  >
-                    <item.icon size={20} />
-                  </motion.a>
-                  <span className="absolute left-1/2 -translate-x-1/2 -bottom-6 invisible group-hover:visible group-hover:bottom-14 text-xs text-center transition-all duration-300 ease-out opacity-0 group-hover:opacity-100 pointer-events-none z-20">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
+              <SocialIcon />
             </motion.div>
           </div>
 

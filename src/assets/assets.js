@@ -1,13 +1,41 @@
-import { Code, Palette, Smartphone, Globe, Zap } from "lucide-react";
+import {
+  Code,
+  Smartphone,
+  Globe,
+  Zap,
+  Github,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Target,
+  Heart,
+  BookOpen,
+  Palette,
+} from "lucide-react";
 import HomeImg from "./HomeImg.png";
 import MyCV from "./MyCV.pdf";
 import movieFinder from "./MovieFinder1.png";
-import SkillShikshya from "./SkillShikshya.png"
+import SkillShikshya from "./SkillShikshya.png";
 
 export const image = {
   HomeImg,
   MyCV,
 };
+export const social = [
+  {
+    icon: Github,
+    href: "https://github.com/Prabintiwari",
+    label: "GitHub",
+    color: "hover:bg-purple-500",
+  },
+  {
+    icon: Linkedin,
+    href: "https://www.linkedin.com/in/prabin-tiwari-61a95a2a2/",
+    label: "LinkedIn",
+    color: "hover:bg-blue-500",
+  },
+];
 export const services = [
   {
     icon: Code,
@@ -56,9 +84,9 @@ export const projects = [
     title: "Skill Shikshya Landing Page",
     description:
       "A clean and responsive landing page for Skill Shikshya, built using only HTML, Tailwind CSS, and Vanilla JS. It showcases smooth scrolling, modern layout, and component-based structure without any framework.",
-    image:SkillShikshya,
+    image: SkillShikshya,
     category: "vanilla",
-    tags: ["html", "tailwind css", "js"],
+    tags: ["html", "tailwind css", "Javascript"],
     liveDemo: "https://assignmentskillshikshya.netlify.app/",
     github: "https://github.com/Prabintiwari/Assignment_02",
     date: "2025",
@@ -71,9 +99,91 @@ export const projects = [
     image:
       "https://images.unsplash.com/photo-1486312338219-ce68e2c6f44d?w=600&h=400&fit=crop&crop=entropy&auto=format",
     category: "react",
-    tags: ["Next.js", "TypeScript", "Markdown", "Vercel"],
+    tags: ["React.js", "Javascript"],
     liveDemo: "https://nextjs-blog-platform.vercel.app",
     github: "https://github.com/yourusername/nextjs-blog",
-    date: "2024",
+    date: "2025",
+  },
+];
+export const contactMethods = [
+  {
+    icon: Mail,
+    title: "Email",
+    value: "prabintiwari964@gmail.com",
+    description: "Send me an email anytime",
+    gradient: "from-blue-500 to-cyan-500",
+    delay: 0.1,
+  },
+  {
+    icon: Phone,
+    title: "Phone",
+    value: "+977 9815027619",
+    description: "Call me for urgent matters",
+    gradient: "from-green-500 to-teal-500",
+    delay: 0.2,
+  },
+  {
+    icon: MapPin,
+    title: "Location",
+    value: "Kathmandu, Nepal",
+    description: "Available for local meetups",
+    gradient: "from-red-500 to-pink-500",
+    delay: 0.3,
+  },
+];
+export const skills = [
+  {
+    name: "CSS/TailwindCSS",
+    level: 65,
+    icon: Palette,
+    color: "from-pink-500 to-purple-500",
+  },
+  {
+    name: "JavaScript",
+    level: 70,
+    icon: Zap,
+    color: "from-yellow-500 to-orange-500",
+  },
+  {
+    name: "React",
+    level: 60,
+    icon: Code,
+    color: "from-blue-500 to-cyan-500",
+  },
+  {
+    name: "Node.js",
+    level: 20,
+    icon: BookOpen,
+    color: "from-green-500 to-teal-500",
+  },
+  {
+    name: "TypeScript",
+    level: 10,
+    icon: Target,
+    color: "from-indigo-500 to-blue-500",
+  },
+];
+export const experiences = [
+  {
+    title: "Frontend Developer (Self Projects)",
+    company: "Personal Practice",
+    period: "2024 - Present",
+    description:
+      "Built multiple frontend projects using React, Tailwind CSS, and JavaScript, focusing on responsive design and user experience.",
+  },
+  {
+    title: "Frontend Development Trainee",
+    company: "Skill Shikshya (Diploma Program)",
+    period: "2025 - Present",
+    description:
+      "Currently enrolled in a diploma course focused on frontend development, learning HTML, CSS, JavaScript, and React through hands-on projects.",
+  },
+
+  {
+    title: "Open Source Contributor (Beginner Level)",
+    company: "GitHub",
+    period: "2024",
+    description:
+      "Contributed to small fixes in frontend projects on GitHub, improving UI bugs and adding small features. Focused on learning collaborative workflows using Git and GitHub.",
   },
 ];
