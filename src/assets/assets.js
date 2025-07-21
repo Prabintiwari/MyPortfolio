@@ -2,6 +2,7 @@ import { Code, Palette, Smartphone, Globe, Zap } from "lucide-react";
 import HomeImg from "./HomeImg.png";
 import MyCV from "./MyCV.pdf";
 import movieFinder from "./MovieFinder1.png";
+import SkillShikshya from "./SkillShikshya.png"
 
 export const image = {
   HomeImg,
@@ -52,16 +53,15 @@ export const projects = [
   },
   {
     id: 2,
-    title: "Vue.js Dashboard",
+    title: "Skill Shikshya Landing Page",
     description:
-      "Interactive admin dashboard with real-time charts, data visualization, and dark/light theme toggle. Built with Vue 3 composition API.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&crop=entropy&auto=format",
+      "A clean and responsive landing page for Skill Shikshya, built using only HTML, Tailwind CSS, and Vanilla JS. It showcases smooth scrolling, modern layout, and component-based structure without any framework.",
+    image:SkillShikshya,
     category: "vanilla",
-    tags: ["Vue.js", "Chart.js", "Vuetify", "Pinia"],
-    liveDemo: "https://vue-dashboard-demo.netlify.app",
-    github: "https://github.com/yourusername/vue-dashboard",
-    date: "2024",
+    tags: ["html", "tailwind css", "js"],
+    liveDemo: "https://assignmentskillshikshya.netlify.app/",
+    github: "https://github.com/Prabintiwari/Assignment_02",
+    date: "2025",
   },
   {
     id: 3,
