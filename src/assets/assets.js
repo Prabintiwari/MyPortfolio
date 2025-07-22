@@ -17,6 +17,7 @@ import HomeImg from "./HomeImg.png";
 import MyCV from "./MyCV.pdf";
 import movieFinder from "./MovieFinder1.png";
 import SkillShikshya from "./SkillShikshya.png";
+import WeatherApp from "./WeatherApp.png";
 
 export const image = {
   HomeImg,
@@ -93,15 +94,14 @@ export const projects = [
   },
   {
     id: 3,
-    title: "Blog Platform",
+    title: "Weather App",
     description:
-      "SEO-optimized blog platform with markdown support, dynamic routing, and server-side rendering. Includes search functionality and category filtering.",
-    image:
-      "https://images.unsplash.com/photo-1486312338219-ce68e2c6f44d?w=600&h=400&fit=crop&crop=entropy&auto=format",
+      "A sleek weather forecasting app built using React and OpenWeather API. It provides real-time weather updates with features like location-based search, temperature unit toggle, and responsive UI with Tailwind CSS.",
+    image: WeatherApp, 
     category: "react",
-    tags: ["React.js", "Javascript"],
-    liveDemo: "https://nextjs-blog-platform.vercel.app",
-    github: "https://github.com/yourusername/nextjs-blog",
+    tags: ["React", "Tailwind CSS", "OpenWeather API"],
+    liveDemo: "https://weatherapp255.netlify.app/", 
+    github: "https://github.com/Prabintiwari/WeatherApp", 
     date: "2025",
   },
 ];
