@@ -113,7 +113,7 @@ const Portfolio = () => {
         </motion.div>
 
         {/* Projects Grid */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div
             key={filter}
             variants={containerVariants}
@@ -135,7 +135,6 @@ const Portfolio = () => {
                     type: "spring",
                     stiffness: 400,
                     damping: 25,
-                    duration: 0.3,
                   },
                 }}
                 whileTap={{ scale: 0.98, duration: 0.3 }}
@@ -245,13 +244,14 @@ const Portfolio = () => {
               bring your ideas to life!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
+              <motion.a
+              href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 shadow-lg"
               >
                 Let's Collaborate
-              </motion.button>
+              </motion.a>
               <motion.a
                 href={image.MyCV}
                 download

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Zap, Star, MessageCircle } from "lucide-react";
 import { contactMethods } from "../assets/assets";
-import SocialIcon from "../components/SocialIcon";
+import SocialIcon from "../components/common/SocialIcon";
+import Input from "../components/common/Input";
 
 const Contact = () => {
   const initialFormData = {
@@ -14,6 +15,7 @@ const Contact = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     setFormData({
@@ -24,12 +26,26 @@ const Contact = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    setIsSubmitted(true);
+    setError("");
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    setTimeout(() => setIsSubmitted(false), 1500);
-    setFormData(initialFormData);
-    setIsLoading(false);
-    
+    try {
+      if (
+        !formData.name ||
+        !formData.email ||
+        !formData.subject ||
+        !formData.message
+      ) {
+        throw "All fields are required for sending message";
+      }
+      setTimeout(() => setIsSubmitted(false), 1500);
+      setFormData(initialFormData);
+      setIsSubmitted(true);
+      setError("");
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const containerVariants = {
@@ -43,9 +59,6 @@ const Contact = () => {
       },
     },
   };
-
-  const inputClassName =
-    "w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-[#8b5cf6] transition-all backdrop-blur-sm";
 
   return (
     <section id="contact" className="py-20 relative overflow-hidden">
@@ -155,7 +168,7 @@ const Contact = () => {
           </motion.div>
 
           {/* Contact Form */}
-          <motion.div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+          <motion.div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 border border-white/10 relative">
             <motion.h2
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -167,61 +180,39 @@ const Contact = () => {
 
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
-                {["name", "email"].map((field, index) => (
-                  <motion.div
-                    key={field}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                  >
-                    <motion.input
-                      type={field === "email" ? "email" : "text"}
-                      name={field}
-                      value={formData[field]}
-                      onChange={handleInputChange}
-                      placeholder={`Your ${
-                        field.charAt(0).toUpperCase() + field.slice(1)
-                      }`}
-                      className={`${inputClassName}`}
-                      whileFocus={{ scale: 1.02 }}
-                    />
-                  </motion.div>
-                ))}
+                <Input
+                  name="name"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="Your Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
               </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-              >
-                <motion.input
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleInputChange}
-                  placeholder="Subject"
-                  className={`${inputClassName}`}
-                  whileFocus={{ scale: 1.02 }}
-                />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.7 }}
-              >
-                <motion.textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  placeholder="Your Message"
-                  rows="5"
-                  className={`${inputClassName}`}
-                  whileFocus={{ scale: 1.02 }}
-                />
-              </motion.div>
+              <Input
+                name="subject"
+                placeholder="Subject"
+                value={formData.subject}
+                onChange={handleInputChange}
+              />
+              <Input
+                name="message"
+                placeholder="Your Message"
+                rows="5"
+                value={formData.message}
+                onChange={handleInputChange}
+              />
+              {error && (
+                <p className="w-full absolute left-1/2 -translate-x-1/2 bottom-16 md:bottom-20 text-red-500 text-sm text-center">
+                  {error}
+                </p>
+              )}
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -231,7 +222,6 @@ const Contact = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSubmit}
-                mailto="prabintiwari964@gmail.com"
                 disabled={isSubmitted}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 shadow-lg shadow-purple-500/25"
               >

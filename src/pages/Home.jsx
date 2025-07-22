@@ -2,8 +2,7 @@ import React from "react";
 import { image } from "../assets/assets";
 import { motion } from "motion/react";
 import { Download } from "lucide-react";
-import { social } from "../assets/assets";
-import SocialIcon from "../components/SocialIcon";
+import SocialIcon from "../components/common/SocialIcon";
 
 const Home = () => {
   const containerVariants = {

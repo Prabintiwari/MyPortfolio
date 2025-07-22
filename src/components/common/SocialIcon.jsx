@@ -1,5 +1,5 @@
 import React from "react";
-import { social } from "../assets/assets";
+import { social } from "../../assets/assets";
 import { motion } from "framer-motion";
 
 const SocialIcon = () => {

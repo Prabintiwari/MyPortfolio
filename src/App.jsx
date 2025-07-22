@@ -11,13 +11,13 @@ const App = () => {
     <div className="bg-gray-900 text-gray-100">
       <CircularProgress />
       <Navbar />
-      <Home />
       <main className="">
         {" "}
+        <Home />
+        <About />
         <Services />
         <Portfolio />
         <Contact />
-        <About />
       </main>
     </div>
   );
