@@ -8,10 +8,10 @@ const Navbar = () => {
 
   const navItems = [
     { name: "Home", href: "#home", icon: Home },
+    { name: "About", href: "#about", icon: User },
     { name: "Services", href: "#services", icon: FileText },
     { name: "Portfolio", href: "#portfolio", icon: Briefcase },
     { name: "Contact", href: "#contact", icon: Mail },
-    { name: "About", href: "#about", icon: User },
   ];
 
   const handleNavClick = (sectionName) => {
