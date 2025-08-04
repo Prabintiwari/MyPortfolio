@@ -158,7 +158,7 @@ export const skills = [
   },
   {
     name: "TypeScript",
-    level: 10,
+    level: 50,
     icon: Target,
     color: "from-indigo-500 to-blue-500",
   },

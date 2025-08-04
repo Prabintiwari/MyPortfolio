@@ -112,7 +112,7 @@ const Contact = () => {
               </motion.h2>
 
               <div className="space-y-6">
-                {contactMethods.map((method, index) => (
+                {contactMethods.map((method) => (
                   <motion.div
                     key={method.title}
                     initial={{ opacity: 0, x: -50 }}

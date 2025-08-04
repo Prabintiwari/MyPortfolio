@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { easeInOut, motion } from "framer-motion";
+import {  motion } from "framer-motion";
 import { skills, experiences } from "../assets/assets";
 import {
   User,
@@ -205,7 +205,7 @@ const About = () => {
             viewport={{ once: true }}
             className="grid md:grid-cols-2 lg:grid-cols-3 items-center mx-auto w-full gap-6 px-6"
           >
-            {skills.map((skill, index) => (
+            {skills.map((skill) => (
               <motion.div
                 key={skill.name}
                 variants={itemVariants}
