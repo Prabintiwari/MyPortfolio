@@ -18,6 +18,7 @@ import MyCV from "./MyCV.pdf";
 import movieFinder from "./MovieFinder1.png";
 import SkillShikshya from "./SkillShikshya.png";
 import WeatherApp from "./WeatherApp.png";
+import NepalShop from "./NepalShop.png"
 
 export const image = {
   HomeImg,
@@ -102,6 +103,18 @@ export const projects = [
     tags: ["React", "Tailwind CSS", "OpenWeather API"],
     liveDemo: "https://weatherapp255.netlify.app/", 
     github: "https://github.com/Prabintiwari/WeatherApp", 
+    date: "2025",
+  },
+  {
+    id: 4,
+    title: "NepalShop E-Commerce Platform",
+    description:
+      "A modern e-commerce platform built with React, TypeScript, and Vite. Features include product catalog, shopping cart, user authentication, and a fully responsive UI styled with Tailwind CSS.",
+    image: NepalShop, 
+    category: "react",
+    tags: ["React", "Tailwind CSS", "Typescript"],
+    liveDemo: "https://nepalshop.netlify.app/", 
+    github: "https://github.com/Prabintiwari/NepalShop", 
     date: "2025",
   },
 ];
