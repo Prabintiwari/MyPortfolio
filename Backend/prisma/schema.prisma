@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model (Admin authentication)
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Projects Model
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  image       String // URL to image
+  category    String // react, vanilla, fullstack, etc.
+  tags        String[] // Array of tags
+  liveDemo    String?
+  github      String?
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  date        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("projects")
+}
+
+// Services Model
+model Service {
+  id          String   @id @default(uuid())
+  icon        String // Icon name or class
+  title       String
+  description String   @db.Text
+  features    String[] // Array of features
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("services")
+}
+
+// Skills Model
+model Skill {
+  id        String   @id @default(uuid())
+  name      String
+  level     Int // Percentage (0-100)
+  icon      String // Icon name or class
+  color     String // Gradient color classes
+  category  String   @default("technical") // technical, soft, tools
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("skills")
+}
+
+// Experience Model
+model Experience {
+  id          String   @id @default(uuid())
+  title       String
+  company     String
+  period      String
+  description String   @db.Text
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("experiences")
+}
+
+// Contact Messages Model
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contacts")
+}
+
+// Social Links Model
+model SocialLink {
+  id        String   @id @default(uuid())
+  icon      String // Icon name or class
+  label     String
+  href      String
+  color     String // Hover color class
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("social_links")
+}
+
+// About/Profile Model (Single record)
+model About {
+  id          String   @id @default(uuid())
+  name        String
+  title       String
+  bio         String   @db.Text
+  avatar      String? // URL to avatar image
+  resume      String? // URL to resume PDF
+  location    String?
+  email       String
+  phone       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("about")
+}
+
+// Contact Methods Model
+model ContactMethod {
+  id          String   @id @default(uuid())
+  icon        String
+  title       String
+  value       String
+  description String
+  gradient    String
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("contact_methods")
+}
