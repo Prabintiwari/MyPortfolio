@@ -14,7 +14,7 @@ const Navbar = () => {
     { name: "Contact", href: "#contact", icon: Mail },
   ];
 
-  const handleNavClick = (sectionName) => {
+  const handleNavClick = (sectionName: string) => {
     setActiveSection(sectionName.toLowerCase());
     setIsOpen(false);
   };
@@ -23,7 +23,7 @@ const Navbar = () => {
     open: {
       clipPath: "circle(1200px at calc(100%))",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         damping: 20,
       },
@@ -31,7 +31,7 @@ const Navbar = () => {
     closed: {
       clipPath: "circle(25px at calc(100% - 40px) 30px)",
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 250,
         damping: 35,
       },

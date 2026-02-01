@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {  motion } from "framer-motion";
 import { skills, experiences } from "../assets/assets";
 import {
@@ -8,11 +8,10 @@ import {
   Heart,
   Award,
   Calendar,
-  ArrowRight,
 } from "lucide-react";
 
 const About = () => {
-  const [hoveredSkill, setHoveredSkill] = useState(null);
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -32,11 +31,9 @@ const About = () => {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 120,
         damping: 20,
-        duration: 0.8,
-        ease: "easeInOut",
       },
     },
   };
@@ -105,7 +102,7 @@ const About = () => {
               <motion.div
                 className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg flex items-center justify-center mr-4"
                 whileHover={{ rotate: 10, scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
               >
                 <Lightbulb className="w-6 h-6 text-white" />
               </motion.div>
@@ -134,9 +131,9 @@ const About = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-gray-300 md:text-lg leading-relaxed"
               >
-                I’ve been learning and practicing React, JavaScript, and modern
+                I've been learning and practicing React, JavaScript, and modern
                 CSS frameworks through online courses and personal projects.
-                While I’m just starting out professionally, I enjoy exploring
+                While I'm just starting out professionally, I enjoy exploring
                 new technologies, building side projects, and continuously
                 improving my skills.
               </motion.p>
@@ -212,7 +209,7 @@ const About = () => {
                 whileHover={{
                   y: -8,
                   scale: 1.02,
-                  transition: { type: "spring", stiffness: 400, damping: 25 },
+                  transition: { type: "spring" as const, stiffness: 400, damping: 25 },
                 }}
                 className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer"
                 onMouseEnter={() => setHoveredSkill(skill.name)}
@@ -222,7 +219,7 @@ const About = () => {
                   <motion.div
                     className={`w-12 h-12 bg-gradient-to-r ${skill.color} rounded-lg flex items-center justify-center mr-4`}
                     whileHover={{ rotate: 10, scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
                   >
                     <skill.icon className="w-6 h-6 text-white" />
                   </motion.div>
@@ -290,7 +287,7 @@ const About = () => {
                 variants={itemVariants}
                 whileHover={{
                   y: -10,
-                  transition: { type: "spring", stiffness: 300, damping: 20 },
+                  transition: { type: "spring" as const, stiffness: 300, damping: 20 },
                 }}
                 className="relative group"
               >

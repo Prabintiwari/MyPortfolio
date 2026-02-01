@@ -1,7 +1,16 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const Input = ({ type = "text", name, value, onChange, placeholder, rows }) => {
+interface InputProps {
+  type?: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  placeholder: string;
+  rows?: number;
+}
+
+const Input = ({ type = "text", name, value, onChange, placeholder, rows }: InputProps) => {
   const baseClass =
     "w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-[#8b5cf6] transition-all backdrop-blur-sm";
 
@@ -13,13 +22,12 @@ const Input = ({ type = "text", name, value, onChange, placeholder, rows }) => {
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.6 }}
       >
-        <motion.textarea
+        <textarea
           name={name}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
           rows={rows}
-          whileFocus={{ scale: 1.02 }}
           className={`${baseClass}`}
           required
         />
@@ -33,14 +41,13 @@ const Input = ({ type = "text", name, value, onChange, placeholder, rows }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: 0.6 }}
     >
-      <motion.input
+      <input
         type={type}
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         required
-        whileFocus={{ scale: 1.02 }}
         className={`${baseClass}`}
       />
     </motion.div>

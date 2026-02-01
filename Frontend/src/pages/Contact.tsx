@@ -17,7 +17,7 @@ const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e:any) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -41,7 +41,7 @@ const Contact = () => {
       setFormData(initialFormData);
       setIsSubmitted(true);
       setError("");
-    } catch (error) {
+    } catch (error:any) {
       setError(error);
     } finally {
       setIsLoading(false);
@@ -204,7 +204,7 @@ const Contact = () => {
               <Input
                 name="message"
                 placeholder="Your Message"
-                rows="5"
+                rows={5}
                 value={formData.message}
                 onChange={handleInputChange}
               />
@@ -219,11 +219,10 @@ const Contact = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.8 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleSubmit}
-                disabled={isSubmitted}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 shadow-lg shadow-purple-500/25"
+                whileHover={{ scale: isSubmitted ? 1 : 1.05 }}
+                whileTap={{ scale: isSubmitted ? 1 : 0.95 }}
+                onClick={isSubmitted ? undefined : handleSubmit}
+                className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg shadow-purple-500/25 ${isSubmitted ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (

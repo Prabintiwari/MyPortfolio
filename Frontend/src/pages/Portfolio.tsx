@@ -38,7 +38,7 @@ const Portfolio = () => {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 120,
         damping: 20,
         duration: 0.1,
@@ -137,7 +137,8 @@ const Portfolio = () => {
                     damping: 25,
                   },
                 }}
-                whileTap={{ scale: 0.98, duration: 0.3 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="group bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-white/10"
                 layout
               >
