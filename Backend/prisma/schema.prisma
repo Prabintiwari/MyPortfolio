@@ -4,10 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-// User Model (Admin authentication)
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -20,14 +18,13 @@ model User {
   @@map("users")
 }
 
-// Projects Model
 model Project {
   id          String   @id @default(uuid())
   title       String
-  description String   @db.Text
-  image       String // URL to image
-  category    String // react, vanilla, fullstack, etc.
-  tags        String[] // Array of tags
+  description String
+  image       String
+  category    String
+  tags        String[]
   liveDemo    String?
   github      String?
   featured    Boolean  @default(false)
@@ -39,13 +36,12 @@ model Project {
   @@map("projects")
 }
 
-// Services Model
 model Service {
   id          String   @id @default(uuid())
-  icon        String // Icon name or class
+  icon        String
   title       String
-  description String   @db.Text
-  features    String[] // Array of features
+  description String
+  features    String[]
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -54,14 +50,13 @@ model Service {
   @@map("services")
 }
 
-// Skills Model
 model Skill {
   id        String   @id @default(uuid())
   name      String
-  level     Int // Percentage (0-100)
-  icon      String // Icon name or class
-  color     String // Gradient color classes
-  category  String   @default("technical") // technical, soft, tools
+  level     Int
+  icon      String
+  color     String
+  category  String   @default("technical")
   order     Int      @default(0)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -70,13 +65,12 @@ model Skill {
   @@map("skills")
 }
 
-// Experience Model
 model Experience {
   id          String   @id @default(uuid())
   title       String
   company     String
   period      String
-  description String   @db.Text
+  description String
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -85,14 +79,13 @@ model Experience {
   @@map("experiences")
 }
 
-// Contact Messages Model
 model Contact {
   id        String   @id @default(uuid())
   name      String
   email     String
   phone     String?
   subject   String?
-  message   String   @db.Text
+  message   String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -100,13 +93,12 @@ model Contact {
   @@map("contacts")
 }
 
-// Social Links Model
 model SocialLink {
   id        String   @id @default(uuid())
-  icon      String // Icon name or class
+  icon      String
   label     String
   href      String
-  color     String // Hover color class
+  color     String
   order     Int      @default(0)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -115,24 +107,22 @@ model SocialLink {
   @@map("social_links")
 }
 
-// About/Profile Model (Single record)
 model About {
-  id          String   @id @default(uuid())
-  name        String
-  title       String
-  bio         String   @db.Text
-  avatar      String? // URL to avatar image
-  resume      String? // URL to resume PDF
-  location    String?
-  email       String
-  phone       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  name      String
+  title     String
+  bio       String
+  avatar    String?
+  resume    String?
+  location  String?
+  email     String
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("about")
 }
 
-// Contact Methods Model
 model ContactMethod {
   id          String   @id @default(uuid())
   icon        String
