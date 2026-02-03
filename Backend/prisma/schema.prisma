@@ -4,6 +4,11 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
 }
 
 model User {
@@ -11,7 +16,7 @@ model User {
   email     String   @unique
   password  String
   name      String
-  role      String   @default("admin")
+  role      UserRole   @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
