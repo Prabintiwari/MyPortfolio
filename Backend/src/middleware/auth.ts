@@ -44,7 +44,7 @@ const authenticateToken = (
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    next({ status: 401, success: false, message: "Access token required" });
+    res.status(401).json({ success: false, message: "Access token required" });
     return;
   }
   if (!JWT_SECRET) {
@@ -53,15 +53,14 @@ const authenticateToken = (
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
-      return next({
-        status: 403,
+      return res.status(403).json({
         success: false,
         message: "Invalid or expired token",
       });
     }
     const payload = decoded as JwtPayload;
     req.id = payload.id;
-    req.email=payload.email;
+    req.email = payload.email;
     req.role = payload.role;
     next();
   });
@@ -70,21 +69,22 @@ const authenticateToken = (
 const AdminOnly = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.role) {
-      next({ status: 400, success: false, message: "Authentication required" });
+      res
+        .status(400)
+        .json({ success: false, message: "Authentication required" });
     }
     if (req.role === UserRole.ADMIN) {
       next();
       return;
     }
-    next({
+    res.status(403).json({
       success: false,
-      status: 403,
       message: "You do not have permission to perform this action",
     });
     return;
   } catch (error) {
     console.log(error);
-    next({ success: false, status: 500, message: "Internal server error!" });
+    res.status(500).json({ success: false, message: "Internal server error!" });
   }
 };
 
