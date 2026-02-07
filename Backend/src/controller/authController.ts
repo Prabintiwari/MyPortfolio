@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
-import bcrypt from 'bcryptjs';
-import { AuthRequest, generateToken } from '../middleware/auth';
-import prisma from '../config/prisma';
-
+import { Request, Response } from "express";
+import bcrypt from "bcryptjs";
+import { AuthRequest, generateToken } from "../middleware/auth";
+import prisma from "../config/prisma";
 
 // Login admin
- const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
@@ -13,7 +12,7 @@ import prisma from '../config/prisma';
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide email and password',
+        message: "Please provide email and password",
       });
     }
 
@@ -25,7 +24,7 @@ import prisma from '../config/prisma';
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials',
+        message: "Invalid credentials",
       });
     }
 
@@ -35,7 +34,7 @@ import prisma from '../config/prisma';
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials',
+        message: "Invalid credentials",
       });
     }
 
@@ -44,7 +43,7 @@ import prisma from '../config/prisma';
 
     res.json({
       success: true,
-      message: 'Login successful',
+      message: "Login successful",
       data: {
         user: {
           id: user.id,
@@ -64,7 +63,7 @@ import prisma from '../config/prisma';
 };
 
 // Get current user
- const getCurrentUser = async (req: AuthRequest, res: Response) => {
+const getCurrentUser = async (req: AuthRequest, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.id },
@@ -80,7 +79,7 @@ import prisma from '../config/prisma';
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: "User not found",
       });
     }
 
@@ -96,4 +95,4 @@ import prisma from '../config/prisma';
   }
 };
 
-export {login,getCurrentUser}
+export { login, getCurrentUser };
