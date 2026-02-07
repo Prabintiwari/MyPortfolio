@@ -2,72 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { AuthRequest, generateToken } from '../middleware/auth';
 import prisma from '../config/prisma';
-import { UserRole } from '@prisma/client';
 
-
-// Register new admin user
- const register = async (req: Request, res: Response) => {
-  try {
-    const { email, password, name } = req.body;
-
-    // Validation
-    if (!email || !password || !name) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide all required fields',
-      });
-    }
-
-    // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'User already exists',
-      });
-    }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create user
-    const user = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name,
-        role: UserRole.ADMIN
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-      },
-    });
-
-    // Generate token
-    const token = generateToken(user);
-
-    res.status(201).json({
-      success: true,
-      message: 'User registered successfully',
-      data: {
-        user,
-        token,
-      },
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
 
 // Login admin
  const login = async (req: Request, res: Response) => {
@@ -161,4 +96,4 @@ import { UserRole } from '@prisma/client';
   }
 };
 
-export {register,login,getCurrentUser}
+export {login,getCurrentUser}
