@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoute);
 
 app.get("/", (req: Request, res: Response) => {
-  res.json({ status: "ok", message: "Server is running" });
+  res.json({ status: "OK", message: `Server is running on ${PORT}` });
 });
 
 app.listen(PORT, () => {
