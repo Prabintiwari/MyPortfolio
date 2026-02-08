@@ -8,7 +8,7 @@ async function main() {
   console.log("🌱 Starting seed...");
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
-  const adminName = process.env.ADMIN_NAME;
+  const adminName = process.env.ADMIN_NAME ||"Prabin Tiwari";
 
   if (!adminEmail || !adminPassword) {
     throw new Error(
@@ -26,15 +26,15 @@ async function main() {
     await prisma.user.create({
       data: {
         email: adminEmail,
-        name: adminName || "Prabin Tiwari",
+        name: adminName ,
         password: hashedPassword,
         role: UserRole.ADMIN,
       },
     });
 
-    console.log("✅ Admin created");
+    console.log("Admin created");
   } else {
-    console.log("ℹ️ Admin already exists");
+    console.log("Admin already exists");
   }
 
   console.log("✅ Admin seeded");
