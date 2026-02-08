@@ -33,6 +33,7 @@ model Project {
   liveDemo    String?
   github      String?
   featured    Boolean  @default(false)
+  isActive    Boolean  @default(true)
   order       Int      @default(0)
   date        String
   createdAt   DateTime @default(now())

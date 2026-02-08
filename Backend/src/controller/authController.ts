@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { AuthRequest, generateToken } from "../middleware/auth";
 import prisma from "../config/prisma";
 import { loginSchema } from "../schema";
+import { ZodError } from "zod";
 
 // Login admin
 const login = async (req: Request, res: Response) => {
@@ -48,6 +49,12 @@ const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,

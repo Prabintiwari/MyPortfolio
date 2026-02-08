@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import {
   projectIdParamsSchema,
+  projectQuerySchema,
+  projectSchema,
   updateProjectSchema,
 } from "../schema/project.schema";
 import { ZodError } from "zod";
@@ -9,22 +11,39 @@ import { ZodError } from "zod";
 //  Get all projects
 const getAllProjects = async (req: Request, res: Response) => {
   try {
-    const { category, featured } = req.query;
+    const { category, featured, isActive, page, limit } =
+      projectQuerySchema.parse(req.query);
+    const pageNumber = page ?? 1;
+    const limitNumber = limit ?? 10;
+    const skip = (pageNumber - 1) * limitNumber;
 
     // Filter options
     const where: any = {};
-    if (category) where.category = category as string;
-    if (featured) where.featured = featured === "true";
+    if (category) where.category = category;
+    if (featured) where.featured = featured;
+    if (isActive) where.isActive = isActive;
 
-    const projects = await prisma.project.findMany({
-      where,
-      orderBy: { order: "asc" },
-    });
+    const [projects, total] = await Promise.all([
+      prisma.project.findMany({
+        where,
+        skip,
+        take: limitNumber,
+        orderBy: { order: "asc" },
+      }),
+      prisma.project.count({ where }),
+    ]);
 
     res.json({
       success: true,
-      count: projects.length,
-      data: projects,
+      data: {
+        projects,
+        pagination: {
+          total,
+          page: pageNumber,
+          limit: limitNumber,
+          totalPages: Math.ceil(total / limitNumber),
+        },
+      },
     });
   } catch (error: any) {
     if (error instanceof ZodError) {
@@ -86,9 +105,10 @@ const createProject = async (req: Request, res: Response) => {
       liveDemo,
       github,
       featured,
+      isActive,
       order,
       date,
-    } = req.body;
+    } = projectSchema.parse(req.body);
 
     // Validation
     if (!title || !description || !category) {
@@ -108,6 +128,7 @@ const createProject = async (req: Request, res: Response) => {
         liveDemo,
         github,
         featured: featured || false,
+        isActive: isActive,
         order: order || 0,
         date: date || new Date().getFullYear().toString(),
       },
