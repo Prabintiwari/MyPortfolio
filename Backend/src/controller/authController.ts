@@ -2,19 +2,12 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { AuthRequest, generateToken } from "../middleware/auth";
 import prisma from "../config/prisma";
+import { loginSchema } from "../schema";
 
 // Login admin
 const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-
-    // Validation
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide email and password",
-      });
-    }
+    const { email, password } = loginSchema.parse(req.body);
 
     // Find user
     const user = await prisma.user.findUnique({
@@ -65,8 +58,10 @@ const login = async (req: Request, res: Response) => {
 // Get current user
 const getCurrentUser = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.id;
+
     const user = await prisma.user.findUnique({
-      where: { id: req.id },
+      where: { id: userId },
       select: {
         id: true,
         email: true,
