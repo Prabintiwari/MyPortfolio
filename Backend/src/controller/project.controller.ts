@@ -5,7 +5,7 @@ import {
   projectQuerySchema,
   projectSchema,
   updateProjectSchema,
-} from "../schema/project.schema";
+} from "../schema";
 import { ZodError } from "zod";
 
 //  Get all projects
