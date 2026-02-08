@@ -25,6 +25,31 @@ export const validateRequest = (schema: z.ZodType<any, any>) => {
   };
 };
 
+// For query and params - validate and let controller access
+export const validateQuery = (schema: z.ZodType<any, any>) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const parsed = await schema.parseAsync(req.query);
+      Object.keys(parsed).forEach((key) => {
+        (req.query as any)[key] = parsed[key];
+      });
+      next();
+    } catch (error: any) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation error",
+          errors: error.issues.map((issue) => ({
+            field: issue.path.join("."),
+            message: issue.message,
+          })),
+        });
+      }
+      next({ status: 400, success: false, message: error.message });
+    }
+  };
+};
+
 export const validateParams = (schema: z.ZodType<any, any>) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
