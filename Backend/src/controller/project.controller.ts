@@ -33,7 +33,7 @@ const getAllProjects = async (req: Request, res: Response) => {
       prisma.project.count({ where }),
     ]);
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: {
         projects,
@@ -110,19 +110,11 @@ const createProject = async (req: Request, res: Response) => {
       date,
     } = projectSchema.parse(req.body);
 
-    // Validation
-    if (!title || !description || !category) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide required fields: title, description, category",
-      });
-    }
-
     const project = await prisma.project.create({
       data: {
         title,
         description,
-        image: image || "/images/default-project.png",
+        image: image,
         category,
         tags: tags || [],
         liveDemo,
@@ -159,6 +151,16 @@ const updateProject = async (req: Request, res: Response) => {
     const { projectId } = projectIdParamsSchema.parse(req.params);
     const updateData = updateProjectSchema.parse(req.body);
 
+    const existingProject = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
+
+    if (!existingProject) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+    }
+
     const project = await prisma.project.update({
       where: { id: projectId },
       data: updateData,
@@ -188,11 +190,21 @@ const deleteProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
 
+    const existingProject = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
+
+    if (!existingProject) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+    }
+
     await prisma.project.delete({
       where: { id: projectId },
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Project deleted successfully",
     });

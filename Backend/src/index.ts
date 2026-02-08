@@ -1,5 +1,5 @@
 import express from "express";
-import  { Request, Response } from "express";
+import { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -7,6 +7,7 @@ import helmet from "helmet";
 dotenv.config();
 
 import authRoute from "./routes/auth.routes";
+import projectsRoute from "./routes/projects.routes";
 
 const app = express();
 const PORT =
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 // API Routes
 app.use("/api/auth", authRoute);
+app.use("/api/projects", projectsRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ status: "OK", message: `Server is running on ${PORT}` });
