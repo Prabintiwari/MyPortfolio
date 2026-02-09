@@ -10,7 +10,6 @@ const projectSchema = z.object({
   github: z.string().url("GitHub must be a valid URL").optional(),
   featured: z.boolean().default(false),
   isActive: z.boolean().default(true),
-  order: z.number().int().optional(),
   date: z.string().datetime().optional(),
 });
 

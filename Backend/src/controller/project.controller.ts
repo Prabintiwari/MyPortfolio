@@ -106,7 +106,6 @@ const createProject = async (req: Request, res: Response) => {
       github,
       featured,
       isActive,
-      order,
       date,
     } = projectSchema.parse(req.body);
 
@@ -121,7 +120,6 @@ const createProject = async (req: Request, res: Response) => {
         github,
         featured: featured || false,
         isActive: isActive,
-        order: order || 0,
         date: date || new Date().getFullYear().toString(),
       },
     });
