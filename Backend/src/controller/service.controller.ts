@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { createServiceSchema, projectIdParamsSchema } from "../schema";
+import {
+  createServiceSchema,
+  projectIdParamsSchema,
+  serviceIdParamsSchema,
+  updateServiceSchema,
+} from "../schema";
 
 // Get all services
 const getAllServices = async (req: Request, res: Response) => {
@@ -33,10 +38,10 @@ const getAllServices = async (req: Request, res: Response) => {
 // Get single service
 const getServiceById = async (req: Request, res: Response) => {
   try {
-    const { projectId } = projectIdParamsSchema.parse(req.params);
+    const { serviceId } = serviceIdParamsSchema.parse(req.params);
 
     const service = await prisma.service.findUnique({
-      where: { id: projectId },
+      where: { id: serviceId },
     });
 
     if (!service) {
@@ -66,7 +71,7 @@ const createService = async (req: Request, res: Response) => {
 
     const service = await prisma.service.create({
       data: {
-        icon: icon ,
+        icon: icon,
         title,
         description,
         features: features || [],
@@ -91,11 +96,21 @@ const createService = async (req: Request, res: Response) => {
 // Update service
 const updateService = async (req: Request, res: Response) => {
   try {
-    const { projectId } = projectIdParamsSchema.parse(req.params);
-    const updateData = req.body;
+    const { serviceId } = serviceIdParamsSchema.parse(req.params);
+    const updateData = updateServiceSchema.parse(req.body);
+
+    const existingService = await prisma.service.findUnique({
+      where: { id: serviceId },
+    });
+
+    if (!existingService) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Service not found" });
+    }
 
     const service = await prisma.service.update({
-      where: { id: projectId },
+      where: { id: serviceId },
       data: updateData,
     });
 
@@ -105,12 +120,6 @@ const updateService = async (req: Request, res: Response) => {
       data: service,
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
-        success: false,
-        message: "Service not found",
-      });
-    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -121,10 +130,21 @@ const updateService = async (req: Request, res: Response) => {
 // Delete service
 const deleteService = async (req: Request, res: Response) => {
   try {
-    const { projectId } = projectIdParamsSchema.parse(req.params);
+    const { serviceId } = serviceIdParamsSchema.parse(req.params);
+
+    const service = await prisma.service.findUnique({
+      where: { id: serviceId },
+    });
+
+    if (!service) {
+      return res.status(404).json({
+        success: false,
+        message: "Service not found",
+      });
+    }
 
     await prisma.service.delete({
-      where: { id: projectId },
+      where: { id: serviceId },
     });
 
     res.json({
