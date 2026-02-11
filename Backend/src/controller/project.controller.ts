@@ -104,7 +104,7 @@ const createProject = async (req: Request, res: Response) => {
       tags,
       liveDemo,
       github,
-      featured,
+      isFeatured,
       isActive,
       date,
     } = projectSchema.parse(req.body);
@@ -118,7 +118,7 @@ const createProject = async (req: Request, res: Response) => {
         tags: tags || [],
         liveDemo,
         github,
-        featured: featured || false,
+        isFeatured: isFeatured || false,
         isActive: isActive,
         date: date || new Date().getFullYear().toString(),
       },

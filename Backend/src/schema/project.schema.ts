@@ -8,7 +8,7 @@ const projectSchema = z.object({
   tags: z.array(z.string()).nonempty("At least one tag is required"),
   liveDemo: z.string().url("Live demo must be a valid URL").optional(),
   github: z.string().url("GitHub must be a valid URL").optional(),
-  featured: z.boolean().default(false),
+  isFeatured: z.boolean().default(false),
   isActive: z.boolean().default(true),
   date: z.string().datetime().optional(),
 });

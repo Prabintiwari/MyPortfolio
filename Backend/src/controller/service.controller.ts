@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { projectIdParamsSchema } from "../schema";
+import { createServiceSchema, projectIdParamsSchema } from "../schema";
 
 // Get all services
 const getAllServices = async (req: Request, res: Response) => {
@@ -61,19 +61,12 @@ const getServiceById = async (req: Request, res: Response) => {
 // Create new service
 const createService = async (req: Request, res: Response) => {
   try {
-    const { icon, title, description, features, order, isActive } = req.body;
-
-    // Validation
-    if (!title || !description) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide title and description",
-      });
-    }
+    const { icon, title, description, features, order, isActive } =
+      createServiceSchema.parse(req.body);
 
     const service = await prisma.service.create({
       data: {
-        icon: icon || "Code",
+        icon: icon ,
         title,
         description,
         features: features || [],

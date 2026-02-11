@@ -1,16 +1,20 @@
 import { z } from "zod";
 
 const createServiceSchema = z.object({
-  title: z.string().min(1, "Title is required"),
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(100, "Title must be less than 100 characters"),
+
   description: z.string().min(1, "Description is required"),
-  image: z.string().url("Image must be a valid URL"),
+
+  features: z
+    .array(z.string().min(1, "Feature cannot be empty"))
+    .min(1, "At least one feature is required"),
+  icon: z.string("Icon is required"),
   category: z.string().min(1, "Category is required"),
-  tags: z.array(z.string()).nonempty("At least one tag is required"),
-  liveDemo: z.string().url("Live demo must be a valid URL").optional(),
-  github: z.string().url("GitHub must be a valid URL").optional(),
-  featured: z.boolean().default(false),
+  order: z.number().int().optional(),
   isActive: z.boolean().default(true),
-  date: z.string().datetime().optional(),
 });
 
 const updateServiceSchema = createServiceSchema.partial();

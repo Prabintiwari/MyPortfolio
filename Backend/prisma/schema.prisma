@@ -32,7 +32,7 @@ model Project {
   tags        String[]
   liveDemo    String?
   github      String?
-  featured    Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
   isActive    Boolean  @default(true)
   order       Int      @default(0)
   date        String
