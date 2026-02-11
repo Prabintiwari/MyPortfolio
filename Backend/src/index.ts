@@ -8,6 +8,7 @@ dotenv.config();
 
 import authRoute from "./routes/auth.routes";
 import projectsRoute from "./routes/projects.routes";
+import servicesRoute from "./routes/service.routes";
 
 const app = express();
 const PORT =
@@ -26,6 +27,7 @@ app.use(cookieParser());
 // API Routes
 app.use("/api/auth", authRoute);
 app.use("/api/projects", projectsRoute);
+app.use("/api/services", servicesRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ status: "OK", message: `Server is running on ${PORT}` });
