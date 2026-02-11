@@ -2,9 +2,7 @@ import { Request, Response } from 'express';
 import prisma from '../config/prisma';
 import { projectIdParamsSchema } from '../schema';
 
-// @desc    Get all services
-// @route   GET /api/services
-// @access  Public
+// Get all services
 export const getAllServices = async (req: Request, res: Response) => {
   try {
     const { isActive } = req.query;
@@ -32,9 +30,7 @@ export const getAllServices = async (req: Request, res: Response) => {
   }
 };
 
-// @desc    Get single service
-// @route   GET /api/services/:id
-// @access  Public
+// Get single service
 export const getServiceById = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
@@ -62,9 +58,7 @@ export const getServiceById = async (req: Request, res: Response) => {
   }
 };
 
-// @desc    Create new service
-// @route   POST /api/services
-// @access  Private/Admin
+// Create new service
 export const createService = async (req: Request, res: Response) => {
   try {
     const { icon, title, description, features, order, isActive } = req.body;
@@ -101,9 +95,7 @@ export const createService = async (req: Request, res: Response) => {
   }
 };
 
-// @desc    Update service
-// @route   PUT /api/services/:id
-// @access  Private/Admin
+// Update service
 export const updateService = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
@@ -133,9 +125,7 @@ export const updateService = async (req: Request, res: Response) => {
   }
 };
 
-// @desc    Delete service
-// @route   DELETE /api/services/:id
-// @access  Private/Admin
+// Delete service
 export const deleteService = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
