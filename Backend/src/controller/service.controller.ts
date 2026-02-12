@@ -38,7 +38,6 @@ const getAllServices = async (req: Request, res: Response) => {
 
     res.json({
       success: true,
-      count: services.length,
       data: {
         services,
         pagination: {

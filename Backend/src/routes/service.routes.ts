@@ -1,26 +1,26 @@
 import { Router } from "express";
-import {
-  createProject,
-  deleteProject,
-  getAllProjects,
-  getProjectById,
-  updateProject,
-} from "../controller/project.controller";
 import { AdminOnly, authenticateToken } from "../middleware/auth";
+import {
+  createService,
+  deleteService,
+  getAllServices,
+  getServiceById,
+  updateService,
+} from "../controller/service.controller";
 
 const router = Router();
 
 router.use(authenticateToken);
 router.use(AdminOnly);
 
-router.post("/", createProject);
+router.post("/", createService);
 
-router.post("/:projectId", updateProject);
+router.post("/:serviceId", updateService);
 
-router.get("/", getAllProjects);
+router.get("/", getAllServices);
 
-router.get("/:projectId", getProjectById);
+router.get("/:serviceId", getServiceById);
 
-router.delete("/:projectId",deleteProject)
+router.delete("/:serviceId", deleteService);
 
 export default router;
