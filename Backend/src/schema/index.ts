@@ -4,5 +4,8 @@ export * from "./auth.schema";
 // Projects
 export * from "./project.schema";
 
-// Projects
+// Services
 export * from "./service.schema";
+
+// Skills
+export * from "./skill.schema";
