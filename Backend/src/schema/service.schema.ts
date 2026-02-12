@@ -12,7 +12,6 @@ const createServiceSchema = z.object({
     .array(z.string().min(1, "Feature cannot be empty"))
     .min(1, "At least one feature is required"),
   icon: z.string("Icon is required"),
-  category: z.string().min(1, "Category is required"),
   order: z.number().int().optional(),
   isActive: z.boolean().default(true),
 });
@@ -24,8 +23,7 @@ const serviceIdParamsSchema = z.object({
 });
 
 const serviceQuerySchema = z.object({
-  category: z.string().min(1, "Category is required").optional(),
-  featured: z.coerce.boolean().default(true).optional(),
+  isFeatured: z.coerce.boolean().default(true).optional(),
   isActive: z.coerce.boolean().default(true).optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),

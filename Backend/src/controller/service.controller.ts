@@ -2,32 +2,60 @@ import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import {
   createServiceSchema,
-  projectIdParamsSchema,
   serviceIdParamsSchema,
+  serviceQuerySchema,
   updateServiceSchema,
 } from "../schema";
+import { ZodError } from "zod";
 
 // Get all services
 const getAllServices = async (req: Request, res: Response) => {
   try {
-    const { isActive } = req.query;
+    const { isActive, isFeatured, page, limit } = serviceQuerySchema.parse(
+      req.query,
+    );
+    const pageNumber = page ?? 1;
+    const limitNumber = limit ?? 10;
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where: any = {};
-    if (isActive !== undefined) {
-      where.isActive = isActive === "true";
+    if (isActive) {
+      where.isActive = isActive;
+    }
+    if (isFeatured) {
+      where.isFeatured = isFeatured;
     }
 
-    const services = await prisma.service.findMany({
-      where,
-      orderBy: { order: "asc" },
-    });
+    const [services, total] = await Promise.all([
+      prisma.service.findMany({
+        where,
+        skip,
+        take: limitNumber,
+        orderBy: { order: "asc" },
+      }),
+      prisma.service.count({ where }),
+    ]);
 
     res.json({
       success: true,
       count: services.length,
-      data: services,
+      data: {
+        services,
+        pagination: {
+          total,
+          page: pageNumber,
+          limit: limitNumber,
+          totalPages: Math.ceil(total / limitNumber),
+        },
+      },
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -56,6 +84,12 @@ const getServiceById = async (req: Request, res: Response) => {
       data: service,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -86,6 +120,12 @@ const createService = async (req: Request, res: Response) => {
       data: service,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -120,6 +160,12 @@ const updateService = async (req: Request, res: Response) => {
       data: service,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -152,10 +198,10 @@ const deleteService = async (req: Request, res: Response) => {
       message: "Service deleted successfully",
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Service not found",
+        message: error.issues,
       });
     }
     res.status(500).json({
