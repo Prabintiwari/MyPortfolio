@@ -1,26 +1,50 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { createSkillSchema, sillIdParamsSchema } from "../schema";
+import {
+  createSkillSchema,
+  sillIdParamsSchema,
+  skillQuerySchema,
+  updateSkillSchema,
+} from "../schema";
 import { ZodError } from "zod";
 
 // Get all skills
 const getAllSkills = async (req: Request, res: Response) => {
   try {
-    const { category, isActive } = req.query;
+    const { name, category, isActive, page, limit } = skillQuerySchema.parse(
+      req.query,
+    );
+    const pageNumber = page ?? 1;
+    const limitNumber = limit ?? 10;
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where: any = {};
-    if (category) where.category = category as string;
-    if (isActive !== undefined) where.isActive = isActive === "true";
+    if (name) where.name = name;
+    if (category) where.category = category;
+    if (isActive) where.isActive = isActive;
 
-    const skills = await prisma.skill.findMany({
-      where,
-      orderBy: { order: "asc" },
-    });
+    const [skills, total] = await Promise.all([
+      await prisma.skill.findMany({
+        where,
+        skip,
+        take: limitNumber,
+        orderBy: { order: "asc" },
+      }),
+      prisma.skill.count({ where }),
+    ]);
 
-    res.json({
+    res.status(200).json({
       success: true,
       count: skills.length,
-      data: skills,
+      data: {
+        skills,
+        pagination: {
+          total,
+          page: pageNumber,
+          limit: limitNumber,
+          totalPages: Math.ceil(total / limitNumber),
+        },
+      },
     });
   } catch (error: any) {
     if (error instanceof ZodError) {
@@ -52,7 +76,7 @@ const getSkillById = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: skill,
     });
@@ -111,16 +135,13 @@ const createSkill = async (req: Request, res: Response) => {
 const updateSkill = async (req: Request, res: Response) => {
   try {
     const { skillId } = sillIdParamsSchema.parse(req.params);
-    const updateData = req.body;
+    const updateData = updateSkillSchema.parse(req.body);
 
-    // Validate level if provided
-    if (updateData.level !== undefined) {
-      if (updateData.level < 0 || updateData.level > 100) {
-        return res.status(400).json({
-          success: false,
-          message: "Level must be between 0 and 100",
-        });
-      }
+    const existingSkill = await prisma.skill.findUnique({
+      where: { id: skillId },
+    });
+    if (!existingSkill) {
+      res.status(404).json({ success: false, message: "Skill not found" });
     }
 
     const skill = await prisma.skill.update({
@@ -128,7 +149,7 @@ const updateSkill = async (req: Request, res: Response) => {
       data: updateData,
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Skill updated successfully",
       data: skill,
@@ -152,11 +173,18 @@ const deleteSkill = async (req: Request, res: Response) => {
   try {
     const { skillId } = sillIdParamsSchema.parse(req.params);
 
+    const skill = await prisma.skill.findUnique({
+      where: { id: skillId },
+    });
+    if (!skill) {
+      res.status(404).json({ success: false, message: "Skill not found" });
+    }
+
     await prisma.skill.delete({
       where: { id: skillId },
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Skill deleted successfully",
     });
