@@ -9,8 +9,6 @@ const router = Router();
 
 router.use(authenticateToken, AdminOnly);
 
-router.use("/auth", authRoute);
-
 router.use("/projects", projectsRoute);
 
 router.use("/services", servicesRoute);

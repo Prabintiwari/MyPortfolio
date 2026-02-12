@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { sillIdParamsSchema } from "../schema";
+import { createSkillSchema, sillIdParamsSchema } from "../schema";
+import { ZodError } from "zod";
 
 // Get all skills
 const getAllSkills = async (req: Request, res: Response) => {
@@ -22,6 +23,12 @@ const getAllSkills = async (req: Request, res: Response) => {
       data: skills,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -50,6 +57,12 @@ const getSkillById = async (req: Request, res: Response) => {
       data: skill,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -60,23 +73,8 @@ const getSkillById = async (req: Request, res: Response) => {
 // Create new skill
 const createSkill = async (req: Request, res: Response) => {
   try {
-    const { name, level, icon, color, category, order, isActive } = req.body;
-
-    // Validation
-    if (!name || level === undefined) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide name and level",
-      });
-    }
-
-    // Level validation (0-100)
-    if (level < 0 || level > 100) {
-      return res.status(400).json({
-        success: false,
-        message: "Level must be between 0 and 100",
-      });
-    }
+    const { name, level, icon, color, category, order, isActive } =
+      createSkillSchema.parse(req.body);
 
     const skill = await prisma.skill.create({
       data: {
@@ -86,7 +84,7 @@ const createSkill = async (req: Request, res: Response) => {
         color: color || "from-blue-500 to-cyan-500",
         category: category || "technical",
         order: order || 0,
-        isActive: isActive !== undefined ? isActive : true,
+        isActive: isActive,
       },
     });
 
@@ -96,6 +94,12 @@ const createSkill = async (req: Request, res: Response) => {
       data: skill,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -130,10 +134,10 @@ const updateSkill = async (req: Request, res: Response) => {
       data: skill,
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Skill not found",
+        message: error.issues,
       });
     }
     res.status(500).json({
@@ -157,10 +161,10 @@ const deleteSkill = async (req: Request, res: Response) => {
       message: "Skill deleted successfully",
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Skill not found",
+        message: error.issues,
       });
     }
     res.status(500).json({

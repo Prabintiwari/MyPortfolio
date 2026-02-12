@@ -1,19 +1,26 @@
 import { z } from "zod";
 
 const createSkillSchema = z.object({
-  title: z
+  name: z
     .string()
-    .min(1, "Title is required")
-    .max(100, "Title must be less than 100 characters"),
+    .min(1, "Skill name is required")
+    .max(100, "Skill name must be less than 100 characters"),
 
-  description: z.string().min(1, "Description is required"),
+  level: z
+    .number()
+    .int("Level must be an integer")
+    .min(0, "Level must be at least 0")
+    .max(100, "Level cannot exceed 100"),
 
-  features: z
-    .array(z.string().min(1, "Feature cannot be empty"))
-    .min(1, "At least one feature is required"),
-  icon: z.string("Icon is required"),
+  icon: z.string().min(1, "Icon is required"),
+
+  color: z.string().min(1, "Color is required"),
+
+  category: z.string().optional(),
+
   order: z.number().int().optional(),
-  isActive: z.boolean().default(true),
+
+  isActive: z.boolean().default(true).optional(),
 });
 
 const updateSkillSchema = createSkillSchema.partial();
@@ -23,7 +30,8 @@ const sillIdParamsSchema = z.object({
 });
 
 const skillQuerySchema = z.object({
-  isFeatured: z.coerce.boolean().default(true).optional(),
+  name: z.string().optional(),
+  category: z.string().optional(),
   isActive: z.coerce.boolean().default(true).optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),
