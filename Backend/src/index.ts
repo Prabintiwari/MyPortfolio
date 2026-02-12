@@ -6,16 +6,14 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 dotenv.config();
 
-import authRoute from "./routes/auth.routes";
-import projectsRoute from "./routes/projects.routes";
-import servicesRoute from "./routes/service.routes";
+import adminRoute from "./routes";
 
 const app = express();
 const PORT =
   process.env.PORT ||
   app.use(
     cors({
-      origin: process.env.FRONTEND_URL || "http://localhost:5000",
+      origin: process.env.FRONTEND_URL || "http://localhost:3000",
       credentials: true,
     }),
   );
@@ -25,9 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // API Routes
-app.use("/api/auth", authRoute);
-app.use("/api/projects", projectsRoute);
-app.use("/api/services", servicesRoute);
+app.use("/api",adminRoute)
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ status: "OK", message: `Server is running on ${PORT}` });
