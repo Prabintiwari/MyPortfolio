@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { experienceIdParamsSchema } from "../schema";
+import {
+  createExperienceSchema,
+  experienceIdParamsSchema,
+  updateExperienceSchema,
+} from "../schema";
+import { ZodError } from "zod";
 
 // Get all experiences
 const getAllExperiences = async (req: Request, res: Response) => {
@@ -23,6 +28,12 @@ const getAllExperiences = async (req: Request, res: Response) => {
       data: experiences,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -36,7 +47,7 @@ const getExperienceById = async (req: Request, res: Response) => {
     const { experienceId } = experienceIdParamsSchema.parse(req.params);
 
     const experience = await prisma.experience.findUnique({
-      where: { id:experienceId },
+      where: { id: experienceId },
     });
 
     if (!experience) {
@@ -46,11 +57,17 @@ const getExperienceById = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: experience,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -61,22 +78,15 @@ const getExperienceById = async (req: Request, res: Response) => {
 // Create new experience
 const createExperience = async (req: Request, res: Response) => {
   try {
-    const { title, company, period, description, order, isActive } = req.body;
-
-    // Validation
-    if (!title || !company || !period) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide title, company, and period",
-      });
-    }
+    const { title, company, period, description, order, isActive } =
+      createExperienceSchema.parse(req.body);
 
     const experience = await prisma.experience.create({
       data: {
         title,
         company,
         period,
-        description: description || "",
+        description: description,
         order: order || 0,
         isActive: isActive !== undefined ? isActive : true,
       },
@@ -88,6 +98,12 @@ const createExperience = async (req: Request, res: Response) => {
       data: experience,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -99,23 +115,33 @@ const createExperience = async (req: Request, res: Response) => {
 const updateExperience = async (req: Request, res: Response) => {
   try {
     const { experienceId } = experienceIdParamsSchema.parse(req.params);
-    const updateData = req.body;
+    const updateData = updateExperienceSchema.parse(req.body);
+
+    const existingExperience = await prisma.experience.findUnique({
+      where: { id: experienceId },
+    });
+
+    if (!existingExperience) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Experience not found" });
+    }
 
     const experience = await prisma.experience.update({
-      where: { id:experienceId },
+      where: { id: experienceId },
       data: updateData,
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Experience updated successfully",
       data: experience,
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Experience not found",
+        message: error.issues,
       });
     }
     res.status(500).json({
@@ -130,19 +156,29 @@ const deleteExperience = async (req: Request, res: Response) => {
   try {
     const { experienceId } = experienceIdParamsSchema.parse(req.params);
 
-    await prisma.experience.delete({
-      where: { id:experienceId },
+    const experience = await prisma.experience.findUnique({
+      where: { id: experienceId },
     });
 
-    res.json({
+    if (!experience) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Experience not found" });
+    }
+
+    await prisma.experience.delete({
+      where: { id: experienceId },
+    });
+
+    res.status(200).json({
       success: true,
       message: "Experience deleted successfully",
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Experience not found",
+        message: error.issues,
       });
     }
     res.status(500).json({

@@ -1,26 +1,22 @@
 import { z } from "zod";
 
 const createExperienceSchema = z.object({
-  name: z
+  title: z
     .string()
-    .min(1, "Skill name is required")
-    .max(100, "Skill name must be less than 100 characters"),
+    .min(1, "Title is required")
+    .max(150, "Title must be less than 150 characters"),
 
-  level: z
-    .number()
-    .int("Level must be an integer")
-    .min(0, "Level must be at least 0")
-    .max(100, "Level cannot exceed 100"),
+  company: z
+    .string()
+    .min(1, "Company name is required")
+    .max(150, "Company must be less than 150 characters"),
 
-  icon: z.string().min(1, "Icon is required"),
+  period: z.string().min(1, "Period is required"), 
+  description: z.string().min(1, "Description is required"),
 
-  color: z.string().min(1, "Color is required"),
+  order: z.number().int().optional(), 
 
-  category: z.string().optional(),
-
-  order: z.number().int().optional(),
-
-  isActive: z.boolean().default(true).optional(),
+  isActive: z.boolean().optional(), 
 });
 
 const updateExperienceSchema = createExperienceSchema.partial();
@@ -30,8 +26,8 @@ const experienceIdParamsSchema = z.object({
 });
 
 const experienceQuerySchema = z.object({
-  name: z.string().optional(),
-  category: z.string().optional(),
+  title: z.string().optional(),
+  company: z.string().optional(),
   isActive: z.coerce.boolean().default(true).optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),
