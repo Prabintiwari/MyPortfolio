@@ -3,6 +3,7 @@ import prisma from "../config/prisma";
 import {
   createExperienceSchema,
   experienceIdParamsSchema,
+  experienceQuerySchema,
   updateExperienceSchema,
 } from "../schema";
 import { ZodError } from "zod";
@@ -10,22 +11,44 @@ import { ZodError } from "zod";
 // Get all experiences
 const getAllExperiences = async (req: Request, res: Response) => {
   try {
-    const { isActive } = req.query;
+    const { isActive, title, company, page, limit } =
+      experienceQuerySchema.parse(req.query);
+
+    const pageNumber = page ?? 1;
+    const limitNumber = limit ?? 10;
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where: any = {};
-    if (isActive !== undefined) {
-      where.isActive = isActive === "true";
+    if (isActive) {
+      where.isActive = isActive;
     }
+    if (title) {
+      where.title = title;
+    }
+    if (company) {
+      where.company = company;
+    }
+    const [experiences, total] = await Promise.all([
+      prisma.experience.findMany({
+        where,
+        skip,
+        take: limitNumber,
+        orderBy: { order: "asc" },
+      }),
+      prisma.experience.count({ where }),
+    ]);
 
-    const experiences = await prisma.experience.findMany({
-      where,
-      orderBy: { order: "asc" },
-    });
-
-    res.json({
+    res.status(200).json({
       success: true,
-      count: experiences.length,
-      data: experiences,
+      data: {
+        experiences,
+        pagination: {
+          total,
+          page: pageNumber,
+          limit: limitNumber,
+          totalPages: Math.ceil(total / limitNumber),
+        },
+      },
     });
   } catch (error: any) {
     if (error instanceof ZodError) {

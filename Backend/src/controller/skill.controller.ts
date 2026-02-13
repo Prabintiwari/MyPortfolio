@@ -24,7 +24,7 @@ const getAllSkills = async (req: Request, res: Response) => {
     if (isActive) where.isActive = isActive;
 
     const [skills, total] = await Promise.all([
-      await prisma.skill.findMany({
+      prisma.skill.findMany({
         where,
         skip,
         take: limitNumber,
