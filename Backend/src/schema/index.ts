@@ -9,3 +9,6 @@ export * from "./service.schema";
 
 // Skills
 export * from "./skill.schema";
+
+// Experiences
+export * from "./experience.schema";

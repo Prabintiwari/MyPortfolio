@@ -35,7 +35,6 @@ const getAllSkills = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      count: skills.length,
       data: {
         skills,
         pagination: {
