@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
+import {
+  createProfileSchema,
+  updateProfileSchema,
+} from "../schema/about.schema";
+import { ZodError } from "zod";
 
 // Get about/profile information
 const getAbout = async (req: Request, res: Response) => {
@@ -18,6 +23,12 @@ const getAbout = async (req: Request, res: Response) => {
       data: about,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -50,15 +61,7 @@ const createAbout = async (req: Request, res: Response) => {
       projectsCompleted,
       openSource,
       globalReachText,
-    } = req.body;
-
-    // Validation
-    if (!name || !title || !bio) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide name, title, and bio",
-      });
-    }
+    } = createProfileSchema.parse(req.body);
 
     const about = await prisma.about.create({
       data: {
@@ -82,6 +85,12 @@ const createAbout = async (req: Request, res: Response) => {
       data: about,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -97,11 +106,11 @@ const updateAbout = async (req: Request, res: Response) => {
     if (!about) {
       return res.status(404).json({
         success: false,
-        message: "About information not found. Use POST to create.",
+        message: "About information not found. Please create one.",
       });
     }
 
-    const updateData = req.body;
+    const updateData = updateProfileSchema.parse(req.body);
 
     const updatedAbout = await prisma.about.update({
       where: { id: about.id },
@@ -114,6 +123,12 @@ const updateAbout = async (req: Request, res: Response) => {
       data: updatedAbout,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -142,6 +157,12 @@ const deleteAbout = async (req: Request, res: Response) => {
       message: "About information deleted successfully",
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
