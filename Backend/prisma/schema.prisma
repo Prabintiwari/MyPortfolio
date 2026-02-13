@@ -114,17 +114,25 @@ model SocialLink {
 }
 
 model About {
-  id        String   @id @default(uuid())
-  name      String
-  title     String
-  bio       String
-  avatar    String?
-  resume    String?
-  location  String?
-  email     String
-  phone     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String   @id @default(uuid())
+  name             String
+  title            String   
+  subtitle         String?  
+  bio              String   
+  description      String?  
+  avatar           String?  
+  resume           String?  
+  
+  // Stats for display
+  yearsExperience  Int     
+  projectsCompleted Int    
+  openSource       Int      
+  
+  // Additional info
+  globalReachText  String?  @default("Creating solutions that connect people worldwide")
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@map("about")
 }
@@ -143,3 +151,5 @@ model ContactMethod {
 
   @@map("contact_methods")
 }
+
+

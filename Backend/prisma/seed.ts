@@ -37,21 +37,25 @@ async function main() {
     console.log("Admin already exists");
   }
 
-
   // Create About/Profile
-  const about = await prisma.about.upsert({
-    where: { id: "1" },
+   const about = await prisma.about.upsert({
+    where: { id: '1' },
     update: {},
     create: {
-      name: "Prabin Tiwari",
-      title: "Frontend Developer",
-      bio: "Passionate frontend developer specializing in React and modern web technologies. I create responsive, accessible, and performant web applications.",
-      location: "Kathmandu, Nepal",
-      email: "prabintiwari964@gmail.com",
-      phone: "+977 9815027619",
+      name: 'Prabin Tiwari',
+      title: 'MERN Stack Developer',
+      subtitle: 'Passionate MERN Stack Developer crafting digital experiences with cutting-edge technologies',
+      bio: 'I\'m a passionate MERN Stack Developer with expertise in building modern, scalable web applications. With a strong foundation in JavaScript and its ecosystems, I specialize in creating efficient, user-friendly solutions that solve real-world problems.',
+      description: `My journey in web development started 1 year ago, and since then I've been constantly learning and adapting to new technologies. I enjoy the process of turning ideas into reality through elegant code and intuitive interfaces.
+
+        When I'm not coding, you can find me exploring new technologies, contributing to open source, or sharing my knowledge through tech blogs and communities.`,
+      yearsExperience: 1,
+      projectsCompleted: 5,
+      openSource: 1,
+      globalReachText: 'Creating solutions that connect people worldwide',
     },
   });
-  console.log("✅ About section created");
+  console.log('✅ About section created');
 
   // Create Social Links
   const socialLinks = await prisma.socialLink.createMany({

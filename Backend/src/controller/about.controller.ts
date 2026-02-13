@@ -4,7 +4,6 @@ import prisma from "../config/prisma";
 // Get about/profile information
 const getAbout = async (req: Request, res: Response) => {
   try {
-    // About table ma single record matrai huncha
     const about = await prisma.about.findFirst();
 
     if (!about) {
@@ -39,14 +38,25 @@ const createAbout = async (req: Request, res: Response) => {
       });
     }
 
-    const { name, title, bio, avatar, resume, location, email, phone } =
-      req.body;
+    const {
+      name,
+      title,
+      bio,
+      avatar,
+      resume,
+      subtitle,
+      description,
+      yearsExperience,
+      projectsCompleted,
+      openSource,
+      globalReachText,
+    } = req.body;
 
     // Validation
-    if (!name || !title || !bio || !email) {
+    if (!name || !title || !bio) {
       return res.status(400).json({
         success: false,
-        message: "Please provide name, title, bio, and email",
+        message: "Please provide name, title, and bio",
       });
     }
 
@@ -57,9 +67,12 @@ const createAbout = async (req: Request, res: Response) => {
         bio,
         avatar,
         resume,
-        location,
-        email,
-        phone,
+        subtitle,
+        description,
+        yearsExperience,
+        projectsCompleted,
+        openSource,
+        globalReachText,
       },
     });
 
