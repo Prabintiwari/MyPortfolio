@@ -111,7 +111,7 @@ const createExperience = async (req: Request, res: Response) => {
         period,
         description: description,
         order: order || 0,
-        isActive: isActive !== undefined ? isActive : true,
+        isActive: isActive
       },
     });
 
