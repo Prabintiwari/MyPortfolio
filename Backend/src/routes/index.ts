@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { AdminOnly, authenticateToken } from "../middleware/auth";
-import authRoute from "./auth.routes";
 import projectsRoute from "./projects.routes";
 import servicesRoute from "./service.routes";
 import skillsRoute from "./skills.routes";

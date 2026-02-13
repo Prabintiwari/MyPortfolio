@@ -6,12 +6,8 @@ import {
   getProjectById,
   updateProject,
 } from "../controller/project.controller";
-import { AdminOnly, authenticateToken } from "../middleware/auth";
 
 const router = Router();
-
-router.use(authenticateToken);
-router.use(AdminOnly);
 
 router.post("/", createProject);
 

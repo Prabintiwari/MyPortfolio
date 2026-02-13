@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { AdminOnly, authenticateToken } from "../middleware/auth";
 import {
   createService,
   deleteService,
@@ -10,8 +9,6 @@ import {
 
 const router = Router();
 
-router.use(authenticateToken);
-router.use(AdminOnly);
 
 router.post("/", createService);
 
