@@ -1,16 +1,14 @@
 import { Router } from "express";
-import { createExperience, deleteExperience, getAllExperiences, getExperienceById, updateExperience } from "../controller/experience.controller";
+import { createAbout, deleteAbout, getAbout, updateAbout } from "../controller/about.controller";
 
 const router = Router()
 
-router.post("/", createExperience);
+router.post("/", createAbout);
 
-router.post("/:experienceId", updateExperience);
+router.put("/", updateAbout);
 
-router.get("/", getAllExperiences);
+router.get("/", getAbout);
 
-router.get("/:experienceId", getExperienceById);
-
-router.delete("/:experienceId",deleteExperience)
+router.delete("/",deleteAbout)
 
 export default router
