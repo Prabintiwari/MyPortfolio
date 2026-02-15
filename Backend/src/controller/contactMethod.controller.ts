@@ -1,28 +1,61 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { contactMethodIdParamsSchema } from "../schema";
+import {
+  contactMethodIdParamsSchema,
+  contactMethodQuerySchema,
+  createContactMethodSchema,
+  updateContactMethodSchema,
+} from "../schema";
+import { ZodError } from "zod";
 
 // Get all contact methods
 const getAllContactMethods = async (req: Request, res: Response) => {
   try {
-    const { isActive } = req.query;
+    const { isActive, title, page, limit } = contactMethodQuerySchema.parse(
+      req.query,
+    );
+    const pageNumber = page || 1;
+    const limitNumber = limit || 10;
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where: any = {};
-    if (isActive !== undefined) {
-      where.isActive = isActive === "true";
+    if (title) {
+      where.title = title;
+    }
+    if (isActive) {
+      where.isActive = isActive;
     }
 
-    const contactMethods = await prisma.contactMethod.findMany({
-      where,
-      orderBy: { order: "asc" },
-    });
+    const [contactMethods, total] = await Promise.all([
+      prisma.contactMethod.findMany({
+        where,
+        skip,
+        take: limitNumber,
+        orderBy: { order: "asc" },
+      }),
+      prisma.contactMethod.count({ where }),
+    ]);
 
-    res.json({
+    res.status(200).json({
       success: true,
       count: contactMethods.length,
-      data: contactMethods,
+      data: {
+        contactMethods,
+        pagination: {
+          total,
+          page: pageNumber,
+          limit: limitNumber,
+          totalPages: Math.ceil(total / limitNumber),
+        },
+      },
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -46,11 +79,17 @@ const getContactMethodById = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: contactMethod,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -62,15 +101,7 @@ const getContactMethodById = async (req: Request, res: Response) => {
 const createContactMethod = async (req: Request, res: Response) => {
   try {
     const { icon, title, value, description, gradient, order, isActive } =
-      req.body;
-
-    // Validation
-    if (!title || !value) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide title and value",
-      });
-    }
+      createContactMethodSchema.parse(req.body);
 
     const contactMethod = await prisma.contactMethod.create({
       data: {
@@ -80,7 +111,7 @@ const createContactMethod = async (req: Request, res: Response) => {
         description: description || "",
         gradient: gradient || "from-blue-500 to-cyan-500",
         order: order || 0,
-        isActive: isActive !== undefined ? isActive : true,
+        isActive: isActive,
       },
     });
 
@@ -90,6 +121,12 @@ const createContactMethod = async (req: Request, res: Response) => {
       data: contactMethod,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -101,9 +138,18 @@ const createContactMethod = async (req: Request, res: Response) => {
 const updateContactMethod = async (req: Request, res: Response) => {
   try {
     const { contactMethodId } = contactMethodIdParamsSchema.parse(req.params);
-    const updateData = req.body;
+    const updateData = updateContactMethodSchema.parse(req.body);
 
-    const contactMethod = await prisma.contactMethod.update({
+    const contactMethod = await prisma.contactMethod.findUnique({
+      where: { id: contactMethodId },
+    });
+    if (!contactMethod) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Contact method not found" });
+    }
+
+    const updatedContactMethod = await prisma.contactMethod.update({
       where: { id: contactMethodId },
       data: updateData,
     });
@@ -111,13 +157,13 @@ const updateContactMethod = async (req: Request, res: Response) => {
     res.json({
       success: true,
       message: "Contact method updated successfully",
-      data: contactMethod,
+      data: updatedContactMethod,
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Contact method not found",
+        message: error.issues,
       });
     }
     res.status(500).json({
@@ -132,6 +178,15 @@ const deleteContactMethod = async (req: Request, res: Response) => {
   try {
     const { contactMethodId } = contactMethodIdParamsSchema.parse(req.params);
 
+    const contactMethod = await prisma.contactMethod.findUnique({
+      where: { id: contactMethodId },
+    });
+    if (!contactMethod) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Contact method not found" });
+    }
+
     await prisma.contactMethod.delete({
       where: { id: contactMethodId },
     });
@@ -141,10 +196,10 @@ const deleteContactMethod = async (req: Request, res: Response) => {
       message: "Contact method deleted successfully",
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Contact method not found",
+        message: error.issues,
       });
     }
     res.status(500).json({
