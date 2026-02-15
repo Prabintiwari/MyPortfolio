@@ -1,14 +1,22 @@
-    import { Router } from "express";
-import { createAbout, deleteAbout, getAbout, updateAbout } from "../controller/about.controller";
+import { Router } from "express";
+import {
+  createContactMethod,
+  deleteContactMethod,
+  getAllContactMethods,
+  getContactMethodById,
+  updateContactMethod,
+} from "../controller/contactMethod.controller";
 
-const router = Router()
+const router = Router();
 
-router.post("/", createAbout);
+router.post("/", createContactMethod);
 
-router.put("/", updateAbout);
+router.put("/:contactMethodId", updateContactMethod);
 
-router.get("/", getAbout);
+router.get("/", getAllContactMethods);
 
-router.delete("/",deleteAbout)
+router.get("/:contactMethodId", getContactMethodById);
 
-export default router
+router.delete("/:contactMethodId", deleteContactMethod);
+
+export default router;
