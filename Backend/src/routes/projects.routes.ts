@@ -11,7 +11,7 @@ const router = Router();
 
 router.post("/", createProject);
 
-router.post("/:projectId", updateProject);
+router.put("/:projectId", updateProject);
 
 router.get("/", getAllProjects);
 

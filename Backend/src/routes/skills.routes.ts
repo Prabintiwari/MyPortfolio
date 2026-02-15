@@ -5,7 +5,7 @@ const router = Router()
 
 router.post("/", createSkill);
 
-router.post("/:skillId", updateSkill);
+router.put("/:skillId", updateSkill);
 
 router.get("/", getAllSkills);
 

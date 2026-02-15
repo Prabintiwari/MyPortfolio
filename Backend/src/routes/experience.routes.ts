@@ -5,7 +5,7 @@ const router = Router()
 
 router.post("/", createExperience);
 
-router.post("/:experienceId", updateExperience);
+router.put("/:experienceId", updateExperience);
 
 router.get("/", getAllExperiences);
 
