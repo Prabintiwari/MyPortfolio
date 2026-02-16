@@ -1,41 +1,44 @@
 import { z } from "zod";
 
 const createContactSchema = z.object({
-  title: z
+  name: z
     .string()
-    .min(1, "Title is required")
-    .max(150, "Title must be less than 150 characters"),
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be less than 50 characters"),
 
-  company: z
+  email: z
     .string()
-    .min(1, "Company name is required")
-    .max(150, "Company must be less than 150 characters"),
+    .trim()
+    .min(1, "Email is required")
+    .max(150, "Email must be less than 150 characters")
+    .email("Invalid email format")
+    .toLowerCase(),
 
-  period: z.string().min(1, "Period is required"), 
-  description: z.string().min(1, "Description is required"),
+  subject: z
+    .string()
+    .trim()
+    .min(3, "Subject must be at least 3 characters")
+    .max(100, "Subject must be less than 100 characters"),
 
-  order: z.number().int().optional(), 
-
-  isActive: z.boolean().optional(), 
+  message: z
+    .string()
+    .trim()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message must be less than 2000 characters"),
 });
-
-const updateContactSchema = createContactSchema.partial();
 
 const contactIdParamsSchema = z.object({
   contactId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid contact ID"),
 });
 
 const contactQuerySchema = z.object({
-  title: z.string().optional(),
-  company: z.string().optional(),
-  isActive: z.coerce.boolean().default(true).optional(),
+  isRead: z.coerce.boolean().optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),
 });
 
 export {
   createContactSchema,
-  updateContactSchema,
   contactIdParamsSchema,
   contactQuerySchema,
 };

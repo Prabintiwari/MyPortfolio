@@ -1,29 +1,55 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import { sendContactNotification } from "../templetes/emailTempletes";
-import { contactIdParamsSchema } from "../schema";
+import {
+  contactIdParamsSchema,
+  contactQuerySchema,
+  createContactSchema,
+} from "../schema";
+import { ZodError } from "zod";
 
 // Get all contact messages
-export const getAllContacts = async (req: Request, res: Response) => {
+const getAllContacts = async (req: Request, res: Response) => {
   try {
-    const { isRead } = req.query;
+    const { isRead, page, limit } = contactQuerySchema.parse(req.query);
+    const pageNumber = page || 1;
+    const limitNumber = limit || 5;
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where: any = {};
-    if (isRead !== undefined) {
-      where.isRead = isRead === "true";
+    if (isRead) {
+      where.isRead = isRead;
     }
 
-    const contacts = await prisma.contact.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-    });
+    const [contacts, total] = await Promise.all([
+      await prisma.contact.findMany({
+        where,
+        skip,
+        take: limitNumber,
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.contact.count({ where }),
+    ]);
 
     res.json({
       success: true,
-      count: contacts.length,
-      data: contacts,
+      data: {
+        contacts,
+        pagination: {
+          total,
+          page: pageNumber,
+          limit: limitNumber,
+          totalPages: Math.ceil(total / limitNumber),
+        },
+      },
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -32,40 +58,22 @@ export const getAllContacts = async (req: Request, res: Response) => {
 };
 
 // Submit contact form
-export const createContact = async (req: Request, res: Response) => {
+const createContact = async (req: Request, res: Response) => {
   try {
-    const { name, email, phone, subject, message } = req.body;
-
-    // Validation
-    if (!name || !email || !message) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide name, email, and message",
-      });
-    }
-
-    // Email validation (basic)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide a valid email",
-      });
-    }
+    const { name, email, subject, message } = createContactSchema.parse(
+      req.body,
+    );
 
     // Save to database
     const contact = await prisma.contact.create({
       data: {
         name,
         email,
-        phone,
         subject,
         message,
       },
     });
 
-    // Send email notification (async - don't wait for it)
-    // Even if email fails, contact is still saved
     sendContactNotification({
       name,
       email,
@@ -73,9 +81,9 @@ export const createContact = async (req: Request, res: Response) => {
       message,
     }).then((result) => {
       if (result.success) {
-        console.log("✅ Email notification sent successfully");
+        console.log(" Email notification sent successfully");
       } else {
-        console.error("❌ Email notification failed:", result.error);
+        console.error(" Email notification failed:", result.error);
       }
     });
 
@@ -85,6 +93,12 @@ export const createContact = async (req: Request, res: Response) => {
       data: contact,
     });
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        message: error.issues,
+      });
+    }
     res.status(500).json({
       success: false,
       message: error.message,
@@ -93,25 +107,34 @@ export const createContact = async (req: Request, res: Response) => {
 };
 
 // Mark message as read
-export const markAsRead = async (req: Request, res: Response) => {
+const markAsRead = async (req: Request, res: Response) => {
   try {
     const { contactId } = contactIdParamsSchema.parse(req.params);
 
-    const contact = await prisma.contact.update({
+    const contact = await prisma.contact.findUnique({
+      where: { id: contactId },
+    });
+    if (!contact) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Contact not found" });
+    }
+
+    const updatedContact = await prisma.contact.update({
       where: { id: contactId },
       data: { isRead: true },
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Message marked as read",
-      data: contact,
+      data: updatedContact,
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Contact message not found",
+        message: error.issues,
       });
     }
     res.status(500).json({
@@ -122,23 +145,32 @@ export const markAsRead = async (req: Request, res: Response) => {
 };
 
 // Delete contact message
-export const deleteContact = async (req: Request, res: Response) => {
+const deleteContact = async (req: Request, res: Response) => {
   try {
     const { contactId } = contactIdParamsSchema.parse(req.params);
+
+    const contact = await prisma.contact.findUnique({
+      where: { id: contactId },
+    });
+    if (!contact) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Contact not found" });
+    }
 
     await prisma.contact.delete({
       where: { id: contactId },
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Message deleted successfully",
     });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
+    if (error instanceof ZodError) {
+      return res.status(400).json({
         success: false,
-        message: "Contact message not found",
+        message: error.issues,
       });
     }
     res.status(500).json({
@@ -147,3 +179,5 @@ export const deleteContact = async (req: Request, res: Response) => {
     });
   }
 };
+
+export { getAllContacts, createContact, markAsRead, deleteContact };
