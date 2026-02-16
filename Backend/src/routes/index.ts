@@ -6,6 +6,8 @@ import servicesRoute from "./service.routes";
 import skillsRoute from "./skills.routes";
 import experiencesRoute from "./experience.routes";
 import contactMethodRoute from "./contactMethod.routes";
+import contactsRoute from "./contact.routes";
+import socialLinksRoute from "./socialLinks.routes";
 
 const router = Router();
 
@@ -22,5 +24,9 @@ router.use("/skills", skillsRoute);
 router.use("/experiences", experiencesRoute);
 
 router.use("/contact-method", contactMethodRoute);
+
+router.use("/contacts", contactsRoute);
+
+router.use("/social-links", socialLinksRoute);
 
 export default router;
