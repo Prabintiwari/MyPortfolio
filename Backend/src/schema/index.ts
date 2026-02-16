@@ -15,3 +15,6 @@ export * from "./experience.schema";
 
 // Contact Method
 export * from "./contactMethod.schema";
+
+// Contact 
+export * from "./contact.schema";
