@@ -1,11 +1,5 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import {
-  createServiceSchema,
-  serviceIdParamsSchema,
-  serviceQuerySchema,
-  updateServiceSchema,
-} from "../schema";
 import { ZodError } from "zod";
 import {
   createSocialLinksSchema,

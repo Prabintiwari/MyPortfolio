@@ -1,16 +1,22 @@
 import { Router } from "express";
-import { createExperience, deleteExperience, getAllExperiences, getExperienceById, updateExperience } from "../controller/experience.controller";
+import {
+  createSocialLinks,
+  deletesocialLink,
+  getAllSocialLinks,
+  getSocialLinkById,
+  updateSocialLinks,
+} from "../controller/socialLinks.controller";
 
-const router = Router()
+const router = Router();
 
-router.post("/", createExperience);
+router.post("/", createSocialLinks);
 
-router.put("/:experienceId", updateExperience);
+router.put("/:socialLinkId", updateSocialLinks);
 
-router.get("/", getAllExperiences);
+router.get("/", getAllSocialLinks);
 
-router.get("/:experienceId", getExperienceById);
+router.get("/:socialLinkId", getSocialLinkById);
 
-router.delete("/:experienceId",deleteExperience)
+router.delete("/:socialLinkId", deletesocialLink);
 
-export default router
+export default router;
