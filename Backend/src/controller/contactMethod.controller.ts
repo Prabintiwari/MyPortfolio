@@ -100,7 +100,7 @@ const getContactMethodById = async (req: Request, res: Response) => {
 // Create new contact method
 const createContactMethod = async (req: Request, res: Response) => {
   try {
-    const { icon, title, value, description, gradient, order, isActive } =
+    const { icon, title, value, description, variant, order, isActive } =
       createContactMethodSchema.parse(req.body);
 
     const contactMethod = await prisma.contactMethod.create({
@@ -109,7 +109,7 @@ const createContactMethod = async (req: Request, res: Response) => {
         title,
         value,
         description: description || "",
-        gradient: gradient || "from-blue-500 to-cyan-500",
+        variant: variant,
         order: order || 0,
         isActive: isActive,
       },

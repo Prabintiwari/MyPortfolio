@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { PrismaClient, UserRole } from "@prisma/client";
+import { ColorVariant, PrismaClient, UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -63,15 +63,15 @@ async function main() {
       {
         icon: "Github",
         label: "GitHub",
-        href: "https://github.com/Prabintiwari",
-        color: "hover:bg-purple-500",
+        url: "https://github.com/Prabintiwari",
+        variant: ColorVariant.SECONDARY,
         order: 1,
       },
       {
         icon: "Linkedin",
         label: "LinkedIn",
-        href: "https://www.linkedin.com/in/prabin-tiwari-61a95a2a2/",
-        color: "hover:bg-blue-500",
+        url: "https://www.linkedin.com/in/prabin-tiwari-61a95a2a2/",
+        variant: ColorVariant.PRIMARY,
         order: 2,
       },
     ],
@@ -181,7 +181,7 @@ async function main() {
         name: "CSS/TailwindCSS",
         level: 65,
         icon: "Palette",
-        color: "from-pink-500 to-purple-500",
+        variant: ColorVariant.SECONDARY,
         category: "technical",
         order: 1,
       },
@@ -189,7 +189,7 @@ async function main() {
         name: "JavaScript",
         level: 70,
         icon: "Zap",
-        color: "from-yellow-500 to-orange-500",
+        variant: ColorVariant.WARNING,
         category: "technical",
         order: 2,
       },
@@ -197,7 +197,7 @@ async function main() {
         name: "React",
         level: 60,
         icon: "Code",
-        color: "from-blue-500 to-cyan-500",
+        variant: ColorVariant.PRIMARY,
         category: "technical",
         order: 3,
       },
@@ -205,7 +205,7 @@ async function main() {
         name: "Node.js",
         level: 20,
         icon: "BookOpen",
-        color: "from-green-500 to-teal-500",
+        variant: ColorVariant.SUCCESS,
         category: "technical",
         order: 4,
       },
@@ -213,7 +213,7 @@ async function main() {
         name: "TypeScript",
         level: 50,
         icon: "Target",
-        color: "from-indigo-500 to-blue-500",
+        variant: ColorVariant.INFO,
         category: "technical",
         order: 5,
       },
@@ -260,7 +260,7 @@ async function main() {
         title: "Email",
         value: "prabintiwari964@gmail.com",
         description: "Send me an email anytime",
-        gradient: "from-blue-500 to-cyan-500",
+        variant: ColorVariant.PRIMARY,
         order: 1,
       },
       {
@@ -268,7 +268,7 @@ async function main() {
         title: "Phone",
         value: "+977 9815027619",
         description: "Call me for urgent matters",
-        gradient: "from-green-500 to-teal-500",
+        variant: ColorVariant.SUCCESS,
         order: 2,
       },
       {
@@ -276,7 +276,7 @@ async function main() {
         title: "Location",
         value: "Kathmandu, Nepal",
         description: "Available for local meetups",
-        gradient: "from-red-500 to-pink-500",
+        variant: ColorVariant.DANGER,
         order: 3,
       },
     ],

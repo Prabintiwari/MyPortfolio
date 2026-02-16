@@ -8,7 +8,7 @@ const SocialIcon = () => {
       {social.map((social, index) => (
         <motion.a
           key={index}
-          href={social.href}
+          href={social.url}
           target="blank"
           whileHover={{ scale: 1.1, y: -2 }}
           whileTap={{ scale: 0.95 }}

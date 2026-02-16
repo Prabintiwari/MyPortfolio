@@ -1,3 +1,4 @@
+import { ColorVariant } from "@prisma/client";
 import { z } from "zod";
 
 const createContactMethodSchema = z.object({
@@ -9,7 +10,7 @@ const createContactMethodSchema = z.object({
   icon: z.string().min(1, "Icon is required"),
 
   value: z.string().min(1, "Value is required"),
-  gradient: z.string().min(1, "Gradient is required"),
+  variant: z.nativeEnum(ColorVariant),
   description: z.string().min(1, "Description is required"),
 
   order: z.number().int().optional(),

@@ -96,7 +96,7 @@ const getSkillById = async (req: Request, res: Response) => {
 // Create new skill
 const createSkill = async (req: Request, res: Response) => {
   try {
-    const { name, level, icon, color, category, order, isActive } =
+    const { name, level, icon, variant, category, order, isActive } =
       createSkillSchema.parse(req.body);
 
     const skill = await prisma.skill.create({
@@ -104,7 +104,7 @@ const createSkill = async (req: Request, res: Response) => {
         name,
         level,
         icon: icon || "Code",
-        color: color || "from-blue-500 to-cyan-500",
+        variant: variant,
         category: category || "technical",
         order: order || 0,
         isActive: isActive,

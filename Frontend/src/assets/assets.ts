@@ -27,13 +27,13 @@ export const image = {
 export const social = [
   {
     icon: Github,
-    href: "https://github.com/Prabintiwari",
+    url: "https://github.com/Prabintiwari",
     label: "GitHub",
     color: "hover:bg-purple-500",
   },
   {
     icon: Linkedin,
-    href: "https://www.linkedin.com/in/prabin-tiwari-61a95a2a2/",
+    url: "https://www.linkedin.com/in/prabin-tiwari-61a95a2a2/",
     label: "LinkedIn",
     color: "hover:bg-blue-500",
   },

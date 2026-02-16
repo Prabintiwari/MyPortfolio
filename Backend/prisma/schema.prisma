@@ -11,6 +11,16 @@ enum UserRole {
   ADMIN
 }
 
+enum ColorVariant {
+  PRIMARY     
+  SECONDARY    
+  SUCCESS     
+  WARNING      
+  DANGER       
+  INFO         
+  ACCENT       
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -61,7 +71,7 @@ model Skill {
   name      String
   level     Int
   icon      String
-  color     String
+  variant   ColorVariant @default(PRIMARY)
   category  String   @default("technical")
   order     Int      @default(0)
   isActive  Boolean  @default(true)
@@ -102,8 +112,8 @@ model SocialLink {
   id        String   @id @default(uuid())
   icon      String
   label     String
-  href      String
-  color     String
+  url       String
+  variant   ColorVariant @default(PRIMARY)
   order     Int      @default(0)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -142,7 +152,7 @@ model ContactMethod {
   title       String
   value       String
   description String
-  gradient    String
+  variant     ColorVariant @default(PRIMARY)
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
