@@ -22,4 +22,3 @@ export interface ProjectQuery {
   limit?: number;
 }
 
-export type UpdateProject = Partial<Project>;

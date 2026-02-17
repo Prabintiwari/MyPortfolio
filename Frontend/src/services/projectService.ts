@@ -1,4 +1,4 @@
-import {  ProjectQuery } from "../types/project.types";
+import {  Project, ProjectQuery } from "../types/project.types";
 import api from "./api";
 
 export const projectService = {
@@ -12,12 +12,12 @@ export const projectService = {
     return data.data;
   },
 
-  create: async (projectData: FormData | object) => {
+  create: async (projectData: Project) => {
     const { data } = await api.post("/projects", projectData);
     return data.data;
   },
 
-  update: async (id: string, projectData: object) => {
+  update: async (id: string, projectData: Partial<Project>) => {
     const { data } = await api.put(`/projects/${id}`, projectData);
     return data.data;
   },

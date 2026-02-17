@@ -4,6 +4,7 @@ import {
   deleteProject,
   getAllProjects,
   getProjectById,
+  getProjectCategories,
   updateProject,
 } from "../controller/project.controller";
 
@@ -11,11 +12,13 @@ const router = Router();
 
 router.post("/", createProject);
 
-router.put("/:projectId", updateProject);
+router.get('/categories', getProjectCategories);
 
 router.get("/", getAllProjects);
 
 router.get("/:projectId", getProjectById);
+
+router.put("/:projectId", updateProject);
 
 router.delete("/:projectId",deleteProject)
 

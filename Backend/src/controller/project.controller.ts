@@ -93,6 +93,35 @@ const getProjectById = async (req: Request, res: Response) => {
   }
 };
 
+// Get unique categories from existing projects
+const getProjectCategories = async (req: Request, res: Response) => {
+  try {
+    const projects = await prisma.project.findMany({
+      select: { category: true },
+      distinct: ["category"],
+      orderBy: { category: "asc" },
+    });
+
+    const categories = [
+      { id: "all", label: "All Projects" },
+      ...projects.map((p) => ({
+        id: p.category,
+        label: p.category.charAt(0).toUpperCase() + p.category.slice(1),
+      })),
+    ];
+
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: categories,
+        message: "Category fetch successfully",
+      });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // Create new project
 const createProject = async (req: Request, res: Response) => {
   try {
@@ -223,6 +252,7 @@ const deleteProject = async (req: Request, res: Response) => {
 export {
   getAllProjects,
   getProjectById,
+  getProjectCategories,
   createProject,
   updateProject,
   deleteProject,
