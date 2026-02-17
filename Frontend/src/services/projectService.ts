@@ -4,7 +4,6 @@ import api from "./api";
 export const projectService = {
   getAll: async (params?: ProjectQuery) => {
     const { data } = await api.get("/projects", { params });
-    console.log(data.data)
     return data.data;
   },
 
@@ -15,7 +14,6 @@ export const projectService = {
 
   getCategories: async () => {
     const { data } = await api.get("/projects/categories");
-    console.log(data.data);
     return data.data;
   },
 

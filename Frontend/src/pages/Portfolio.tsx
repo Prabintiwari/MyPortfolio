@@ -97,7 +97,6 @@ const Portfolio = () => {
           </p>
         </motion.div>
 
-        {/* Filter Buttons - ✅ Dynamic from API! */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -106,7 +105,6 @@ const Portfolio = () => {
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {categories.map((category) => {
-            // Icon - category id bata map garnus, nabhetne bhane Code use garnus
             const IconComponent = categoryIcons[category.id] ?? Code;
 
             return (
@@ -122,7 +120,7 @@ const Portfolio = () => {
                 }`}
               >
                 <IconComponent size={18} />
-                {category.label} {/* ✅ API bata aayeko label */}
+                {category.label} 
               </motion.button>
             );
           })}
