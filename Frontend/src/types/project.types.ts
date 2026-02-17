@@ -2,13 +2,24 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  category: string;
-  featured: boolean;
   image: string;
+  category: string;
+  tags: string[];
+  liveDemo?: string;
+  github?: string;
+  isFeatured: boolean;
+  isActive: boolean;
+  date?: string;
   createdAt: string;
+  updatedAt: string;
 }
 
-export interface GetProjectsParams {
+export interface ProjectQuery {
   category?: string;
   featured?: boolean;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
 }
+
+export type UpdateProject = Partial<Project>;

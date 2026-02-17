@@ -1,8 +1,8 @@
-import { GetProjectsParams } from "../types/project.types";
+import {  ProjectQuery } from "../types/project.types";
 import api from "./api";
 
 export const projectService = {
-  getAll: async (params?: GetProjectsParams) => {
+  getAll: async (params?: ProjectQuery) => {
     const { data } = await api.get("/projects", { params });
     return data.data;
   },
