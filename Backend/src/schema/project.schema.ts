@@ -21,8 +21,8 @@ const projectIdParamsSchema = z.object({
 
 const projectQuerySchema = z.object({
   category: z.string().min(1, "Category is required").optional(),
-  featured: z.coerce.boolean().default(true).optional(),
-  isActive: z.coerce.boolean().default(true).optional(),
+  isFeatured: z.coerce.boolean().optional(),
+  isActive: z.coerce.boolean().optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),
 });

@@ -11,8 +11,6 @@ import socialLinksRoute from "./socialLinks.routes";
 
 const router = Router();
 
-router.use(authenticateToken, AdminOnly);
-
 router.use("/about", aboutRoute);
 
 router.use("/projects", projectsRoute);

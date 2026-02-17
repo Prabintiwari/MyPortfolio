@@ -11,7 +11,7 @@ import { ZodError } from "zod";
 //  Get all projects
 const getAllProjects = async (req: Request, res: Response) => {
   try {
-    const { category, featured, isActive, page, limit } =
+    const { category, isFeatured, isActive, page, limit } =
       projectQuerySchema.parse(req.query);
     const pageNumber = page ?? 1;
     const limitNumber = limit ?? 10;
@@ -20,7 +20,7 @@ const getAllProjects = async (req: Request, res: Response) => {
     // Filter options
     const where: any = {};
     if (category) where.category = category;
-    if (featured) where.featured = featured;
+    if (isFeatured) where.isFeatured = isFeatured;
     if (isActive) where.isActive = isActive;
 
     const [projects, total] = await Promise.all([

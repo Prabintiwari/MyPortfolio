@@ -1,56 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { image, projects } from "../assets/assets";
 import { ExternalLink, Github, Calendar, Code, Palette } from "lucide-react";
+import { projectService } from "../services/projectService";
+
+const categoryIcons: Record<string, React.ElementType> = {
+  all: Code,
+  react: Code,
+  vanilla: Palette,
+  fullstack: Code,
+};
 
 const Portfolio = () => {
   const [filter, setFilter] = useState("all");
 
-  const categories = [
-    { id: "all", name: "All Projects", icon: Code },
-    { id: "react", name: "React", icon: Code },
-    { id: "vanilla", name: "Vanilla JS", icon: Palette },
-  ];
+  const [categories, setCategories] = useState([
+    { id: "all", label: "All Projects" },
+  ]);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProjects =
-    filter === "all"
-      ? projects
-      : projects.filter((project) => project.category === filter);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await projectService.getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Categories fetch failed:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      setLoading(true);
+      try {
+        const { projects, pagination } = await projectService.getAll(
+          filter === "all" ? {} : { category: filter },
+        );
+        setProjects(projects);
+      } catch (error) {
+        console.error("Projects fetch failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [filter]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-        duration:1
-      },
+      transition: { staggerChildren: 0.2, delayChildren: 0.3, duration: 1 },
     },
   };
 
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 60,
-    },
+    hidden: { opacity: 0, y: 60 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 120,
-        damping: 20,
-        duration: 0.1,
-      },
+      transition: { type: "spring" as const, stiffness: 120, damping: 20 },
     },
-    exit: {
-      opacity: 0,
-      y: -60,
-      transition: {
-        duration: 0.1,
-      },
-    },
+    exit: { opacity: 0, y: -60, transition: { duration: 0.1 } },
   };
 
   return (
@@ -78,12 +93,11 @@ const Portfolio = () => {
           </h1>
           <p className="text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed">
             Crafting exceptional user experiences through modern frontend
-            technologies. From responsive web applications to cross-platform
-            mobile solutions.
+            technologies.
           </p>
         </motion.div>
 
-        {/* Filter Buttons */}
+        {/* Filter Buttons - ✅ Dynamic from API! */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -92,7 +106,9 @@ const Portfolio = () => {
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {categories.map((category) => {
-            const IconComponent = category.icon;
+            // Icon - category id bata map garnus, nabhetne bhane Code use garnus
+            const IconComponent = categoryIcons[category.id] ?? Code;
+
             return (
               <motion.button
                 key={category.id}
@@ -106,126 +122,137 @@ const Portfolio = () => {
                 }`}
               >
                 <IconComponent size={18} />
-                {category.name}
+                {category.label} {/* ✅ API bata aayeko label */}
               </motion.button>
             );
           })}
         </motion.div>
 
+        {/* Loading state */}
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+
         {/* Projects Grid */}
-        <AnimatePresence>
-          <motion.div
-            key={filter}
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{once:true}}
-            exit="hidden"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={`${filter}-${project.id}`}
-                variants={cardVariants}
-                custom={index}
-                whileHover={{
-                  y: -12,
-                  scale: 1.02,
-                  transition: {
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 25,
-                  },
-                }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="group bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-white/10"
-                layout
-              >
-                {/* Project Image */}
-                <div className="relative overflow-hidden">
-                  <motion.img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-48 object-cover"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                  />
+        {!loading && (
+          <AnimatePresence>
+            <motion.div
+              key={filter}
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              exit="hidden"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {projects.length === 0 ? (
+                <div className="col-span-3 text-center text-gray-400 py-20">
+                  No projects found in this category.
+                </div>
+              ) : (
+                projects.map((project: any, index) => (
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </div>
-
-                {/* Project Details */}
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <motion.h3
-                      className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors duration-300"
-                      layoutId={`title-${project.id}`}
-                    >
-                      {project.title}
-                    </motion.h3>
-                    <div className="flex items-center text-gray-400 text-sm">
-                      <Calendar size={16} className="mr-1" />
-                      {project.date}
-                    </div>
-                  </div>
-
-                  <motion.p
-                    className="text-gray-300 text-xs leading-tight mb-6 line-clamp-3 overflow-hidden"
-                    layoutId={`description-${project.id}`}
+                    key={`${filter}-${project.id}`}
+                    variants={cardVariants}
+                    custom={index}
+                    whileHover={{
+                      y: -12,
+                      scale: 1.02,
+                      transition: {
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 25,
+                      },
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    className="group bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-white/10"
                   >
-                    {project.description}
-                  </motion.p>
+                    {/* Project Image */}
+                    <div className="relative overflow-hidden">
+                      <motion.img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-48 object-cover"
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                      />
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-transparent to-transparent"
+                        initial={{ opacity: 0 }}
+                        whileHover={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </div>
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tags.map((tag, tagIndex) => (
-                      <motion.span
-                        key={tag}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: tagIndex * 0.1 }}
-                        className="px-3 py-1 bg-gradient-to-r from-purple-600/30 to-blue-600/30 text-purple-300 rounded-full text-xs font-medium border border-purple-500/20"
-                      >
-                        {tag}
-                      </motion.span>
-                    ))}
-                  </div>
+                    {/* Project Details */}
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors duration-300">
+                          {project.title}
+                        </h3>
+                        <div className="flex items-center text-gray-400 text-sm">
+                          <Calendar size={16} className="mr-1" />
+                          {project.date}
+                        </div>
+                      </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
-                    <motion.a
-                      href={project.liveDemo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
-                    >
-                      <ExternalLink size={16} />
-                      Live Demo
-                    </motion.a>
-                    <motion.a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
-                    >
-                      <Github size={16} />
-                      Code
-                    </motion.a>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+                      <p className="text-gray-300 text-xs leading-tight mb-6 line-clamp-3">
+                        {project.description}
+                      </p>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {project.tags.map((tag: string, tagIndex: number) => (
+                          <motion.span
+                            key={tag}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: tagIndex * 0.1 }}
+                            className="px-3 py-1 bg-gradient-to-r from-purple-600/30 to-blue-600/30 text-purple-300 rounded-full text-xs font-medium border border-purple-500/20"
+                          >
+                            {tag}
+                          </motion.span>
+                        ))}
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-3">
+                        {project.liveDemo && (
+                          <motion.a
+                            href={project.liveDemo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <ExternalLink size={16} />
+                            Live Demo
+                          </motion.a>
+                        )}
+                        {project.github && (
+                          <motion.a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+                          >
+                            <Github size={16} />
+                            Code
+                          </motion.a>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* Bottom CTA */}
         <motion.div
@@ -241,26 +268,16 @@ const Portfolio = () => {
             </h2>
             <p className="text-gray-300 mb-8 max-w-3xl mx-auto text-lg leading-relaxed">
               I specialize in creating beautiful, responsive, and performant
-              frontend applications. Let's collaborate on your next project and
-              bring your ideas to life!
+              frontend applications. Let's collaborate on your next project!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.a
-              href="#contact"
+                href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 shadow-lg"
               >
                 Let's Collaborate
-              </motion.a>
-              <motion.a
-                href={image.MyCV}
-                download
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20"
-              >
-                Download CV
               </motion.a>
             </div>
           </div>
