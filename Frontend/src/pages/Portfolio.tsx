@@ -151,7 +151,7 @@ const Portfolio = () => {
                   No projects found in this category.
                 </div>
               ) : (
-                projects.map((project: any, index) => (
+                projects.slice(0,8).map((project: any, index) => (
                   <motion.div
                     key={`${filter}-${project.id}`}
                     variants={cardVariants}
@@ -173,7 +173,7 @@ const Portfolio = () => {
                       <motion.img
                         src={project.image}
                         alt={project.title}
-                        className="w-full h-48 object-cover"
+                        className="w-full h-40 object-cover"
                         whileHover={{ scale: 1.1 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}
                       />
