@@ -36,9 +36,11 @@ const Portfolio = () => {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        const { projects, pagination } = await projectService.getAll(
-          filter === "all" ? {} : { category: filter },
-        );
+        const { projects } = await projectService.getAll({
+          ...(filter === "all" ? {} : { category: filter }),
+          isActive: true,
+        });
+        console.log(projects);
         setProjects(projects);
       } catch (error) {
         console.error("Projects fetch failed:", error);
@@ -120,7 +122,7 @@ const Portfolio = () => {
                 }`}
               >
                 <IconComponent size={18} />
-                {category.label} 
+                {category.label}
               </motion.button>
             );
           })}

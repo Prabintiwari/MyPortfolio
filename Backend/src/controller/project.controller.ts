@@ -20,8 +20,8 @@ const getAllProjects = async (req: Request, res: Response) => {
     // Filter options
     const where: any = {};
     if (category) where.category = category;
-    if (isFeatured) where.isFeatured = isFeatured;
-    if (isActive) where.isActive = isActive;
+    if (isFeatured !== undefined) where.isFeatured = isFeatured;
+    if (isActive !== undefined) where.isActive = isActive;
 
     const [projects, total] = await Promise.all([
       prisma.project.findMany({
