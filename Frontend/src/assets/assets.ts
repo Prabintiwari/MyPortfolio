@@ -68,56 +68,6 @@ export const services = [
     features: ["Semantic HTML", "Meta Tags", "Accessibility"],
   },
 ];
-export const projects = [
-  {
-    id: 1,
-    title: "React MovieFinder",
-    description:
-      "A responsive React movie search app with user authentication, custom hooks, and real-time search capabilities. Built with Tailwind CSS and optimized for performance.",
-    image: movieFinder,
-    category: "react",
-    tags: ["React", "Tailwind CSS", "Custon Hooks"],
-    liveDemo: "https://moviefinder2025.netlify.app/",
-    github: "https://github.com/Prabintiwari/MovieFinder",
-    date: "2025",
-  },
-  {
-    id: 2,
-    title: "Skill Shikshya Landing Page",
-    description:
-      "A clean and responsive landing page for Skill Shikshya, built using only HTML, Tailwind CSS, and Vanilla JS. It showcases smooth scrolling, modern layout, and component-based structure without any framework.",
-    image: SkillShikshya,
-    category: "vanilla",
-    tags: ["html", "tailwind css", "Javascript"],
-    liveDemo: "https://assignmentskillshikshya.netlify.app/",
-    github: "https://github.com/Prabintiwari/Assignment_02",
-    date: "2025",
-  },
-  {
-    id: 3,
-    title: "Weather App",
-    description:
-      "A sleek weather forecasting app built using React and OpenWeather API. It provides real-time weather updates with features like location-based search, temperature unit toggle, and responsive UI with Tailwind CSS.",
-    image: WeatherApp, 
-    category: "react",
-    tags: ["React", "Tailwind CSS", "OpenWeather API"],
-    liveDemo: "https://weatherapp255.netlify.app/", 
-    github: "https://github.com/Prabintiwari/WeatherApp", 
-    date: "2025",
-  },
-  {
-    id: 4,
-    title: "NepalShop E-Commerce Platform",
-    description:
-      "A modern e-commerce platform built with React, TypeScript, and Vite. Features include product catalog, shopping cart, user authentication, and a fully responsive UI styled with Tailwind CSS.",
-    image: NepalShop, 
-    category: "react",
-    tags: ["React", "Tailwind CSS", "Typescript"],
-    liveDemo: "https://nepalshop.netlify.app/", 
-    github: "https://github.com/Prabintiwari/NepalShop", 
-    date: "2025",
-  },
-];
 export const contactMethods = [
   {
     icon: Mail,

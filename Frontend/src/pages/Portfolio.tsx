@@ -40,7 +40,6 @@ const Portfolio = () => {
           ...(filter === "all" ? {} : { category: filter }),
           isActive: true,
         });
-        console.log(projects);
         setProjects(projects);
       } catch (error) {
         console.error("Projects fetch failed:", error);
