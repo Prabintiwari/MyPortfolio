@@ -14,17 +14,17 @@ export const projectService = {
 
   getCategories: async () => {
     const { data } = await api.get("/projects/categories");
-    return data.data;
+    return data;
   },
 
   create: async (projectData: Project) => {
     const { data } = await api.post("/projects", projectData);
-    return data.data;
+    return data;
   },
 
   update: async (id: string, projectData: Partial<Project>) => {
     const { data } = await api.put(`/projects/${id}`, projectData);
-    return data.data;
+    return data;
   },
 
   delete: async (id: string) => {

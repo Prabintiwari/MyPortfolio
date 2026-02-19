@@ -44,6 +44,7 @@ const getAllProjects = async (req: Request, res: Response) => {
           totalPages: Math.ceil(total / limitNumber),
         },
       },
+      message: "Projects Retrival successfully",
     });
   } catch (error: any) {
     if (error instanceof ZodError) {
