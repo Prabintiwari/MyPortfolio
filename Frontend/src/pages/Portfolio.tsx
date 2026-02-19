@@ -18,14 +18,20 @@ const Portfolio = () => {
   ]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setError("");
       try {
         const data = await projectService.getCategories();
         setCategories(data);
-      } catch (error) {
-        console.error("Categories fetch failed:", error);
+      } catch (error: any) {
+        setError(error.response?.data?.message);
+        console.error(
+          "Categories fetch failed:",
+          error.response?.data?.message,
+        );
       }
     };
 
@@ -34,15 +40,17 @@ const Portfolio = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
+      setError("");
       setLoading(true);
       try {
-        const { projects } = await projectService.getAll({
+        const data = await projectService.getAll({
           ...(filter === "all" ? {} : { category: filter }),
           isActive: true,
         });
-        setProjects(projects);
-      } catch (error) {
-        console.error("Projects fetch failed:", error);
+        setProjects(data.data.projects);
+      } catch (error: any) {
+        setError(error.response?.data?.message);
+        console.error("Projects fetch failed:", error.response?.data?.message);
       } finally {
         setLoading(false);
       }
@@ -133,9 +141,14 @@ const Portfolio = () => {
             <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
+        {error && (
+          <div className="text-red-500 flex justify-center items-center py-20">
+            {error}
+          </div>
+        )}
 
         {/* Projects Grid */}
-        {!loading && (
+        {!loading && !error && (
           <AnimatePresence>
             <motion.div
               key={filter}
@@ -151,7 +164,7 @@ const Portfolio = () => {
                   No projects found in this category.
                 </div>
               ) : (
-                projects.slice(0,8).map((project: any, index) => (
+                projects.slice(0, 8).map((project: any, index) => (
                   <motion.div
                     key={`${filter}-${project.id}`}
                     variants={cardVariants}

@@ -110,13 +110,11 @@ const getProjectCategories = async (req: Request, res: Response) => {
       })),
     ];
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: categories,
-        message: "Category fetch successfully",
-      });
+    res.status(200).json({
+      success: true,
+      data: categories,
+      message: "Category fetch successfully",
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
