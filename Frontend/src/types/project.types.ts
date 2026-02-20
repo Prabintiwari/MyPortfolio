@@ -16,7 +16,7 @@ export interface Project {
 
 export interface ProjectQuery {
   category?: string;
-  featured?: boolean;
+  isFeatured?: boolean;
   isActive?: boolean;
   page?: number;
   limit?: number;

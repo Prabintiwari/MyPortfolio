@@ -23,7 +23,6 @@ const serviceIdParamsSchema = z.object({
 });
 
 const serviceQuerySchema = z.object({
-  isFeatured: z.coerce.boolean().default(true).optional(),
   isActive: z.coerce.boolean().default(true).optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),

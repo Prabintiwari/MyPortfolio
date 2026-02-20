@@ -11,7 +11,7 @@ import { ZodError } from "zod";
 // Get all services
 const getAllServices = async (req: Request, res: Response) => {
   try {
-    const { isActive, isFeatured, page, limit } = serviceQuerySchema.parse(
+    const { isActive, page, limit } = serviceQuerySchema.parse(
       req.query,
     );
     const pageNumber = page ?? 1;
@@ -21,9 +21,6 @@ const getAllServices = async (req: Request, res: Response) => {
     const where: any = {};
     if (isActive) {
       where.isActive = isActive;
-    }
-    if (isFeatured) {
-      where.isFeatured = isFeatured;
     }
 
     const [services, total] = await Promise.all([
