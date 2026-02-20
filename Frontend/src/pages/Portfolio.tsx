@@ -116,7 +116,6 @@ const Portfolio = () => {
         >
           {categories.map((category) => {
             const IconComponent = categoryIcons[category.id] ?? Code;
-            console.log(IconComponent);
 
             return (
               <motion.button
