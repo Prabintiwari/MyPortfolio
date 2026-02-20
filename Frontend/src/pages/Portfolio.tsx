@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Calendar, Code, Palette } from "lucide-react";
 import { projectService } from "../services/projectService";
+import { Project } from "../types/project.types";
 
 const categoryIcons: Record<string, React.ElementType> = {
   all: Code,
@@ -16,7 +17,7 @@ const Portfolio = () => {
   const [categories, setCategories] = useState([
     { id: "all", label: "All Projects" },
   ]);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -25,7 +26,7 @@ const Portfolio = () => {
       setError("");
       try {
         const data = await projectService.getCategories();
-        setCategories(data);
+        setCategories(data.data);
       } catch (error: any) {
         setError(error.response?.data?.message);
         console.error(
@@ -115,6 +116,7 @@ const Portfolio = () => {
         >
           {categories.map((category) => {
             const IconComponent = categoryIcons[category.id] ?? Code;
+            console.log(IconComponent);
 
             return (
               <motion.button
