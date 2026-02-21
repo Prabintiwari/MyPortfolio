@@ -27,7 +27,7 @@ const Services = () => {
         setServices(data.data.services);
       } catch (error: any) {
         setError(error.response?.data?.message);
-        console.error("Projects fetch failed:", error.response?.data?.message);
+        console.error("Services fetch failed:", error.response?.data?.message);
       } finally {
         setLoading(false);
       }
@@ -86,6 +86,20 @@ const Services = () => {
           </p>
         </motion.div>
 
+        {/* Loading state */}
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-red-500 flex justify-center items-center py-20">
+            {error}
+          </div>
+        )}
+
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -93,64 +107,65 @@ const Services = () => {
           viewport={{ once: true, margin: "-100px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {services.map((service, index) => {
-            const IconComponent = servicesIcons[service.icon] ?? Lightbulb;
-            return (
-              <motion.div
-                key={index}
-                variants={cardVariants}
-                whileHover={{
-                  y: -10,
-                  transition: { type: "spring", stiffness: 300, damping: 20 },
-                }}
-                className="group relative"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition-opacity duration-300"></div>
-                <div className="relative bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 h-full hover:border-purple-500/50 transition-all duration-300">
-                  <motion.div whileHover="hover" className="mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:shadow-purple-500/25 transition-all duration-300">
-                      <IconComponent size={18} />
-                    </div>
-                  </motion.div>
+          {!loading &&
+            services.map((service, index) => {
+              const IconComponent = servicesIcons[service.icon] ?? Lightbulb;
+              return (
+                <motion.div
+                  key={index}
+                  variants={cardVariants}
+                  whileHover={{
+                    y: -10,
+                    transition: { type: "spring", stiffness: 300, damping: 20 },
+                  }}
+                  className="group relative"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition-opacity duration-300"></div>
+                  <div className="relative bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 h-full hover:border-purple-500/50 transition-all duration-300">
+                    <motion.div whileHover="hover" className="mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:shadow-lg group-hover:shadow-purple-500/25 transition-all duration-300">
+                        <IconComponent size={18} />
+                      </div>
+                    </motion.div>
 
-                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-purple-200 transition-colors duration-300">
-                    {service.title}
-                  </h3>
+                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-purple-200 transition-colors duration-300">
+                      {service.title}
+                    </h3>
 
-                  <p className="text-gray-300 mb-6 leading-relaxed">
-                    {service.description}
-                  </p>
+                    <p className="text-gray-300 mb-6 leading-relaxed">
+                      {service.description}
+                    </p>
 
-                  <ul className="space-y-2">
-                    {service.features.map((feature, featureIndex) => (
-                      <motion.li
-                        key={featureIndex}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          delay: 0.1 * featureIndex,
-                          duration: 0.3,
-                        }}
-                        className="flex items-center text-gray-400 text-sm"
-                      >
-                        <div className="w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full mr-3"></div>
-                        {feature}
-                      </motion.li>
-                    ))}
-                  </ul>
+                    <ul className="space-y-2">
+                      {service.features.map((feature, featureIndex) => (
+                        <motion.li
+                          key={featureIndex}
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{
+                            delay: 0.1 * featureIndex,
+                            duration: 0.3,
+                          }}
+                          className="flex items-center text-gray-400 text-sm"
+                        >
+                          <div className="w-1.5 h-1.5 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full mr-3"></div>
+                          {feature}
+                        </motion.li>
+                      ))}
+                    </ul>
 
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-b-2xl origin-left"
-                  ></motion.div>
-                </div>
-              </motion.div>
-            );
-          })}
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.5, duration: 1 }}
+                      className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-b-2xl origin-left"
+                    ></motion.div>
+                  </div>
+                </motion.div>
+              );
+            })}
         </motion.div>
 
         <motion.div
