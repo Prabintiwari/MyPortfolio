@@ -1,4 +1,4 @@
-import {  ContactMethodQuery } from "../types/contactMethod.types";
+import { ContactMethodQuery } from "../types/contactMethod.types";
 import api from "./api";
 
 export const contactMethodService = {
@@ -11,6 +11,4 @@ export const contactMethodService = {
     const { data } = await api.get(`/contact-method/${id}`);
     return data;
   },
-
-  
 };

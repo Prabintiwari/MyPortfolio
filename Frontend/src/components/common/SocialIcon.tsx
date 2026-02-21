@@ -4,6 +4,7 @@ import { SocialLinks } from "../../types/socialLinks.types";
 import { socialLinksService } from "../../services/socialLinksServices";
 import { Github, Linkedin } from "lucide-react";
 import { getThemeColors } from "../../config/theme";
+import { useSocialLink } from "../../hooks/useSocialLinks";
 
 const socialLinksIcons: Record<string, React.ElementType> = {
   Github: Github,
@@ -11,33 +12,7 @@ const socialLinksIcons: Record<string, React.ElementType> = {
 };
 
 const SocialIcon = () => {
-  const [socialLinks, setSocialLinks] = useState<SocialLinks[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchsocialLinks = async () => {
-      setError("");
-      setLoading(true);
-      try {
-        const data = await socialLinksService.getAll({
-          isActive: true,
-        });
-        setSocialLinks(data.data.socialLinks);
-      } catch (error: any) {
-        const message =
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to load services";
-        setError(message);
-        console.error("Projects fetch failed:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchsocialLinks();
-  }, []);
+  const { socialLinks, error, loading } = useSocialLink();
 
   return (
     <div className="flex space-x-4">
