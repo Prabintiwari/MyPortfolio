@@ -24,20 +24,6 @@ export const image = {
   HomeImg,
   MyCV,
 };
-export const social = [
-  {
-    icon: Github,
-    url: "https://github.com/Prabintiwari",
-    label: "GitHub",
-    color: "hover:bg-purple-500",
-  },
-  {
-    icon: Linkedin,
-    url: "https://www.linkedin.com/in/prabin-tiwari-61a95a2a2/",
-    label: "LinkedIn",
-    color: "hover:bg-blue-500",
-  },
-];
 export const contactMethods = [
   {
     icon: Mail,

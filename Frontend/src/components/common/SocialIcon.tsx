@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { social } from "../../assets/assets";
 import { motion } from "framer-motion";
 import { SocialLinks } from "../../types/socialLinks.types";
 import { socialLinksService } from "../../services/socialLinksServices";

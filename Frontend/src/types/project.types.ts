@@ -10,15 +10,14 @@ export interface Project {
   isFeatured: boolean;
   isActive: boolean;
   date?: string;
+  order: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface ProjectQuery {
   category?: string;
-  isFeatured?: boolean;
   isActive?: boolean;
   page?: number;
   limit?: number;
 }
-

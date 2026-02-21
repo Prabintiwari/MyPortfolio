@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Zap, Star, MessageCircle } from "lucide-react";
-import { contactMethods } from "../assets/assets";
+import {
+  Send,
+  Zap,
+  Star,
+  MessageCircle,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
 import SocialIcon from "../components/common/SocialIcon";
 import Input from "../components/common/Input";
+import { contactMethodService } from "../services/contactMethodService";
+import { ContactMethod } from "../types/contactMethod.types";
+import { getThemeColors } from "../config/theme";
+
+const contactMethodIcon: Record<string, React.ElementType> = {
+  Mail: Mail,
+  Phone: Phone,
+  MapPin: MapPin,
+};
 
 const Contact = () => {
   const initialFormData = {
@@ -12,12 +28,38 @@ const Contact = () => {
     subject: "",
     message: "",
   };
+  const [contactMethods, setContactMethods] = useState<ContactMethod[]>([]);
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleInputChange = (e:any) => {
+  useEffect(() => {
+    const fetchContactMethod = async () => {
+      setError("");
+      setLoading(true);
+      try {
+        const data = await contactMethodService.getAll({
+          isActive: true,
+        });
+
+        setContactMethods(data.data.contactMethods);
+      } catch (error: any) {
+        const message =
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to load services";
+        setError(message);
+        console.error("Projects fetch failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContactMethod();
+  }, []);
+
+  const handleInputChange = (e: any) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -25,7 +67,7 @@ const Contact = () => {
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true);
+    setLoading(true);
     setError("");
     await new Promise((resolve) => setTimeout(resolve, 1500));
     try {
@@ -41,10 +83,10 @@ const Contact = () => {
       setFormData(initialFormData);
       setIsSubmitted(true);
       setError("");
-    } catch (error:any) {
+    } catch (error: any) {
       setError(error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -112,45 +154,50 @@ const Contact = () => {
               </motion.h2>
 
               <div className="space-y-6">
-                {contactMethods.map((method) => (
-                  <motion.div
-                    key={method.title}
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: method.delay }}
-                    whileHover={{
-                      x: 8,
-                      transition: {
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 25,
-                      },
-                    }}
-                    className="flex items-center group cursor-pointer"
-                  >
+                {contactMethods.map((method, index) => {
+                  const themeColor = getThemeColors(method.variant);
+                  console.log(themeColor.gradient);
+                  const IconComponent = contactMethodIcon[method.icon] ?? Send
+                  return (
                     <motion.div
-                      className={`w-12 h-12 bg-gradient-to-r ${method.gradient} rounded-lg flex items-center justify-center mr-4`}
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 17,
+                      key={method.title}
+                      initial={{ opacity: 0, x: -50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      whileHover={{
+                        x: 8,
+                        transition: {
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 25,
+                        },
                       }}
+                      className="flex items-center group cursor-pointer"
                     >
-                      <method.icon className="w-6 h-6 text-white" />
+                      <motion.div
+                        className={`w-12 h-12 bg-gradient-to-r ${themeColor.gradient} rounded-lg flex items-center justify-center mr-4`}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 17,
+                        }}
+                      >
+                        <IconComponent size={18} />
+                      </motion.div>
+                      <div>
+                        <p className="text-sm text-gray-400">{method.title}</p>
+                        <p className="text-lg font-medium text-white group-hover:text-purple-400 transition-colors">
+                          {method.value}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {method.description}
+                        </p>
+                      </div>
                     </motion.div>
-                    <div>
-                      <p className="text-sm text-gray-400">{method.title}</p>
-                      <p className="text-lg font-medium text-white group-hover:text-purple-400 transition-colors">
-                        {method.value}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {method.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Social Links */}
@@ -225,7 +272,7 @@ const Contact = () => {
                 className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg shadow-purple-500/25 ${isSubmitted ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 <AnimatePresence mode="wait">
-                  {isLoading ? (
+                  {loading ? (
                     <div className="flex justify-center items-center gap-2">
                       sending
                       <div
