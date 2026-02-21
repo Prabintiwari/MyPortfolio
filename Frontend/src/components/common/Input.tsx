@@ -5,12 +5,23 @@ interface InputProps {
   type?: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
   placeholder: string;
+  disabled?: boolean;
   rows?: number;
 }
 
-const Input = ({ type = "text", name, value, onChange, placeholder, rows }: InputProps) => {
+const Input = ({
+  type = "text",
+  name,
+  value,
+  onChange,
+  placeholder,
+  disabled,
+  rows,
+}: InputProps) => {
   const baseClass =
     "w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-[#8b5cf6] transition-all backdrop-blur-sm";
 
@@ -29,6 +40,7 @@ const Input = ({ type = "text", name, value, onChange, placeholder, rows }: Inpu
           placeholder={placeholder}
           rows={rows}
           className={`${baseClass}`}
+          disabled={disabled}
           required
         />
       </motion.div>
@@ -47,6 +59,7 @@ const Input = ({ type = "text", name, value, onChange, placeholder, rows }: Inpu
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        disabled={disabled}
         required
         className={`${baseClass}`}
       />
