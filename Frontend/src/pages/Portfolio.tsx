@@ -50,8 +50,12 @@ const Portfolio = () => {
         });
         setProjects(data.data.projects);
       } catch (error: any) {
-        setError(error.response?.data?.message);
-        console.error("Projects fetch failed:", error.response?.data?.message);
+        const message =
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to load services";
+        setError(message);
+        console.error("Projects fetch failed:", error);
       } finally {
         setLoading(false);
       }
