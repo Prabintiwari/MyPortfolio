@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Calendar, Code, Palette } from "lucide-react";
 import { projectService } from "../services/projectService";
 import { Project } from "../types/project.types";
+import { useProject } from "../hooks/useProject";
 
 const categoryIcons: Record<string, React.ElementType> = {
   all: Code,
@@ -12,57 +13,8 @@ const categoryIcons: Record<string, React.ElementType> = {
 };
 
 const Portfolio = () => {
-  const [filter, setFilter] = useState("all");
-
-  const [categories, setCategories] = useState([
-    { id: "all", label: "All Projects" },
-  ]);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      setError("");
-      try {
-        const data = await projectService.getCategories();
-        setCategories(data.data);
-      } catch (error: any) {
-        setError(error.response?.data?.message);
-        console.error(
-          "Categories fetch failed:",
-          error.response?.data?.message,
-        );
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      setError("");
-      setLoading(true);
-      try {
-        const data = await projectService.getAll({
-          ...(filter === "all" ? {} : { category: filter }),
-          isActive: true,
-        });
-        setProjects(data.data.projects);
-      } catch (error: any) {
-        const message =
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to load services";
-        setError(message);
-        console.error("Projects fetch failed:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, [filter]);
+  const { projects, categories, error, loading, filter, setFilter } =
+    useProject();
 
   const containerVariants = {
     hidden: { opacity: 0 },

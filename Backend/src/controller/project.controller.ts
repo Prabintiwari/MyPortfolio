@@ -50,7 +50,7 @@ const getAllProjects = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -84,7 +84,7 @@ const getProjectById = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -161,7 +161,7 @@ const createProject = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -201,7 +201,7 @@ const updateProject = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -238,7 +238,7 @@ const deleteProject = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({

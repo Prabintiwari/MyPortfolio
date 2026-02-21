@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send,
@@ -13,10 +13,9 @@ import {
 } from "lucide-react";
 import SocialIcon from "../components/common/SocialIcon";
 import Input from "../components/common/Input";
-import { ContactMethod } from "../types/contactMethod.types";
 import { getThemeColors } from "../config/theme";
-import { contactMethodService } from "../services/contactMethodService";
-import { contactService } from "../services/contactService";
+import { useContactForm } from "../hooks/useContactForm";
+import { useContactMethods } from "../hooks/useContactMethods";
 
 const contactMethodIcon: Record<string, React.ElementType> = {
   Mail: Mail,
@@ -25,121 +24,20 @@ const contactMethodIcon: Record<string, React.ElementType> = {
 };
 
 const Contact = () => {
-  const initialFormData = {
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  };
+  const {
+    formData,
+    loading: formLoading,
+    error: formError,
+    isSubmitted,
+    handleInputChange,
+    handleSubmit,
+  } = useContactForm();
 
-  const [contactMethods, setContactMethods] = useState<ContactMethod[]>([]);
-  const [formData, setFormData] = useState(initialFormData);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [formError, setFormError] = useState("");
-  const [fetchError, setFetchError] = useState("");
-  const [fetchLoading, setFetchLoading] = useState(true);
-
-  // ✅ Fetch contact methods
-  useEffect(() => {
-    const fetchContactMethod = async () => {
-      setFetchError("");
-      setFetchLoading(true);
-      try {
-        const data = await contactMethodService.getAll({
-          isActive: true,
-          limit: 100,
-        });
-        setContactMethods(data.data.contactMethods);
-      } catch (error: any) {
-        const message =
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to load contact methods";
-        setFetchError(message);
-        console.error("Contact methods fetch failed:", error);
-      } finally {
-        setFetchLoading(false);
-      }
-    };
-
-    fetchContactMethod();
-  }, []);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-    // Clear error when user types
-    if (formError) setFormError("");
-  };
-
-  // ✅ Form validation
-  const validateForm = (): boolean => {
-    if (!formData.name.trim()) {
-      setFormError("Name is required");
-      return false;
-    }
-    if (!formData.email.trim()) {
-      setFormError("Email is required");
-      return false;
-    }
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setFormError("Please enter a valid email address");
-      return false;
-    }
-    if (!formData.subject.trim()) {
-      setFormError("Subject is required");
-      return false;
-    }
-    if (!formData.message.trim()) {
-      setFormError("Message is required");
-      return false;
-    }
-    if (formData.message.length < 10) {
-      setFormError("Message must be at least 10 characters");
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate form
-    if (!validateForm()) return;
-
-    setLoading(true);
-    setFormError("");
-
-    try {
-      const response = await contactService.create(formData);
-
-      // Success
-      setFormData(initialFormData);
-      setIsSubmitted(true);
-      setFormError("");
-
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to send message. Please try again.";
-      setFormError(message);
-      console.error("Message send failed:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    contactMethods,
+    loading: fetchLoading,
+    error: fetchError,
+  } = useContactMethods();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -203,14 +101,14 @@ const Contact = () => {
                 Let's Connect
               </motion.h2>
 
-              {/* ✅ Loading state */}
+              {/* Loading */}
               {fetchLoading && (
                 <div className="flex justify-center items-center py-8">
                   <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
 
-              {/* ✅ Error state */}
+              {/* Error */}
               {fetchError && (
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
                   <div className="flex items-start gap-3">
@@ -228,7 +126,7 @@ const Contact = () => {
                 </div>
               )}
 
-              {/* ✅ Contact methods */}
+              {/* Contact Methods */}
               {!fetchLoading && !fetchError && (
                 <div className="space-y-6">
                   {contactMethods.length === 0 ? (
@@ -238,8 +136,7 @@ const Contact = () => {
                   ) : (
                     contactMethods.map((method, index) => {
                       const themeColor = getThemeColors(method.variant);
-                      const IconComponent =
-                        contactMethodIcon[method.icon] ?? Send;
+                      const IconComponent = contactMethodIcon[method.icon] ?? Send;
                       return (
                         <motion.div
                           key={method.id}
@@ -269,9 +166,7 @@ const Contact = () => {
                             <IconComponent className="text-white" size={20} />
                           </motion.div>
                           <div>
-                            <p className="text-sm text-gray-400">
-                              {method.title}
-                            </p>
+                            <p className="text-sm text-gray-400">{method.title}</p>
                             <p className="text-lg font-medium text-white group-hover:text-purple-400 transition-colors">
                               {method.value}
                             </p>
@@ -318,7 +213,7 @@ const Contact = () => {
                   placeholder="Your Name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  disabled={loading || isSubmitted}
+                  disabled={formLoading || isSubmitted}
                 />
                 <Input
                   type="email"
@@ -326,7 +221,7 @@ const Contact = () => {
                   placeholder="Your Email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  disabled={loading || isSubmitted}
+                  disabled={formLoading || isSubmitted}
                 />
               </div>
 
@@ -335,7 +230,7 @@ const Contact = () => {
                 placeholder="Subject"
                 value={formData.subject}
                 onChange={handleInputChange}
-                disabled={loading || isSubmitted}
+                disabled={formLoading || isSubmitted}
               />
 
               <Input
@@ -344,10 +239,10 @@ const Contact = () => {
                 rows={5}
                 value={formData.message}
                 onChange={handleInputChange}
-                disabled={loading || isSubmitted}
+                disabled={formLoading || isSubmitted}
               />
 
-              {/* ✅ Error message */}
+              {/* Error */}
               <AnimatePresence>
                 {formError && (
                   <motion.div
@@ -356,13 +251,13 @@ const Contact = () => {
                     exit={{ opacity: 0, y: -10 }}
                     className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 flex items-start gap-2"
                   >
-                    <AlertCircle className="text-red-500 mt-0.5" size={18} />
+                    <AlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={18} />
                     <p className="text-red-500 text-sm">{formError}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* ✅ Success message */}
+              {/* Success */}
               <AnimatePresence>
                 {isSubmitted && (
                   <motion.div
@@ -371,7 +266,7 @@ const Contact = () => {
                     exit={{ opacity: 0, y: -10 }}
                     className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 flex items-start gap-2"
                   >
-                    <CheckCircle className="text-green-500 mt-0.5" size={18} />
+                    <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
                     <div>
                       <p className="text-green-500 text-sm font-medium">
                         Message sent successfully!
@@ -384,22 +279,22 @@ const Contact = () => {
                 )}
               </AnimatePresence>
 
-              {/* ✅ Submit button */}
+              {/* Submit Button */}
               <motion.button
                 type="submit"
-                disabled={loading || isSubmitted}
+                disabled={formLoading || isSubmitted}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.8 }}
-                whileHover={{ scale: loading || isSubmitted ? 1 : 1.05 }}
-                whileTap={{ scale: loading || isSubmitted ? 1 : 0.95 }}
+                whileHover={{ scale: formLoading || isSubmitted ? 1 : 1.05 }}
+                whileTap={{ scale: formLoading || isSubmitted ? 1 : 0.95 }}
                 className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg shadow-purple-500/25 ${
-                  loading || isSubmitted ? "opacity-50 cursor-not-allowed" : ""
+                  formLoading || isSubmitted ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
                 <AnimatePresence mode="wait">
-                  {loading ? (
+                  {formLoading ? (
                     <motion.div
                       key="loading"
                       initial={{ opacity: 0 }}

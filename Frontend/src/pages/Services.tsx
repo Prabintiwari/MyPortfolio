@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Service } from "../types/services.types";
 import { Code, Globe, Smartphone, Zap, Lightbulb } from "lucide-react";
 import { serviceService } from "../services/serviceService";
+import { useService } from "../hooks/useServices";
 
 const servicesIcons: Record<string, React.ElementType> = {
   Code: Code,
@@ -13,34 +14,7 @@ const servicesIcons: Record<string, React.ElementType> = {
 };
 
 const Services = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      setError("");
-      setLoading(true);
-      try {
-        const data = await serviceService.getAll({
-          isActive: true,
-        });
-
-        setServices(data.data.services);
-      } catch (error: any) {
-        const message =
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to load services";
-        setError(message);
-        console.error("Services fetch failed:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, []);
+  const { services, error, loading } = useService();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -117,7 +91,7 @@ const Services = () => {
               viewport={{ once: true, margin: "-100px" }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {services.map((service, index) => {
+              {services.map((service) => {
                 const IconComponent = servicesIcons[service.icon] ?? Lightbulb;
                 return (
                   <motion.div

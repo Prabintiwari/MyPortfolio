@@ -26,7 +26,7 @@ const getAbout = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -88,7 +88,7 @@ const createAbout = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -126,7 +126,7 @@ const updateAbout = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -160,7 +160,7 @@ const deleteAbout = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({

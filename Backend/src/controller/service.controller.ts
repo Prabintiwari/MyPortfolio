@@ -49,7 +49,7 @@ const getAllServices = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -83,7 +83,7 @@ const getServiceById = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -119,7 +119,7 @@ const createService = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -159,7 +159,7 @@ const updateService = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
@@ -197,7 +197,7 @@ const deleteService = async (req: Request, res: Response) => {
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
-        message: error.issues,
+        message: error.issues[0].message,
       });
     }
     res.status(500).json({
