@@ -26,7 +26,7 @@ const socialLinkIdParamsSchema = z.object({
 });
 
 const socialLinkQuerySchema = z.object({
-  label: z.coerce.boolean().default(true).optional(),
+  label: z.coerce.string().optional(),
   isActive: z.coerce.boolean().default(true).optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),

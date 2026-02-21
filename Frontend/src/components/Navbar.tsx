@@ -84,36 +84,33 @@ const Navbar = () => {
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{
-                      delay: 0.1 * index + 0.4,
+                      delay: 0.1 * index + 0.2,
                       duration: 0.4,
                     }}
-                    className="relative"
                   >
                     <motion.a
                       href={item.href}
                       onClick={() => handleNavClick(item.name)}
-                      className={`px-3 py-2 text-sm font-medium transition-colors duration-200 hover:text-blue-400 cursor-pointer no-underline ${
+                      className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 hover:text-blue-400 cursor-pointer no-underline block ${
                         activeSection === item.name.toLowerCase()
                           ? "text-blue-600"
                           : "text-gray-300"
                       }`}
                     >
                       {item.name}
-
-                      {/* Active indicator */}
-                      {activeSection === item.name.toLowerCase() && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute -bottom-2 right-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"
-                          initial={false}
-                          transition={{
-                            type: "spring",
-                            stiffness: 400,
-                            damping: 20,
-                          }}
-                        />
-                      )}
                     </motion.a>
+                    {activeSection === item.name.toLowerCase() && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mt-1"
+                        initial={false}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                        }}
+                      />
+                    )}
                   </motion.div>
                 ))}
               </motion.div>

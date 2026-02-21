@@ -38,36 +38,6 @@ export const social = [
     color: "hover:bg-blue-500",
   },
 ];
-export const services = [
-  {
-    icon: Code,
-    title: "Frontend Development",
-    description:
-      "Responsive and accessible websites built using modern frontend technologies.",
-    features: ["HTML & CSS", "Tailwind CSS", "JavaScript", "React.js"],
-  },
-  {
-    icon: Smartphone,
-    title: "Responsive Design",
-    description:
-      "Web interfaces that look great on all screen sizes and devices.",
-    features: ["Mobile-First Approach", "Media Queries", "Flexbox & Grid"],
-  },
-  {
-    icon: Zap,
-    title: "Performance Optimization",
-    description:
-      "Improve frontend speed and performance for better user experience.",
-    features: ["Lazy Loading", "Code Splitting", "Optimized Assets"],
-  },
-  {
-    icon: Globe,
-    title: "Basic SEO (Frontend)",
-    description:
-      "Implement semantic HTML and meta tags to improve search visibility.",
-    features: ["Semantic HTML", "Meta Tags", "Accessibility"],
-  },
-];
 export const contactMethods = [
   {
     icon: Mail,

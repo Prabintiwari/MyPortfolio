@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, useScroll } from "framer-motion";
 
 const CircularProgress = () => {
@@ -6,7 +6,7 @@ const CircularProgress = () => {
   const [percentage, setPercentage] = useState(0);
 
   useEffect(() => {
-    const ScrollY = scrollYProgress.onChange((latest) => {
+    const ScrollY = scrollYProgress.on("change", (latest) => {
       setPercentage(Math.round(latest * 100));
     });
     return ScrollY;
@@ -31,7 +31,7 @@ const CircularProgress = () => {
       whileTap={{ scale: 0.95 }}
     >
       <div className="w-full h-full rounded-full flex flex-col items-center justify-center relative">
-        <svg className="absolute w-16 h-16 transform -rotate-90">      
+        <svg className="absolute w-16 h-16 transform -rotate-90">
           <circle
             cx="32"
             cy="32"

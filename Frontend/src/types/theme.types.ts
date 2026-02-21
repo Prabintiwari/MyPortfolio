@@ -1,4 +1,3 @@
-
 export enum ColorVariant {
   PRIMARY = 'PRIMARY',
   SECONDARY = 'SECONDARY',

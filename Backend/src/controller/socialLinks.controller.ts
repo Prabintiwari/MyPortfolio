@@ -26,7 +26,7 @@ const getAllSocialLinks = async (req: Request, res: Response) => {
       where.label = label;
     }
 
-    const [socialLink, total] = await Promise.all([
+    const [socialLinks, total] = await Promise.all([
       prisma.socialLink.findMany({
         where,
         skip,
@@ -36,10 +36,10 @@ const getAllSocialLinks = async (req: Request, res: Response) => {
       prisma.socialLink.count({ where }),
     ]);
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: {
-        socialLink,
+        socialLinks,
         pagination: {
           total,
           page: pageNumber,
