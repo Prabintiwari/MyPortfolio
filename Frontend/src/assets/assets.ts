@@ -15,41 +15,11 @@ import {
 } from "lucide-react";
 import HomeImg from "./HomeImg.png";
 import MyCV from "./MyCV.pdf";
-import movieFinder from "./MovieFinder1.png";
-import SkillShikshya from "./SkillShikshya.png";
-import WeatherApp from "./WeatherApp.png";
-import NepalShop from "./NepalShop.png"
 
 export const image = {
   HomeImg,
   MyCV,
 };
-export const contactMethods = [
-  {
-    icon: Mail,
-    title: "Email",
-    value: "prabintiwari964@gmail.com",
-    description: "Send me an email anytime",
-    gradient: "from-blue-500 to-cyan-500",
-    delay: 0.1,
-  },
-  {
-    icon: Phone,
-    title: "Phone",
-    value: "+977 9815027619",
-    description: "Call me for urgent matters",
-    gradient: "from-green-500 to-teal-500",
-    delay: 0.2,
-  },
-  {
-    icon: MapPin,
-    title: "Location",
-    value: "Kathmandu, Nepal",
-    description: "Available for local meetups",
-    gradient: "from-red-500 to-pink-500",
-    delay: 0.3,
-  },
-];
 export const skills = [
   {
     name: "CSS/TailwindCSS",
