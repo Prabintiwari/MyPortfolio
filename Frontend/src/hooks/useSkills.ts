@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Skill } from "../types/skill.types";
 import { skillService } from "../services/skillService";
 
-export const useSocialLink = () => {
+export const useSkill = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

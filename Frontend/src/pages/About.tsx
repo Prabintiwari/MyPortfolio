@@ -1,6 +1,6 @@
-import  { useState } from "react";
-import {  motion } from "framer-motion";
-import { skills, experiences } from "../assets/assets";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { experiences } from "../assets/assets";
 import {
   User,
   Lightbulb,
@@ -8,10 +8,26 @@ import {
   Heart,
   Award,
   Calendar,
+  Zap,
+  Palette,
+  Code,
+  BookOpen,
+  Target,
 } from "lucide-react";
+import { useSkill } from "../hooks/useSkills";
+import { getThemeColors } from "../config/theme";
+
+const skillsIcons: Record<string, React.ElementType> = {
+  Palette: Palette,
+  Zap: Zap,
+  BookOpen: BookOpen,
+  Code: Code,
+  Target: Target,
+};
 
 const About = () => {
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const { skills, error, loading } = useSkill();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -102,7 +118,11 @@ const About = () => {
               <motion.div
                 className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg flex items-center justify-center mr-4"
                 whileHover={{ rotate: 10, scale: 1.1 }}
-                transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
+                transition={{
+                  type: "spring" as const,
+                  stiffness: 400,
+                  damping: 17,
+                }}
               >
                 <Lightbulb className="w-6 h-6 text-white" />
               </motion.div>
@@ -202,53 +222,65 @@ const About = () => {
             viewport={{ once: true }}
             className="grid md:grid-cols-2 lg:grid-cols-3 items-center mx-auto w-full gap-6 px-6"
           >
-            {skills.map((skill) => (
-              <motion.div
-                key={skill.name}
-                variants={itemVariants}
-                whileHover={{
-                  y: -8,
-                  scale: 1.02,
-                  transition: { type: "spring" as const, stiffness: 400, damping: 25 },
-                }}
-                className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer"
-                onMouseEnter={() => setHoveredSkill(skill.name)}
-                onMouseLeave={() => setHoveredSkill(null)}
-              >
-                <div className="flex items-center mb-4">
-                  <motion.div
-                    className={`w-12 h-12 bg-gradient-to-r ${skill.color} rounded-lg flex items-center justify-center mr-4`}
-                    whileHover={{ rotate: 10, scale: 1.1 }}
-                    transition={{ type: "spring" as const, stiffness: 400, damping: 17 }}
-                  >
-                    <skill.icon className="w-6 h-6 text-white" />
-                  </motion.div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {skill.name}
-                  </h3>
-                </div>
-
-                <div className="mb-2">
-                  <div className="flex justify-between text-sm text-gray-400 mb-1">
-                    <span>Proficiency</span>
-                    <span>{skill.level}%</span>
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+            {skills.map((skill) => {
+              const IconComponent = skillsIcons[skill.icon]??Code
+              const themeColor = getThemeColors(skill.variant)
+              return (
+                <motion.div
+                  key={skill.name}
+                  variants={itemVariants}
+                  whileHover={{
+                    y: -8,
+                    scale: 1.02,
+                    transition: {
+                      type: "spring" as const,
+                      stiffness: 400,
+                      damping: 25,
+                    },
+                  }}
+                  className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer"
+                  onMouseEnter={() => setHoveredSkill(skill.name)}
+                  onMouseLeave={() => setHoveredSkill(null)}
+                >
+                  <div className="flex items-center mb-4">
                     <motion.div
-                      className={`h-2 rounded-full bg-gradient-to-r ${skill.color}`}
-                      initial={{ width: 0 }}
-                      animate={{
-                        width:
-                          hoveredSkill === skill.name
-                            ? `${skill.level}%`
-                            : "0%",
+                      className={`w-12 h-12 bg-gradient-to-r ${themeColor.gradient} rounded-lg flex items-center justify-center mr-4`}
+                      whileHover={{ rotate: 10, scale: 1.1 }}
+                      transition={{
+                        type: "spring" as const,
+                        stiffness: 400,
+                        damping: 17,
                       }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                    />
+                    >
+                      <IconComponent size={18} />
+                    </motion.div>
+                    <h3 className="text-xl font-semibold text-white">
+                      {skill.name}
+                    </h3>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+
+                  <div className="mb-2">
+                    <div className="flex justify-between text-sm text-gray-400 mb-1">
+                      <span>Proficiency</span>
+                      <span>{skill.level}%</span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+                      <motion.div
+                        className={`h-2 rounded-full bg-gradient-to-r ${themeColor.gradient}`}
+                        initial={{ width: 0 }}
+                        animate={{
+                          width:
+                            hoveredSkill === skill.name
+                              ? `${skill.level}%`
+                              : "0%",
+                        }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
 
@@ -287,7 +319,11 @@ const About = () => {
                 variants={itemVariants}
                 whileHover={{
                   y: -10,
-                  transition: { type: "spring" as const, stiffness: 300, damping: 20 },
+                  transition: {
+                    type: "spring" as const,
+                    stiffness: 300,
+                    damping: 20,
+                  },
                 }}
                 className="relative group"
               >

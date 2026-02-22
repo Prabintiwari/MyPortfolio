@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Calendar, Code, Palette } from "lucide-react";
-import { projectService } from "../services/projectService";
-import { Project } from "../types/project.types";
 import { useProject } from "../hooks/useProject";
 
 const categoryIcons: Record<string, React.ElementType> = {
