@@ -101,28 +101,23 @@ const Contact = () => {
                 Let's Connect
               </motion.h2>
 
-              {/* Loading */}
+              {/* Loading State */}
               {fetchLoading && (
-                <div className="flex justify-center items-center py-8">
-                  <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                <div className="flex justify-center items-center py-20">
+                  <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
 
-              {/* Error */}
+              {/* Error State */}
               {fetchError && (
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="text-red-500 mt-0.5" size={20} />
-                    <div>
-                      <p className="text-red-500 text-sm">{fetchError}</p>
-                      <button
-                        onClick={() => window.location.reload()}
-                        className="text-red-400 hover:text-red-300 text-xs mt-2 underline"
-                      >
-                        Retry
-                      </button>
-                    </div>
-                  </div>
+                <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8">
+                  <p className="text-red-500 text-center">{fetchError}</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 mx-auto block px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+                  >
+                    Retry
+                  </button>
                 </div>
               )}
 
@@ -136,7 +131,8 @@ const Contact = () => {
                   ) : (
                     contactMethods.map((method, index) => {
                       const themeColor = getThemeColors(method.variant);
-                      const IconComponent = contactMethodIcon[method.icon] ?? Send;
+                      const IconComponent =
+                        contactMethodIcon[method.icon] ?? Send;
                       return (
                         <motion.div
                           key={method.id}
@@ -166,7 +162,9 @@ const Contact = () => {
                             <IconComponent className="text-white" size={20} />
                           </motion.div>
                           <div>
-                            <p className="text-sm text-gray-400">{method.title}</p>
+                            <p className="text-sm text-gray-400">
+                              {method.title}
+                            </p>
                             <p className="text-lg font-medium text-white group-hover:text-purple-400 transition-colors">
                               {method.value}
                             </p>
@@ -251,7 +249,10 @@ const Contact = () => {
                     exit={{ opacity: 0, y: -10 }}
                     className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 flex items-start gap-2"
                   >
-                    <AlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={18} />
+                    <AlertCircle
+                      className="text-red-500 mt-0.5 flex-shrink-0"
+                      size={18}
+                    />
                     <p className="text-red-500 text-sm">{formError}</p>
                   </motion.div>
                 )}
@@ -266,7 +267,10 @@ const Contact = () => {
                     exit={{ opacity: 0, y: -10 }}
                     className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 flex items-start gap-2"
                   >
-                    <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                    <CheckCircle
+                      className="text-green-500 mt-0.5 flex-shrink-0"
+                      size={18}
+                    />
                     <div>
                       <p className="text-green-500 text-sm font-medium">
                         Message sent successfully!
@@ -290,7 +294,9 @@ const Contact = () => {
                 whileHover={{ scale: formLoading || isSubmitted ? 1 : 1.05 }}
                 whileTap={{ scale: formLoading || isSubmitted ? 1 : 0.95 }}
                 className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg shadow-purple-500/25 ${
-                  formLoading || isSubmitted ? "opacity-50 cursor-not-allowed" : ""
+                  formLoading || isSubmitted
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 }`}
               >
                 <AnimatePresence mode="wait">
