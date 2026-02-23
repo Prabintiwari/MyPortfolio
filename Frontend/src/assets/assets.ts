@@ -20,38 +20,6 @@ export const image = {
   HomeImg,
   MyCV,
 };
-export const skills = [
-  {
-    name: "CSS/TailwindCSS",
-    level: 65,
-    icon: Palette,
-    color: "from-pink-500 to-purple-500",
-  },
-  {
-    name: "JavaScript",
-    level: 70,
-    icon: Zap,
-    color: "from-yellow-500 to-orange-500",
-  },
-  {
-    name: "React",
-    level: 60,
-    icon: Code,
-    color: "from-blue-500 to-cyan-500",
-  },
-  {
-    name: "Node.js",
-    level: 20,
-    icon: BookOpen,
-    color: "from-green-500 to-teal-500",
-  },
-  {
-    name: "TypeScript",
-    level: 50,
-    icon: Target,
-    color: "from-indigo-500 to-blue-500",
-  },
-];
 export const experiences = [
   {
     title: "Frontend Developer (Self Projects)",
