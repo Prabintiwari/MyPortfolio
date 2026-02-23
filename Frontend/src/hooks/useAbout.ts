@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Skill } from "../types/skill.types";
 import { skillService } from "../services/skillService";
 
-export const useSkill = () => {
+export const useAbout = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
-  const [skillLoading, setSkillLoading] = useState(true);
-  const [skillError, setSkillError] = useState("");
+  const [aboutLoading, setAboutLoading] = useState(true);
+  const [aboutError, setAboutError] = useState("");
 
   useEffect(() => {
     const fetchskills = async () => {
-      setSkillError("");
-      setSkillLoading(true);
+      setAboutError("");
+      setAboutLoading(true);
       try {
         const data = await skillService.getAll({
           isActive: true,
@@ -21,15 +21,15 @@ export const useSkill = () => {
           error.response?.data?.message ||
           error.message ||
           "Failed to load services";
-        setSkillError(message);
+        setAboutError(message);
         console.error("Skills fetch failed:", error);
       } finally {
-        setSkillLoading(false);
+        setAboutLoading(false);
       }
     };
 
     fetchskills();
   }, []);
 
-  return { skills, skillLoading, skillError };
+  return { skills, aboutLoading, aboutError };
 };

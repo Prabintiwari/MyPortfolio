@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { experiences } from "../assets/assets";
 import {
   User,
   Lightbulb,
   Coffee,
   Heart,
   Award,
-  Calendar,
   Zap,
   Palette,
   Code,
   BookOpen,
   Target,
-  AlertCircle,
 } from "lucide-react";
 import { useSkill } from "../hooks/useSkills";
 import { getThemeColors } from "../config/theme";
@@ -28,7 +25,7 @@ const skillsIcons: Record<string, React.ElementType> = {
 
 const About = () => {
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-  const { skills, error, loading } = useSkill();
+  const { skills, skillLoading, skillError } = useSkill();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -217,16 +214,16 @@ const About = () => {
           </motion.div>
 
           {/* Loading State */}
-          {loading && (
+          {skillLoading && (
             <div className="flex justify-center items-center py-20">
               <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
 
           {/* Error State */}
-          {error && (
+          {skillError && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8">
-              <p className="text-red-500 text-center">{error}</p>
+              <p className="text-red-500 text-center">{skillError}</p>
               <button
                 onClick={() => window.location.reload()}
                 className="mt-4 mx-auto block px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
