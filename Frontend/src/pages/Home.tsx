@@ -107,7 +107,7 @@ const Home = () => {
               </span>
             </motion.div>
 
-            {/* Main Heading - Dynamic from About API */}
+            {/* Main Heading  */}
             {aboutLoading ? (
               <div className="flex justify-center lg:justify-start mb-6">
                 <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />

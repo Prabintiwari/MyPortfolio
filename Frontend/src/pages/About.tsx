@@ -56,7 +56,6 @@ const About = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative mb-8"
           >
-            {/* ✅ Default icon only - Avatar handled by ImageGallery component */}
             <motion.div
               className="w-32 h-32 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full mx-auto flex items-center justify-center backdrop-blur-sm"
               animate={{ opacity: [1, 0.5, 1] }}
@@ -142,7 +141,7 @@ const About = () => {
               <h2 className="text-4xl font-bold text-white">My Journey</h2>
             </div>
 
-            {/* Bio & Description from backend */}
+            {/* Bio & Description */}
             <div className="space-y-6">
               {about?.bio && (
                 <motion.p

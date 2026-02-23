@@ -144,6 +144,18 @@ model About {
   @@map("about")
 }
 
+model Portfolio  {
+  id               String   @id @default(uuid())
+  avatar           String?
+  resume           String?  
+  logo             String?
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("portfolio ")
+}
+
 model ContactMethod {
   id          String   @id @default(uuid())
   icon        String

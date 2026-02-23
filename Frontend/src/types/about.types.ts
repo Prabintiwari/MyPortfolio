@@ -5,7 +5,6 @@ export interface About {
   subtitle?: string
   bio: string;
   description?: string;
-  resume?: string;
   yearsExperience: number;
   projectsCompleted: number;
   openSource: number;
