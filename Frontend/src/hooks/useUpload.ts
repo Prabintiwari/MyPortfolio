@@ -7,9 +7,9 @@ export const useUpload = () => {
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const images = await uploadService.getAll();
+        const files = await uploadService.getAll();
 
-        const avatar = images.find(
+        const avatar = files.find(
           (img: any) =>
             img.filename.toLowerCase().includes("profile") ||
             img.filename.toLowerCase().includes("avatar") ||
@@ -17,7 +17,7 @@ export const useUpload = () => {
         );
         if (avatar) setProfileImage(avatar.url);
 
-        const resume = images.find(
+        const resume = files.find(
           (img: any) =>
             img.filename.toLowerCase().includes("resume") ||
             img.filename.toLowerCase().includes("cv"),
