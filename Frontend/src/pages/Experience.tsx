@@ -1,22 +1,6 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { experiences } from "../assets/assets";
-import {
-  User,
-  Lightbulb,
-  Coffee,
-  Heart,
-  Award,
-  Calendar,
-  Zap,
-  Palette,
-  Code,
-  BookOpen,
-  Target,
-  AlertCircle,
-} from "lucide-react";
-import { useSkill } from "../hooks/useSkills";
-import { getThemeColors } from "../config/theme";
+import { Calendar, Zap, Palette, Code, BookOpen, Target } from "lucide-react";
+import { useExperience } from "../hooks/useExperience";
 
 const skillsIcons: Record<string, React.ElementType> = {
   Palette: Palette,
@@ -27,6 +11,8 @@ const skillsIcons: Record<string, React.ElementType> = {
 };
 
 const Experience = () => {
+  const { experiences, error, loading } = useExperience();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -76,6 +62,26 @@ const Experience = () => {
             </motion.h2>
             <p className="text-gray-300 text-lg">My professional journey</p>
           </motion.div>
+
+          {/* Loading State */}
+          {loading && (
+            <div className="flex justify-center items-center py-20">
+              <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8">
+              <p className="text-red-500 text-center">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-4 mx-auto block px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          )}
 
           <motion.div
             variants={containerVariants}
