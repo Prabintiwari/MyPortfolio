@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { skillService } from "../services/skillService";
 import { About } from "../types/about.types";
 import { aboutService } from "../services/aboutSevice";
 
 export const useAbout = () => {
-  const [about, setAbout] = useState<About[]>([]);
+  const [about, setAbout] = useState<About>();
   const [aboutLoading, setAboutLoading] = useState(true);
   const [aboutError, setAboutError] = useState("");
 

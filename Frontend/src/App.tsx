@@ -6,6 +6,7 @@ import Portfolio from "./pages/Portfolio";
 import Services from "./pages/Services";
 import CircularProgress from "./components/CircularProgress";
 import Experience from "./pages/Experience";
+import Skill from "./pages/Skill";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         {" "}
         <Home />
         <About />
+        <Skill />
         <Experience />
         <Services />
         <Portfolio />

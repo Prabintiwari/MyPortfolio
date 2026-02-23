@@ -20,7 +20,7 @@ const getAbout = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      data: about,
+      data: { about },
     });
   } catch (error: any) {
     if (error instanceof ZodError) {
