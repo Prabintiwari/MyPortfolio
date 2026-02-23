@@ -10,8 +10,6 @@ const createProfileSchema = z.object({
 
   bio: z.string().min(1, "Bio is required"),
 
-  avatar: z.string().url("Avatar must be a valid URL").optional(),
-
   resume: z.string().url("Resume must be a valid URL").optional(),
 
   subtitle: z.string().optional(),

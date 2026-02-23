@@ -1,35 +1,34 @@
 import { useEffect, useState } from "react";
-import { Skill } from "../types/skill.types";
 import { skillService } from "../services/skillService";
+import { About } from "../types/about.types";
+import { aboutService } from "../services/aboutSevice";
 
 export const useAbout = () => {
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const [about, setAbout] = useState<About[]>([]);
   const [aboutLoading, setAboutLoading] = useState(true);
   const [aboutError, setAboutError] = useState("");
 
   useEffect(() => {
-    const fetchskills = async () => {
+    const fetchAbout = async () => {
       setAboutError("");
       setAboutLoading(true);
       try {
-        const data = await skillService.getAll({
-          isActive: true,
-        });
-        setSkills(data.data.skills);
+        const data = await aboutService.getAbout();
+        setAbout(data.data.about);
       } catch (error: any) {
         const message =
           error.response?.data?.message ||
           error.message ||
           "Failed to load services";
         setAboutError(message);
-        console.error("Skills fetch failed:", error);
+        console.error("About data fetch failed:", error);
       } finally {
         setAboutLoading(false);
       }
     };
 
-    fetchskills();
+    fetchAbout();
   }, []);
 
-  return { skills, aboutLoading, aboutError };
+  return { about, aboutLoading, aboutError };
 };

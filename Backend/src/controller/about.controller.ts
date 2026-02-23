@@ -18,7 +18,7 @@ const getAbout = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: about,
     });
@@ -53,7 +53,6 @@ const createAbout = async (req: Request, res: Response) => {
       name,
       title,
       bio,
-      avatar,
       resume,
       subtitle,
       description,
@@ -68,7 +67,6 @@ const createAbout = async (req: Request, res: Response) => {
         name,
         title,
         bio,
-        avatar,
         resume,
         subtitle,
         description,

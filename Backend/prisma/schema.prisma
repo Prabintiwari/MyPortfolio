@@ -129,7 +129,6 @@ model About {
   subtitle         String?  
   bio              String   
   description      String?  
-  avatar           String?  
   resume           String?  
   
   // Stats for display
