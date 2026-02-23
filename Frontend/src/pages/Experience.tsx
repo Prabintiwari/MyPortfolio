@@ -42,7 +42,7 @@ const Experience = () => {
     <section id="experience" className="py-20 relative overflow-hidden">
       <div className="px-6 relative z-10">
         {/* Experience Section */}
-        <div className="max-w-4xl mx-auto mb-20">
+        <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
