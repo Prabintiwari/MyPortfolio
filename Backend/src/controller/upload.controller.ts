@@ -14,7 +14,7 @@ const getPortfolio = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: portfolio,
     });
@@ -31,12 +31,11 @@ const upsertPortfolio = async (req: Request, res: Response) => {
   try {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-    // Get existing portfolio
     let portfolio = await prisma.uploadFile.findFirst();
 
     const updateData: any = {};
 
-    // ✅ Handle avatar upload using service
+    // Handle avatar upload
     if (files?.avatar && files.avatar[0]) {
       const avatarFile = files.avatar[0];
 
@@ -53,7 +52,7 @@ const upsertPortfolio = async (req: Request, res: Response) => {
       updateData.avatar = fileUpload(avatarFile, "portfolio");
     }
 
-    // ✅ Handle logo upload using service
+    //  Handle logo upload
     if (files?.logo && files.logo[0]) {
       const logoFile = files.logo[0];
 
@@ -70,7 +69,7 @@ const upsertPortfolio = async (req: Request, res: Response) => {
       updateData.logo = fileUpload(logoFile, "portfolio");
     }
 
-    // ✅ Handle resume upload using service
+    //  Handle resume upload
     if (files?.resume && files.resume[0]) {
       const resumeFile = files.resume[0];
 
@@ -95,7 +94,7 @@ const upsertPortfolio = async (req: Request, res: Response) => {
         data: updateData,
       });
 
-      res.json({
+      res.status(200).json({
         success: true,
         message: "Portfolio updated successfully",
         data: portfolio,
@@ -150,7 +149,7 @@ const deletePortfolioFile = async (req: Request, res: Response) => {
       });
     }
 
-    // ✅ Delete file using service
+    //  Delete file
     try {
       deleteFile(fileUrl);
     } catch (err) {
@@ -163,7 +162,7 @@ const deletePortfolioFile = async (req: Request, res: Response) => {
       data: { [fileType]: null },
     });
 
-    res.json({
+    res.status(200).json({
       success: true,
       message: `${fileType.charAt(0).toUpperCase() + fileType.slice(1)} deleted successfully`,
     });
@@ -197,7 +196,7 @@ const getPortfolioFiles = async (req: Request, res: Response) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: portfolio,
     });
@@ -209,4 +208,9 @@ const getPortfolioFiles = async (req: Request, res: Response) => {
   }
 };
 
-export { getPortfolio, getPortfolioFiles, upsertPortfolio, deletePortfolioFile };
+export {
+  getPortfolio,
+  getPortfolioFiles,
+  upsertPortfolio,
+  deletePortfolioFile,
+};
