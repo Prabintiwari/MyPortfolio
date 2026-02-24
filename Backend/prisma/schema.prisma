@@ -144,7 +144,7 @@ model About {
   @@map("about")
 }
 
-model Portfolio  {
+model UploadFile  {
   id               String   @id @default(uuid())
   avatar           String?
   resume           String?  
@@ -153,7 +153,7 @@ model Portfolio  {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  @@map("portfolio ")
+  @@map("uploadFile ")
 }
 
 model ContactMethod {
