@@ -43,12 +43,12 @@ export const deleteFile = (filePath: string): void => {
 
     if (fs.existsSync(cleanPath)) {
       fs.unlinkSync(cleanPath);
-      console.log("✅ File deleted:", cleanPath);
+      console.log("File deleted:", cleanPath);
     } else {
-      console.log("⚠️  File not found:", cleanPath);
+      console.log("File not found:", cleanPath);
     }
   } catch (error) {
-    console.error("❌ Delete file error:", error);
+    console.error("Delete file error:", error);
     throw new Error("File deletion failed!");
   }
 };

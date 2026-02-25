@@ -23,7 +23,7 @@ export const uploadProjectImage = multer({
       cb(new Error("Invalid file type. Only images allowed."));
     }
   },
-}).single("projectImage");
+})
 
 export const uploadPortfolioFiles = multer({
   storage: storage,
@@ -50,7 +50,7 @@ export const uploadPortfolioFiles = multer({
       }
     }
     // Resume: PDF only
-    else if (file.fieldname === "resume") {
+    else if (file.fieldname === "resume" || file.fieldname === "cv") {
       if (validateFileType(file, pdfTypes)) {
         cb(null, true);
       } else {
