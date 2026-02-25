@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { AdminOnly, authenticateToken } from "../middleware/auth";
 import aboutRoute from "./about.routes";
+import portfolioFileRoute from "./portfolioFile.routes";
 import projectsRoute from "./projects.routes";
 import servicesRoute from "./service.routes";
 import skillsRoute from "./skills.routes";
@@ -14,6 +14,8 @@ const router = Router();
 router.use("/about", aboutRoute);
 
 router.use("/projects", projectsRoute);
+
+router.use("/portfolio-files", portfolioFileRoute);
 
 router.use("/services", servicesRoute);
 

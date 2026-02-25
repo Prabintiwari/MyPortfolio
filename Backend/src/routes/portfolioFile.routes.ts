@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   uploadPortfolioFiles,
 } from "../middleware/uploadFile";
-import { upsertPortfolio } from "../controller/upload.controller";
+import { upsertPortfolio } from "../controller/portfolioFiles.controller";
 
 const router = Router();
 
