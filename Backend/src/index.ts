@@ -8,6 +8,7 @@ dotenv.config();
 
 import authRoute from "./routes/auth.routes";
 import adminRoute from "./routes";
+import path from "path";
 
 const app = express();
 const PORT =
@@ -26,6 +27,7 @@ app.use(cookieParser());
 // API Routes
 app.use("/api/auth",authRoute)
 app.use("/api",adminRoute)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ status: "OK", message: `Server is running on ${PORT}` });
