@@ -7,6 +7,7 @@ import {
   updateProjectSchema,
 } from "../schema";
 import { ZodError } from "zod";
+import { deleteFile, fileUpload } from "../config/upload";
 
 //  Get all projects
 const getAllProjects = async (req: Request, res: Response) => {
@@ -127,7 +128,6 @@ const createProject = async (req: Request, res: Response) => {
     const {
       title,
       description,
-      image,
       category,
       tags,
       liveDemo,
@@ -136,12 +136,18 @@ const createProject = async (req: Request, res: Response) => {
       isActive,
       date,
     } = projectSchema.parse(req.body);
+    const file = req.file;
+
+    let imageUrl = "";
+    if (file) {
+      imageUrl = fileUpload(file, "projects");
+    }
 
     const project = await prisma.project.create({
       data: {
         title,
         description,
-        image: image,
+        image: imageUrl,
         category,
         tags: tags || [],
         liveDemo,
@@ -176,6 +182,7 @@ const updateProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
     const updateData = updateProjectSchema.parse(req.body);
+    const file = req.file;
 
     const existingProject = await prisma.project.findUnique({
       where: { id: projectId },
@@ -185,6 +192,18 @@ const updateProject = async (req: Request, res: Response) => {
       return res
         .status(404)
         .json({ success: false, message: "Project not found" });
+    }
+
+    if (file) {
+      if (existingProject.image) {
+        try {
+          deleteFile(existingProject.image);
+        } catch (err) {
+          console.log("Old image deletion failed:", err);
+        }
+      }
+
+      updateData.image = fileUpload(file, "projects");
     }
 
     const project = await prisma.project.update({
