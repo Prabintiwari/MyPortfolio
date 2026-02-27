@@ -138,6 +138,12 @@ const createProject = async (req: Request, res: Response) => {
     } = projectSchema.parse(req.body);
     const file = req.file;
 
+    if (!file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Image file is required" });
+    }
+
     let imageUrl = "";
     if (file) {
       imageUrl = fileUpload(file, "projects");
@@ -235,14 +241,22 @@ const deleteProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
 
-    const existingProject = await prisma.project.findUnique({
+    const project = await prisma.project.findUnique({
       where: { id: projectId },
     });
 
-    if (!existingProject) {
+    if (!project) {
       return res
         .status(404)
         .json({ success: false, message: "Project not found" });
+    }
+
+    if (project.image) {
+      try {
+        deleteFile(project.image);
+      } catch (err) {
+        console.log("Image deletion failed:", err);
+      }
     }
 
     await prisma.project.delete({
