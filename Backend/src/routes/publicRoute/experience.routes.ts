@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createExperience, deleteExperience, getAllExperiences, getExperienceById, updateExperience } from "../controller/experience.controller";
+import { createExperience, deleteExperience, getAllExperiences, getExperienceById, updateExperience } from "../../controller/experience.controller";
 
 const router = Router()
 

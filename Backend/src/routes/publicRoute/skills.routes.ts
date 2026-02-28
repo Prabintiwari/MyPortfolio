@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createSkill, deleteSkill, getAllSkills, getSkillById, updateSkill } from "../controller/skill.controller";
+import { createSkill, deleteSkill, getAllSkills, getSkillById, updateSkill } from "../../controller/skill.controller";
 
 const router = Router()
 

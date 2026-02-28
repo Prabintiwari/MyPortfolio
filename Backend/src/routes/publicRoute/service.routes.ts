@@ -5,7 +5,7 @@ import {
   getAllServices,
   getServiceById,
   updateService,
-} from "../controller/service.controller";
+} from "../../controller/service.controller";
 
 const router = Router();
 

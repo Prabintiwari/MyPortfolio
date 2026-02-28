@@ -5,7 +5,7 @@ import {
   getAllSocialLinks,
   getSocialLinkById,
   updateSocialLinks,
-} from "../controller/socialLinks.controller";
+} from "../../controller/socialLinks.controller";
 
 const router = Router();
 

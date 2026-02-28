@@ -6,8 +6,8 @@ import {
   getProjectById,
   getProjectCategories,
   updateProject,
-} from "../controller/project.controller";
-import { uploadProjectImage } from "../middleware/uploadFile";
+} from "../../controller/project.controller";
+import { uploadProjectImage } from "../../middleware/uploadFile";
 
 const router = Router();
 

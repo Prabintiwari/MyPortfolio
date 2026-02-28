@@ -4,7 +4,7 @@ import {
   deleteContact,
   getAllContacts,
   markAsRead,
-} from "../controller/contact.controller";
+} from "../../controller/contact.controller";
 
 const router = Router();
 

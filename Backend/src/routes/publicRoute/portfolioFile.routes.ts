@@ -1,8 +1,8 @@
 import { Router } from "express";
 import {
   uploadPortfolioFiles,
-} from "../middleware/uploadFile";
-import { deletePortfolioFile, getPortfolio, getPortfolioFiles, upsertPortfolio } from "../controller/portfolioFiles.controller";
+} from "../../middleware/uploadFile";
+import { deletePortfolioFile, getPortfolio, getPortfolioFiles, upsertPortfolio } from "../../controller/portfolioFiles.controller";
 
 const router = Router();
 
