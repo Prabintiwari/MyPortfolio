@@ -1,5 +1,5 @@
 import { Router } from "express";
-import aboutRoute from "./about.routes";
+import aboutRoute from "./publicRoute/about.routes";
 import portfolioFileRoute from "./portfolioFile.routes";
 import projectsRoute from "./projects.routes";
 import servicesRoute from "./service.routes";
