@@ -7,7 +7,7 @@ import helmet from "helmet";
 dotenv.config();
 
 import authRoute from "./routes/publicRoute/auth.routes";
-import adminRoute from "./routes/publicRoute";
+import adminRoute from "./routes/adminRoute";
 import path from "path";
 
 const app = express();
