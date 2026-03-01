@@ -1,5 +1,6 @@
 import { Router } from "express";
 import aboutRoute from "./about.routes";
+import authRoute from "./auth.routes";
 import portfolioFileRoute from "./portfolioFile.routes";
 import projectsRoute from "./projects.routes";
 import servicesRoute from "./service.routes";
@@ -10,6 +11,8 @@ import contactsRoute from "./contact.routes";
 import socialLinksRoute from "./socialLinks.routes";
 
 const router = Router();
+
+router.use("/auth", authRoute);
 
 router.use("/about", aboutRoute);
 

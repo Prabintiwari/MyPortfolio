@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 dotenv.config();
 
-import authRoute from "./routes/publicRoute/auth.routes";
+import publicRoute from "./routes/publicRoute";
 import adminRoute from "./routes/adminRoute";
 import path from "path";
 
@@ -27,8 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // API Routes
-app.use("/api/auth", authRoute);
-app.use("/api", adminRoute);
+app.use("/api",publicRoute)
+app.use("/api/admin", adminRoute);
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.get("/", (req: Request, res: Response) => {
