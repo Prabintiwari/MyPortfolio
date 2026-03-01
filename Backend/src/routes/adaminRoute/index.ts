@@ -1,13 +1,13 @@
 import { Router } from "express";
-import aboutRoute from "./about.routes";
-import portfolioFileRoute from "./portfolioFile.routes";
-import projectsRoute from "./projects.routes";
-import servicesRoute from "./service.routes";
-import skillsRoute from "./skills.routes";
-import experiencesRoute from "./experience.routes";
-import contactMethodRoute from "./contactMethod.routes";
-import contactsRoute from "./contact.routes";
-import socialLinksRoute from "./socialLinks.routes";
+import aboutRoute from "./admin.about.routes";
+import portfolioFileRoute from "./admin.portfolioFile.routes";
+import projectsRoute from "./admin.projects.routes";
+import servicesRoute from "./admin.service.routes";
+import skillsRoute from "./admin.skills.routes";
+import experiencesRoute from "./admin.experience.routes";
+import contactMethodRoute from "./admin.contactMethod.routes";
+import contactsRoute from "./admin.contact.routes";
+import socialLinksRoute from "./admin.socialLinks.routes";
 
 const router = Router();
 
