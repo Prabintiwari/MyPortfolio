@@ -53,12 +53,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const login = async (email: string, password: string) => {
     try {
-      const { token, user: userData } = await authService.login({
+      const { data } = await authService.login({
         email,
         password,
       });
-      localStorage.setItem("token", token);
-      setUser(userData);
+      localStorage.setItem("token", data.data.token);
+      setUser(data.data.user);
     } catch (error: any) {
       const message =
         error.response?.data?.message ||
