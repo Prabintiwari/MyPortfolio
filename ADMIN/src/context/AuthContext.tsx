@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { authService } from "../services/authService";
-import type { User } from "../types/auth.types";
+import type { User } from "../schema/auth.types";
 
 interface AuthContextType {
   user: User | null;
@@ -17,23 +17,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
+    setError("");
+    setLoading(true);
     const token = localStorage.getItem("token");
 
     if (!token) {
       setLoading(false);
+      setError("Access token required");
       return;
     }
 
     try {
-      const userData = await authService.getMe();
-      setUser(userData);
-    } catch (error) {
+      const data = await authService.getMe();
+      setUser(data.data.user);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to load services";
+      setError(message);
+      console.error("Auth checking failed:", error);
       localStorage.removeItem("token");
       setUser(null);
     } finally {
@@ -42,12 +52,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const login = async (email: string, password: string) => {
-    const { token, user: userData } = await authService.login({
-      email,
-      password,
-    });
-    localStorage.setItem("token", token);
-    setUser(userData);
+    try {
+      const { token, user: userData } = await authService.login({
+        email,
+        password,
+      });
+      localStorage.setItem("token", token);
+      setUser(userData);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to load services";
+      setError(message);
+      console.error("Login failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
@@ -60,6 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     user,
     isAuthenticated: !!user,
     loading,
+    error,
     login,
     logout,
   };

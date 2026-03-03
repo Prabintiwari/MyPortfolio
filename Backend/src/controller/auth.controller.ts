@@ -85,7 +85,7 @@ const getCurrentUser = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: user,
     });
