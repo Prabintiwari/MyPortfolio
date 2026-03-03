@@ -19,8 +19,8 @@ const Navbar: React.FC<NavbarProps> = ({ setSidebarOpen }) => {
       </button>
 
       {/* Page Title */}
-      <div className="hidden lg:block">
-        <h2 className="text-xl font-semibold text-white">Welcome back!</h2>
+      <div className="flex">
+        <h2 className="text-sm font-semibold text-white">Welcome back!</h2>
       </div>
 
       {/* User Menu */}

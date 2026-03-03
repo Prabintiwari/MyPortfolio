@@ -53,11 +53,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const login = async (email: string, password: string) => {
     try {
-      const { data } = await authService.login({
+      const data = await authService.login({
         email,
         password,
       });
-      localStorage.setItem("token", data.data.token);
+      console.log(data.data);
       setUser(data.data.user);
     } catch (error: any) {
       const message =
@@ -73,7 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = () => {
     localStorage.removeItem("token");
-    setUser(null);
+    localStorage.removeItem("user");
     window.location.href = "/login";
   };
 
