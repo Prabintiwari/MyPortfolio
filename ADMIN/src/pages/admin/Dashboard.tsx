@@ -1,15 +1,15 @@
 // src/pages/admin/Dashboard.tsx
-import { useState, useEffect } from 'react';
-import { 
-  FolderKanban, 
-  Mail, 
-  Award, 
-  Briefcase, 
+import { useState, useEffect } from "react";
+import {
+  FolderKanban,
+  Mail,
+  Award,
+  Briefcase,
   Wrench,
   TrendingUp,
-  Eye
-} from 'lucide-react';
-import api from '../../services/api';
+  Eye,
+} from "lucide-react";
+import api from "../../services/api";
 
 interface Stats {
   projects: number;
@@ -28,6 +28,7 @@ const Dashboard = () => {
     contacts: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchStats();
@@ -35,70 +36,81 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const [projects, skills, experiences, services, contacts] = await Promise.all([
-        api.get('/projects'),
-        api.get('/skills'),
-        api.get('/experiences'),
-        api.get('/services'),
-        api.get('/contacts'),
-      ]);
+      const [projects, skills, experiences, services, contacts] =
+        await Promise.all([
+          api.get("/projects"),
+          api.get("/skills"),
+          api.get("/experiences"),
+          api.get("/services"),
+          api.get("/contacts"),
+        ]);
+      console.log(projects);
+      console.log(skills);
+      console.log(experiences);
+      console.log(services);
+      console.log(contacts);
 
       setStats({
-        projects: projects.data.data.count || 0,
-        skills: skills.data.count || 0,
-        experiences: experiences.data.count || 0,
-        services: services.data.count || 0,
-        contacts: contacts.data.count || 0,
+        projects: projects.data.data.pagination.total || 0,
+        skills: skills.data.data.pagination.total || 0,
+        experiences: experiences.data.data.pagination.total || 0,
+        services: services.data.data.pagination.total || 0,
+        contacts: contacts.data.data.pagination.total || 0,
       });
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed. Please try again.";
+      setError(message);
+      console.error("Failed to fetch stats:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const statCards = [
-    { 
-      title: 'Total Projects', 
-      value: stats.projects, 
-      icon: FolderKanban, 
-      color: 'blue',
-      gradient: 'from-blue-500 to-cyan-500'
+    {
+      title: "Total Projects",
+      value: stats.projects,
+      icon: FolderKanban,
+      color: "blue",
+      gradient: "from-blue-500 to-cyan-500",
     },
-    { 
-      title: 'Total Skills', 
-      value: stats.skills, 
-      icon: Award, 
-      color: 'purple',
-      gradient: 'from-purple-500 to-pink-500'
+    {
+      title: "Total Skills",
+      value: stats.skills,
+      icon: Award,
+      color: "purple",
+      gradient: "from-purple-500 to-pink-500",
     },
-    { 
-      title: 'Experiences', 
-      value: stats.experiences, 
-      icon: Briefcase, 
-      color: 'green',
-      gradient: 'from-green-500 to-teal-500'
+    {
+      title: "Experiences",
+      value: stats.experiences,
+      icon: Briefcase,
+      color: "green",
+      gradient: "from-green-500 to-teal-500",
     },
-    { 
-      title: 'Services', 
-      value: stats.services, 
-      icon: Wrench, 
-      color: 'orange',
-      gradient: 'from-orange-500 to-yellow-500'
+    {
+      title: "Services",
+      value: stats.services,
+      icon: Wrench,
+      color: "orange",
+      gradient: "from-orange-500 to-yellow-500",
     },
-    { 
-      title: 'Messages', 
-      value: stats.contacts, 
-      icon: Mail, 
-      color: 'red',
-      gradient: 'from-red-500 to-pink-500'
+    {
+      title: "Messages",
+      value: stats.contacts,
+      icon: Mail,
+      color: "red",
+      gradient: "from-red-500 to-pink-500",
     },
-    { 
-      title: 'Total Views', 
-      value: '1.2K', 
-      icon: Eye, 
-      color: 'indigo',
-      gradient: 'from-indigo-500 to-purple-500'
+    {
+      title: "Total Views",
+      value: "1.2K",
+      icon: Eye,
+      color: "indigo",
+      gradient: "from-indigo-500 to-purple-500",
     },
   ];
 
@@ -115,8 +127,22 @@ const Dashboard = () => {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
-        <p className="text-gray-400">Welcome back! Here's your portfolio overview.</p>
+        <p className="text-gray-400">
+          Welcome back! Here's your portfolio overview.
+        </p>
       </div>
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8">
+          <p className="text-red-500 text-center">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 mx-auto block px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -128,12 +154,16 @@ const Dashboard = () => {
               className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all hover:shadow-lg hover:shadow-blue-500/10"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 bg-linear-to-r ${stat.gradient} rounded-lg`}>
+                <div
+                  className={`p-3 bg-linear-to-r ${stat.gradient} rounded-lg`}
+                >
                   <Icon className="text-white" size={24} />
                 </div>
                 <TrendingUp className="text-green-500" size={20} />
               </div>
-              <h3 className="text-gray-400 text-sm font-medium mb-1">{stat.title}</h3>
+              <h3 className="text-gray-400 text-sm font-medium mb-1">
+                {stat.title}
+              </h3>
               <p className="text-3xl font-bold text-white">{stat.value}</p>
             </div>
           );
@@ -181,7 +211,8 @@ const Dashboard = () => {
           Welcome to Admin Panel! 🎉
         </h2>
         <p className="text-blue-100 mb-4">
-          Manage your portfolio content efficiently. Select a section from the sidebar to get started.
+          Manage your portfolio content efficiently. Select a section from the
+          sidebar to get started.
         </p>
         <button className="px-6 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors">
           View Portfolio
