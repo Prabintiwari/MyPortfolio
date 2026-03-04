@@ -20,7 +20,9 @@ const Navbar: React.FC<NavbarProps> = ({ setSidebarOpen }) => {
 
       {/* Page Title */}
       <div className="">
-        <h2 className="text-sm font-semibold text-white">Welcome back!</h2>
+        <h2 className="text-sm sm:text-lg md:text-xl font-semibold text-white">
+          Welcome back!
+        </h2>
       </div>
 
       {/* User Menu */}

@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { authService } from "../services/authService";
-import type { User } from "../schema/auth.types";
+import api from "../services/api";
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -17,33 +23,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
-    setError("");
-    setLoading(true);
     const token = localStorage.getItem("token");
 
     if (!token) {
+      setUser(null);
       setLoading(false);
-      setError("Access token required");
       return;
     }
 
     try {
-      const data = await authService.getMe();
-      setUser(data.data.user);
+      const response = await api.get("/auth/me");
+
+      const userData = response.data.data;
+
+      setUser(userData);
     } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to load services";
-      setError(message);
-      console.error("Auth checking failed:", error);
       localStorage.removeItem("token");
       setUser(null);
     } finally {
@@ -52,28 +52,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const login = async (email: string, password: string) => {
-    try {
-      const data = await authService.login({
-        email,
-        password,
-      });
-      console.log(data.data);
-      setUser(data.data.user);
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to load services";
-      setError(message);
-      console.error("Login failed:", error);
-    } finally {
-      setLoading(false);
-    }
+    const response = await api.post("/auth/login", { email, password });
+    const { token, user: userData } = response.data.data;
+    localStorage.setItem("token", token);
+    setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    setUser(null);
     window.location.href = "/login";
   };
 
@@ -81,7 +68,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     user,
     isAuthenticated: !!user,
     loading,
-    error,
     login,
     logout,
   };
@@ -91,8 +77,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };

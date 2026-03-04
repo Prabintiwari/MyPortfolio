@@ -4,12 +4,6 @@ import api from "./api";
 export const authService = {
   login: async (credentials: Auth) => {
     const { data } = await api.post("/auth/login", credentials);
-
-    if (data.data.token) {
-      localStorage.setItem("token", data.data.token);
-      localStorage.setItem("user", JSON.stringify(data.data.user));
-    }
-
     return data;
   },
 

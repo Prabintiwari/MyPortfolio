@@ -78,6 +78,7 @@ const getCurrentUser = async (req: AuthRequest, res: Response) => {
       },
     });
 
+
     if (!user) {
       return res.status(404).json({
         success: false,
