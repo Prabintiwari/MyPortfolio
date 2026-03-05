@@ -44,11 +44,6 @@ const Dashboard = () => {
           api.get("/services"),
           api.get("/contacts"),
         ]);
-      console.log(projects);
-      console.log(skills);
-      console.log(experiences);
-      console.log(services);
-      console.log(contacts);
 
       setStats({
         projects: projects.data.data.pagination.total || 0,
