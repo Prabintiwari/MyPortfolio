@@ -132,6 +132,7 @@ const createProject = async (req: Request, res: Response) => {
       tags,
       liveDemo,
       github,
+      order,
       isFeatured,
       isActive,
       date,
@@ -158,6 +159,7 @@ const createProject = async (req: Request, res: Response) => {
         tags: tags || [],
         liveDemo,
         github,
+        order,
         isFeatured: isFeatured || false,
         isActive: isActive,
         date: date || new Date().getFullYear().toString(),
@@ -170,12 +172,14 @@ const createProject = async (req: Request, res: Response) => {
       data: project,
     });
   } catch (error: any) {
+    console.log(error);
     if (error instanceof ZodError) {
       return res.status(400).json({
         success: false,
         message: error.issues[0].message,
       });
     }
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -187,7 +191,18 @@ const createProject = async (req: Request, res: Response) => {
 const updateProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
-    const updateData = updateProjectSchema.parse(req.body);
+    const {
+      title,
+      description,
+      category,
+      tags,
+      liveDemo,
+      github,
+      order,
+      isFeatured,
+      isActive,
+      date,
+    } = updateProjectSchema.parse(req.body);
     const file = req.file;
 
     const existingProject = await prisma.project.findUnique({
@@ -199,6 +214,7 @@ const updateProject = async (req: Request, res: Response) => {
         .status(404)
         .json({ success: false, message: "Project not found" });
     }
+    let imageUrl = "";
 
     if (file) {
       if (existingProject.image) {
@@ -209,12 +225,24 @@ const updateProject = async (req: Request, res: Response) => {
         }
       }
 
-      updateData.image = fileUpload(file, "projects");
+      imageUrl = fileUpload(file, "projects");
     }
 
     const project = await prisma.project.update({
       where: { id: projectId },
-      data: updateData,
+      data: {
+        title,
+        description,
+        image: imageUrl,
+        category,
+        tags: tags || [],
+        liveDemo,
+        github,
+        order,
+        isFeatured: isFeatured || false,
+        isActive: isActive,
+        date: date || new Date().getFullYear().toString(),
+      },
     });
 
     res.json({

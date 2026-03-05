@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Eye, 
+import { useState, useEffect } from "react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
   X,
   Save,
   Image as ImageIcon,
-  AlertCircle
-} from 'lucide-react';
-import api from '../../services/api';
+  AlertCircle,
+} from "lucide-react";
+import api from "../../services/api";
 
 interface Project {
   id: string;
@@ -28,20 +28,20 @@ interface Project {
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: '',
-    tags: '',
-    liveDemo: '',
-    github: '',
+    title: "",
+    description: "",
+    category: "",
+    tags: "",
+    liveDemo: "",
+    github: "",
     featured: false,
     order: 0,
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split("T")[0],
   });
 
   useEffect(() => {
@@ -51,10 +51,10 @@ const Projects = () => {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get('/projects');
+      const { data } = await api.get("/projects");
       setProjects(data.data.projects || []);
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Failed to fetch projects');
+      setError(error.response?.data?.message || "Failed to fetch projects");
     } finally {
       setLoading(false);
     }
@@ -62,31 +62,39 @@ const Projects = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('description', formData.description);
-      formDataToSend.append('category', formData.category);
-      formDataToSend.append('tags', formData.tags);
-      formDataToSend.append('liveDemo', formData.liveDemo);
-      formDataToSend.append('github', formData.github);
-      formDataToSend.append('featured', String(formData.featured));
-      formDataToSend.append('order', String(formData.order));
-      formDataToSend.append('date', formData.date);
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("category", formData.category);
+      formDataToSend.append(
+        "tags",
+        JSON.stringify(
+          formData.tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter((tag) => tag),
+        ),
+      );
+      formDataToSend.append("liveDemo", formData.liveDemo);
+      formDataToSend.append("github", formData.github);
+      formDataToSend.append("featured", String(formData.featured));
+      formDataToSend.append("order", String(formData.order));
+      formDataToSend.append("date", formData.date);
 
       if (imageFile) {
-        formDataToSend.append('image', imageFile);
+        formDataToSend.append("image", imageFile);
       }
 
       if (editingProject) {
         await api.put(`/projects/${editingProject.id}`, formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
-        await api.post('/projects', formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+        await api.post("/projects", formDataToSend, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
       }
 
@@ -94,7 +102,7 @@ const Projects = () => {
       resetForm();
       setShowModal(false);
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Operation failed');
+      setError(error.response?.data?.message || "Operation failed");
     }
   };
 
@@ -104,9 +112,9 @@ const Projects = () => {
       title: project.title,
       description: project.description,
       category: project.category,
-      tags: project.tags.join(', '),
-      liveDemo: project.liveDemo || '',
-      github: project.github || '',
+      tags: project.tags.join(", "),
+      liveDemo: project.liveDemo || "",
+      github: project.github || "",
       featured: project.featured,
       order: project.order,
       date: project.date,
@@ -114,28 +122,28 @@ const Projects = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+  const handleDelete = async (projectId: string) => {
+    if (!confirm("Are you sure you want to delete this project?")) return;
 
     try {
-      await api.delete(`/projects/${id}`);
+      await api.delete(`/projects/${projectId}`);
       fetchProjects();
     } catch (error: any) {
-      setError(error.response?.data?.message || 'Delete failed');
+      setError(error.response?.data?.message || "Delete failed");
     }
   };
 
   const resetForm = () => {
     setFormData({
-      title: '',
-      description: '',
-      category: '',
-      tags: '',
-      liveDemo: '',
-      github: '',
+      title: "",
+      description: "",
+      category: "",
+      tags: "",
+      liveDemo: "",
+      github: "",
       featured: false,
       order: 0,
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
     });
     setEditingProject(null);
     setImageFile(null);
@@ -214,7 +222,9 @@ const Projects = () => {
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="text-lg font-bold text-white mb-2">{project.title}</h3>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  {project.title}
+                </h3>
                 <p className="text-gray-400 text-sm mb-3 line-clamp-2">
                   {project.description}
                 </p>
@@ -269,7 +279,7 @@ const Projects = () => {
               {/* Modal Header */}
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-white">
-                  {editingProject ? 'Edit Project' : 'Add Project'}
+                  {editingProject ? "Edit Project" : "Add Project"}
                 </h2>
                 <button
                   onClick={() => {
@@ -292,7 +302,9 @@ const Projects = () => {
                     <input
                       type="text"
                       value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     />
@@ -305,7 +317,9 @@ const Projects = () => {
                     <input
                       type="text"
                       value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     />
@@ -318,7 +332,9 @@ const Projects = () => {
                   </label>
                   <textarea
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     rows={4}
                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
@@ -332,7 +348,9 @@ const Projects = () => {
                   <input
                     type="text"
                     value={formData.tags}
-                    onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, tags: e.target.value })
+                    }
                     placeholder="React, TypeScript, Node.js"
                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -346,7 +364,9 @@ const Projects = () => {
                     <input
                       type="url"
                       value={formData.liveDemo}
-                      onChange={(e) => setFormData({ ...formData, liveDemo: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, liveDemo: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -358,7 +378,9 @@ const Projects = () => {
                     <input
                       type="url"
                       value={formData.github}
-                      onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, github: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -384,7 +406,12 @@ const Projects = () => {
                     <input
                       type="number"
                       value={formData.order}
-                      onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          order: parseInt(e.target.value),
+                        })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -396,7 +423,9 @@ const Projects = () => {
                     <input
                       type="date"
                       value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, date: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -406,7 +435,12 @@ const Projects = () => {
                       <input
                         type="checkbox"
                         checked={formData.featured}
-                        onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            featured: e.target.checked,
+                          })
+                        }
                         className="w-4 h-4 bg-gray-700 border-gray-600 rounded"
                       />
                       <span className="text-sm text-gray-300">Featured</span>
@@ -421,7 +455,7 @@ const Projects = () => {
                     className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2"
                   >
                     <Save size={20} />
-                    {editingProject ? 'Update' : 'Create'} Project
+                    {editingProject ? "Update" : "Create"} Project
                   </button>
                   <button
                     type="button"
