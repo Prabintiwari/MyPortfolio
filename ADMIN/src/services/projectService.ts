@@ -1,14 +1,14 @@
-import type { CreateProject, Project, ProjectQuery, UpdateProject } from '../types/project.types';
-import api from './api';
+import type { ProjectQuery } from "../types/project.types";
+import api from "./api";
 
 export const projectService = {
   getAll: async (params?: ProjectQuery) => {
-    const { data } = await api.get('/projects', { params });
+    const { data } = await api.get("/projects", { params });
     return data;
   },
 
   getCategories: async () => {
-    const { data } = await api.get('/projects/categories');
+    const { data } = await api.get("/projects/categories");
     return data;
   },
 
@@ -17,12 +17,12 @@ export const projectService = {
     return data;
   },
 
-  create: async (projectData: Project) => {
-    const { data } = await api.post('/admin/projects', projectData);
+  create: async (projectData: FormData) => {
+    const { data } = await api.post("/admin/projects", projectData);
     return data;
   },
 
-  update: async (id: string, projectData: object) => {
+  update: async (id: string, projectData: FormData) => {
     const { data } = await api.put(`/admin/projects/${id}`, projectData);
     return data;
   },

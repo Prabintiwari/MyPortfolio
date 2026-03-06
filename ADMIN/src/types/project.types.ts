@@ -12,33 +12,6 @@ export interface Project {
   date: string;
 }
 
-export interface CreateProject {
-  title: string;
-  description: string;
-  category: string;
-  tags: string[];
-  liveDemo?: string;
-  github?: string;
-  order?: number;
-  isFeatured?: boolean;
-  date: string;
-}
-
-export interface UpdateProject {
-  id?: string;
-  title?: string;
-  description?: string;
-  category?: string;
-  tags?: string[];
-  liveDemo?: string;
-  github?: string;
-  image?: string;
-  order?: number;
-  isFeatured?: boolean;
-  date?: string;
-  isActive?: boolean;
-}
-
 export interface ProjectQuery {
   category?: string;
   isActive?: boolean;

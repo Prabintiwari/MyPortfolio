@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Project } from "../types/project.types";
 import { projectService } from "../services/projectService";
-import api from "../services/api";
 
 export const useProject = () => {
   const [filter, setFilter] = useState("all");
@@ -101,7 +100,7 @@ export const useProject = () => {
       if (editingProject) {
         await projectService.update(editingProject.id,formDataToSend)
       } else {
-        await api.post("/projects", formDataToSend);
+        await projectService.create(formDataToSend)
       }
 
       fetchProjects();
