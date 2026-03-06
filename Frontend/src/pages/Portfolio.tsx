@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, Calendar, Code, Palette } from "lucide-react";
+import { ExternalLink, Github, Calendar, Code, Palette, Filter } from "lucide-react";
 import { useProject } from "../hooks/useProject";
 
 const categoryIcons: Record<string, React.ElementType> = {
@@ -66,8 +66,9 @@ const Portfolio = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
+          className="flex flex-wrap items-center justify-center gap-3 mb-12"
         >
+          <Filter className="text-white" size={20} />
           {categories.map((category) => {
             const IconComponent = categoryIcons[category.id] ?? Code;
 
