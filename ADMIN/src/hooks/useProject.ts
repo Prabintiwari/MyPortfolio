@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type {  Project } from "../../types/project.types";
+import type {  Project } from "../types/project.types";
 import { projectService } from "../services/projectService";
 
 export const useProject = () => {
@@ -11,6 +11,20 @@ export const useProject = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+    const [editingProject, setEditingProject] = useState<Project | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [formData, setFormData] = useState({
+      title: "",
+      description: "",
+      category: "",
+      tags: "",
+      liveDemo: "",
+      github: "",
+      featured: false,
+      order: 0,
+      date: new Date().toISOString().split("T")[0],
+    });
 
   useEffect(() => {
     const fetchCategories = async () => {

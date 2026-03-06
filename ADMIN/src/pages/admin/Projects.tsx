@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Plus,
   Edit,
@@ -10,6 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import api from "../../services/api";
+import { useProject } from "../../hooks/useProject";
 
 interface Project {
   id: string;
@@ -26,8 +27,8 @@ interface Project {
 }
 
 const Projects = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {projects,loading} = useProject()
+  console.log(projects);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -44,21 +45,7 @@ const Projects = () => {
     date: new Date().toISOString().split("T")[0],
   });
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
 
-  const fetchProjects = async () => {
-    try {
-      setLoading(true);
-      const { data } = await api.get("/projects");
-      setProjects(data.data.projects || []);
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Failed to fetch projects");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +85,7 @@ const Projects = () => {
         });
       }
 
-      fetchProjects();
+      // fetchProjects();
       resetForm();
       setShowModal(false);
     } catch (error: any) {
@@ -127,7 +114,7 @@ const Projects = () => {
 
     try {
       await api.delete(`/projects/${projectId}`);
-      fetchProjects();
+      // fetchProjects();
     } catch (error: any) {
       setError(error.response?.data?.message || "Delete failed");
     }

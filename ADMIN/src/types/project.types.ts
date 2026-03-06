@@ -7,12 +7,9 @@ export interface Project {
   tags: string[];
   liveDemo?: string;
   github?: string;
-  isFeatured: boolean;
-  isActive: boolean;
-  date?: string;
-  order?: number;
-  createdAt: string;
-  updatedAt: string;
+  featured: boolean;
+  order: number;
+  date: string;
 }
 
 export interface CreateProject {
