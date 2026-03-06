@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Plus,
   Edit,
@@ -9,132 +8,24 @@ import {
   Image as ImageIcon,
   AlertCircle,
 } from "lucide-react";
-import api from "../../services/api";
 import { useProject } from "../../hooks/useProject";
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  tags: string[];
-  liveDemo?: string;
-  github?: string;
-  featured: boolean;
-  order: number;
-  date: string;
-}
-
 const Projects = () => {
-  const {projects,loading} = useProject()
-  console.log(projects);
-  const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "",
-    tags: "",
-    liveDemo: "",
-    github: "",
-    featured: false,
-    order: 0,
-    date: new Date().toISOString().split("T")[0],
-  });
-
-
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("category", formData.category);
-      formDataToSend.append(
-        "tags",
-        JSON.stringify(
-          formData.tags
-            .split(",")
-            .map((tag) => tag.trim())
-            .filter((tag) => tag),
-        ),
-      );
-      formDataToSend.append("liveDemo", formData.liveDemo);
-      formDataToSend.append("github", formData.github);
-      formDataToSend.append("featured", String(formData.featured));
-      formDataToSend.append("order", String(formData.order));
-      formDataToSend.append("date", formData.date);
-
-      if (imageFile) {
-        formDataToSend.append("image", imageFile);
-      }
-
-      if (editingProject) {
-        await api.put(`/projects/${editingProject.id}`, formDataToSend, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      } else {
-        await api.post("/projects", formDataToSend, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      }
-
-      // fetchProjects();
-      resetForm();
-      setShowModal(false);
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Operation failed");
-    }
-  };
-
-  const handleEdit = (project: Project) => {
-    setEditingProject(project);
-    setFormData({
-      title: project.title,
-      description: project.description,
-      category: project.category,
-      tags: project.tags.join(", "),
-      liveDemo: project.liveDemo || "",
-      github: project.github || "",
-      featured: project.featured,
-      order: project.order,
-      date: project.date,
-    });
-    setShowModal(true);
-  };
-
-  const handleDelete = async (projectId: string) => {
-    if (!confirm("Are you sure you want to delete this project?")) return;
-
-    try {
-      await api.delete(`/projects/${projectId}`);
-      // fetchProjects();
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Delete failed");
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      title: "",
-      description: "",
-      category: "",
-      tags: "",
-      liveDemo: "",
-      github: "",
-      featured: false,
-      order: 0,
-      date: new Date().toISOString().split("T")[0],
-    });
-    setEditingProject(null);
-    setImageFile(null);
-  };
+  const {
+    projects,
+    loading,
+    error,
+    showModal,
+    editingProject,
+    formData,
+    handleSubmit,
+    handleEdit,
+    handleDelete,
+    resetForm,
+    setImageFile,
+    setFormData,
+    setShowModal,
+  } = useProject();
 
   if (loading) {
     return (
