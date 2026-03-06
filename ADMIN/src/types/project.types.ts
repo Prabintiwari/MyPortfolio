@@ -7,7 +7,7 @@ export interface Project {
   tags: string[];
   liveDemo?: string;
   github?: string;
-  featured: boolean;
+  isFeatured: boolean;
   order: number;
   date: string;
 }

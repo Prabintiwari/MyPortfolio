@@ -22,7 +22,7 @@ export const useProject = () => {
     tags: "",
     liveDemo: "",
     github: "",
-    featured: false,
+    isFeatured: false,
     order: 0,
     date: new Date().toISOString().split("T")[0],
   });
@@ -45,28 +45,28 @@ export const useProject = () => {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      setError("");
-      setLoading(true);
-      try {
-        const data = await projectService.getAll({
-          ...(filter === "all" ? {} : { category: filter }),
-          isActive: true,
-        });
-        setProjects(data.data.projects);
-      } catch (error: any) {
-        const message =
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to load services";
-        setError(message);
-        console.error("Projects fetch failed:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProjects = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const data = await projectService.getAll({
+        ...(filter === "all" ? {} : { category: filter }),
+        isActive: true,
+      });
+      setProjects(data.data.projects);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to load services";
+      setError(message);
+      console.error("Projects fetch failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProjects();
   }, [filter]);
 
@@ -90,7 +90,7 @@ export const useProject = () => {
       );
       formDataToSend.append("liveDemo", formData.liveDemo);
       formDataToSend.append("github", formData.github);
-      formDataToSend.append("featured", String(formData.featured));
+      formDataToSend.append("featured", String(formData.isFeatured));
       formDataToSend.append("order", String(formData.order));
       formDataToSend.append("date", formData.date);
 
@@ -99,16 +99,12 @@ export const useProject = () => {
       }
 
       if (editingProject) {
-        await api.put(`/projects/${editingProject.id}`, formDataToSend, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await api.put(`/projects/${editingProject.id}`, formDataToSend);
       } else {
-        await api.post("/projects", formDataToSend, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await api.post("/projects", formDataToSend);
       }
 
-      // fetchProjects();
+      fetchProjects();
       resetForm();
       setShowModal(false);
     } catch (error: any) {
@@ -119,25 +115,29 @@ export const useProject = () => {
   const handleEdit = (project: Project) => {
     setEditingProject(project);
     setFormData({
-      title: project.title,
+      title: project?.title,
       description: project.description,
       category: project.category,
       tags: project.tags.join(", "),
       liveDemo: project.liveDemo || "",
       github: project.github || "",
-      featured: project.featured,
+      isFeatured: project.isFeatured,
       order: project.order,
       date: project.date,
     });
     setShowModal(true);
   };
 
+  useEffect(() => {
+    console.log("formData updated:", formData);
+  }, [formData]);
+
   const handleDelete = async (projectId: string) => {
     if (!confirm("Are you sure you want to delete this project?")) return;
 
     try {
       await api.delete(`/projects/${projectId}`);
-      // fetchProjects();
+       fetchProjects();
     } catch (error: any) {
       setError(error.response?.data?.message || "Delete failed");
     }
@@ -151,7 +151,7 @@ export const useProject = () => {
       tags: "",
       liveDemo: "",
       github: "",
-      featured: false,
+      isFeatured: false,
       order: 0,
       date: new Date().toISOString().split("T")[0],
     });
@@ -176,6 +176,6 @@ export const useProject = () => {
     setImageFile,
     formData,
     setFormData,
-    setShowModal
+    setShowModal,
   };
 };

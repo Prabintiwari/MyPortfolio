@@ -2,9 +2,6 @@ import { Router } from "express";
 import {
   createProject,
   deleteProject,
-  getAllProjects,
-  getProjectById,
-  getProjectCategories,
   updateProject,
 } from "../../controller/project.controller";
 import { uploadProjectImage } from "../../middleware/uploadFile";
@@ -17,7 +14,7 @@ router.use(authenticateToken, AdminOnly);
 
 router.post("/", uploadProjectImage.single("image"), createProject);
 
-router.put("/:projectId", updateProject);
+router.put("/:projectId", uploadProjectImage.single("image"), updateProject);
 
 router.delete("/:projectId", deleteProject);
 

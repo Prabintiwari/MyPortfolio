@@ -191,6 +191,8 @@ const createProject = async (req: Request, res: Response) => {
 const updateProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
+    console.log("body:", req.body);
+    console.log("file:", req.file);
     const {
       title,
       description,
@@ -203,6 +205,7 @@ const updateProject = async (req: Request, res: Response) => {
       isActive,
       date,
     } = updateProjectSchema.parse(req.body);
+    
     const file = req.file;
 
     const existingProject = await prisma.project.findUnique({
@@ -228,21 +231,23 @@ const updateProject = async (req: Request, res: Response) => {
       imageUrl = fileUpload(file, "projects");
     }
 
+    const updatedData = {
+      title: title ?? existingProject.title,
+      description: description ?? existingProject.description,
+      image: imageUrl ?? existingProject.image,
+      category: category ?? existingProject.category,
+      tags: tags ?? existingProject.tags,
+      liveDemo: liveDemo ?? existingProject.liveDemo,
+      github: github ?? existingProject.github,
+      order: order ?? existingProject.order,
+      isFeatured: isFeatured ?? existingProject.isFeatured,
+      date: date ?? existingProject.date,
+      isActive: isActive ?? existingProject.isActive,
+    };
+
     const project = await prisma.project.update({
       where: { id: projectId },
-      data: {
-        title,
-        description,
-        image: imageUrl,
-        category,
-        tags: tags || [],
-        liveDemo,
-        github,
-        order,
-        isFeatured: isFeatured || false,
-        isActive: isActive,
-        date: date || new Date().getFullYear().toString(),
-      },
+      data: updatedData,
     });
 
     res.json({

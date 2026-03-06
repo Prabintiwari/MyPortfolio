@@ -91,7 +91,7 @@ const Projects = () => {
                     <ImageIcon className="text-gray-500" size={48} />
                   </div>
                 )}
-                {project.featured && (
+                {project.isFeatured && (
                   <span className="absolute top-2 right-2 px-2 py-1 bg-yellow-500 text-xs font-semibold rounded">
                     Featured
                   </span>
@@ -312,11 +312,11 @@ const Projects = () => {
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={formData.featured}
+                        checked={formData.isFeatured}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
-                            featured: e.target.checked,
+                            isFeatured: e.target.checked,
                           })
                         }
                         className="w-4 h-4 bg-gray-700 border-gray-600 rounded"
