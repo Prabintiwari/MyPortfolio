@@ -8,6 +8,7 @@ export interface Project {
   liveDemo?: string;
   github?: string;
   isFeatured: boolean;
+  isActive?: boolean;
   order: number;
   date: string;
 }

@@ -11,8 +11,11 @@ const projectSchema = z.object({
   liveDemo: z.string().url().optional(),
   github: z.string().url().optional(),
   order: z.coerce.number().int().optional(),
-  isFeatured: z.coerce.boolean().default(false),
-  isActive: z.coerce.boolean().default(true),
+  isFeatured: z.preprocess(
+    (val) => val === "true" || val === true,
+    z.boolean(),
+  ),
+  isActive: z.preprocess((val) => val === "true" || val === true, z.boolean()),
 
   date: z.string().optional(),
 });

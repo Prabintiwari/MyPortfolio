@@ -21,6 +21,7 @@ const Projects = () => {
     handleSubmit,
     handleEdit,
     handleDelete,
+    toggleStatus,
     resetForm,
     setImageFile,
     setFormData,
@@ -96,6 +97,19 @@ const Projects = () => {
                     Featured
                   </span>
                 )}
+
+                {project && (
+                  <div className="flex absolute top-2 left-2 gap-2 items-center">
+                    <input
+                      type="checkbox"
+                      className="cursor-pointer text-green-500"
+                      onChange={() => toggleStatus(project.id)}
+                      checked={project.isActive}
+                    />
+                    <p className="px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded">Active</p>
+                  </div>
+                )}
+                
               </div>
 
               {/* Content */}
@@ -321,7 +335,7 @@ const Projects = () => {
                         }
                         className="w-4 h-4 bg-gray-700 border-gray-600 rounded"
                       />
-                      <span className="text-sm text-gray-300">Featured</span>
+                      <span className="text-sm text-gray-300">isFeatured</span>
                     </label>
                   </div>
                 </div>

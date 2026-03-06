@@ -147,7 +147,7 @@ const Portfolio = () => {
                     {/* Project Image */}
                     <div className="relative overflow-hidden">
                       <motion.img
-                        src={project.image}
+                        src={`http://localhost:5000${project.image}`}
                         alt={project.title}
                         className="w-full h-40 object-cover"
                         whileHover={{ scale: 1.1 }}

@@ -17,6 +17,11 @@ export const projectService = {
     return data;
   },
 
+  toggleStatus: async (id: string) => {
+    const { data } = await api.put(`/admin/projects/${id}/toggle`);
+    return data;
+  },
+
   create: async (projectData: FormData) => {
     const { data } = await api.post("/admin/projects", projectData);
     return data;

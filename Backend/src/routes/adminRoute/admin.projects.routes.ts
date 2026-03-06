@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createProject,
   deleteProject,
+  toggleIsActive,
   updateProject,
 } from "../../controller/project.controller";
 import { uploadProjectImage } from "../../middleware/uploadFile";
@@ -14,10 +15,9 @@ router.use(authenticateToken, AdminOnly);
 
 router.post("/", uploadProjectImage.single("image"), createProject);
 
-router.put("/:projectId", (req,res,next)=>{
-  console.log("hit route");
-  next();
-}, uploadProjectImage.single("image"), updateProject);
+router.put("/:projectId", uploadProjectImage.single("image"), updateProject);
+
+router.put("/:projectId/toggle", toggleIsActive);
 
 router.delete("/:projectId", deleteProject);
 

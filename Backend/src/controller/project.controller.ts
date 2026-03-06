@@ -191,6 +191,7 @@ const createProject = async (req: Request, res: Response) => {
 const updateProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
+    console.log(req.body);
     const {
       title,
       description,
@@ -203,7 +204,8 @@ const updateProject = async (req: Request, res: Response) => {
       isActive,
       date,
     } = updateProjectSchema.parse(req.body);
-    
+    console.log(updateProjectSchema.parse(req.body));
+
     const file = req.file;
 
     const existingProject = await prisma.project.findUnique({
@@ -215,7 +217,7 @@ const updateProject = async (req: Request, res: Response) => {
         .status(404)
         .json({ success: false, message: "Project not found" });
     }
-    let imageUrl = "";
+    let imageUrl = undefined;
 
     if (file) {
       if (existingProject.image) {
@@ -260,6 +262,33 @@ const updateProject = async (req: Request, res: Response) => {
         message: error.issues[0].message,
       });
     }
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const toggleIsActive = async (req: Request, res: Response) => {
+  try {
+    const { projectId } = projectIdParamsSchema.parse(req.params);
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
+    if (!project) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+    }
+
+    await prisma.project.update({
+      where: { id: projectId },
+      data: { isActive: !project.isActive },
+    });
+
+    res.json({ success: true, message: "Availability changed successfully" });
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message,
@@ -318,5 +347,6 @@ export {
   getProjectCategories,
   createProject,
   updateProject,
+  toggleIsActive,
   deleteProject,
 };

@@ -49,8 +49,7 @@ export const useProject = () => {
     setLoading(true);
     try {
       const data = await projectService.getAll({
-        ...(filter === "all" ? {} : { category: filter }),
-        isActive: true,
+        ...(filter === "all" ? {} : { category: filter })
       });
       setProjects(data.data.projects);
     } catch (error: any) {
@@ -89,7 +88,7 @@ export const useProject = () => {
       );
       formDataToSend.append("liveDemo", formData.liveDemo);
       formDataToSend.append("github", formData.github);
-      formDataToSend.append("featured", String(formData.isFeatured));
+      formDataToSend.append("isFeatured", String(formData.isFeatured));
       formDataToSend.append("order", String(formData.order));
       formDataToSend.append("date", formData.date);
 
@@ -98,9 +97,9 @@ export const useProject = () => {
       }
 
       if (editingProject) {
-        await projectService.update(editingProject.id,formDataToSend)
+        await projectService.update(editingProject.id, formDataToSend);
       } else {
-        await projectService.create(formDataToSend)
+        await projectService.create(formDataToSend);
       }
 
       fetchProjects();
@@ -131,12 +130,21 @@ export const useProject = () => {
     if (!confirm("Are you sure you want to delete this project?")) return;
 
     try {
-      await projectService.delete(projectId)
-       fetchProjects();
+      await projectService.delete(projectId);
+      fetchProjects();
     } catch (error: any) {
       setError(error.response?.data?.message || "Delete failed");
     }
   };
+
+  const toggleStatus = async (projectId:string)=>{
+    try {
+      await projectService.toggleStatus(projectId)
+      fetchProjects()
+    } catch (error:any) {
+       setError(error.response?.data?.message || "toggle status failed");
+    }
+  }
 
   const resetForm = () => {
     setFormData({
@@ -163,6 +171,7 @@ export const useProject = () => {
     setFilter,
     handleSubmit,
     handleDelete,
+    toggleStatus,
     handleEdit,
     resetForm,
     showModal,
