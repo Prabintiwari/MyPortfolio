@@ -6,11 +6,8 @@ import {
 
 const router = Router();
 
-
-
 router.get("/", getAllServices);
 
 router.get("/:serviceId", getServiceById);
-
 
 export default router;

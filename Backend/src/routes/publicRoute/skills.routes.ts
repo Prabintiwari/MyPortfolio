@@ -1,13 +1,10 @@
 import { Router } from "express";
-import {  getAllSkills, getSkillById,  } from "../../controller/skill.controller";
+import { getAllSkills, getSkillById } from "../../controller/skill.controller";
 
-const router = Router()
-
-
+const router = Router();
 
 router.get("/", getAllSkills);
 
 router.get("/:skillId", getSkillById);
 
-
-export default router
+export default router;

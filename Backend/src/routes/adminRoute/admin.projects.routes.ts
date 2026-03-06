@@ -14,7 +14,10 @@ router.use(authenticateToken, AdminOnly);
 
 router.post("/", uploadProjectImage.single("image"), createProject);
 
-router.put("/:projectId", uploadProjectImage.single("image"), updateProject);
+router.put("/:projectId", (req,res,next)=>{
+  console.log("hit route");
+  next();
+}, uploadProjectImage.single("image"), updateProject);
 
 router.delete("/:projectId", deleteProject);
 

@@ -25,12 +25,14 @@ export interface CreateProject {
 }
 
 export interface UpdateProject {
+  id?: string;
   title?: string;
   description?: string;
   category?: string;
   tags?: string[];
   liveDemo?: string;
   github?: string;
+  image?: string;
   order?: number;
   isFeatured?: boolean;
   date?: string;

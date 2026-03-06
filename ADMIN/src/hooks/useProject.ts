@@ -99,7 +99,7 @@ export const useProject = () => {
       }
 
       if (editingProject) {
-        await api.put(`/projects/${editingProject.id}`, formDataToSend);
+        await projectService.update(editingProject.id,formDataToSend)
       } else {
         await api.post("/projects", formDataToSend);
       }
@@ -128,15 +128,11 @@ export const useProject = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
-    console.log("formData updated:", formData);
-  }, [formData]);
-
   const handleDelete = async (projectId: string) => {
     if (!confirm("Are you sure you want to delete this project?")) return;
 
     try {
-      await api.delete(`/projects/${projectId}`);
+      await projectService.delete(projectId)
        fetchProjects();
     } catch (error: any) {
       setError(error.response?.data?.message || "Delete failed");

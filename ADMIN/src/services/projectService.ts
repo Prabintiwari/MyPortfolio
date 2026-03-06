@@ -1,4 +1,4 @@
-import type { CreateProject, ProjectQuery, UpdateProject } from '../types/project.types';
+import type { CreateProject, Project, ProjectQuery, UpdateProject } from '../types/project.types';
 import api from './api';
 
 export const projectService = {
@@ -17,18 +17,18 @@ export const projectService = {
     return data;
   },
 
-  create: async (projectData: CreateProject) => {
-    const { data } = await api.post('/projects', projectData);
+  create: async (projectData: Project) => {
+    const { data } = await api.post('/admin/projects', projectData);
     return data;
   },
 
-  update: async (id: string, projectData: UpdateProject) => {
-    const { data } = await api.put(`/projects/${id}`, projectData);
+  update: async (id: string, projectData: object) => {
+    const { data } = await api.put(`/admin/projects/${id}`, projectData);
     return data;
   },
 
   delete: async (id: string) => {
-    const { data } = await api.delete(`/projects/${id}`);
+    const { data } = await api.delete(`/admin/projects/${id}`);
     return data;
   },
 };
