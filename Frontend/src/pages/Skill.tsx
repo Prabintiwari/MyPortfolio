@@ -8,6 +8,8 @@ import {
   BookOpen,
   Target,
   AlertCircle,
+  Database,
+  Server,
 } from "lucide-react";
 import { useSkill } from "../hooks/useSkills";
 import { getThemeColors } from "../config/theme";
@@ -18,6 +20,8 @@ const skillsIcons: Record<string, React.ElementType> = {
   BookOpen: BookOpen,
   Code: Code,
   Target: Target,
+  Database: Database,
+  Server: Server,
 };
 
 const Skill = () => {
@@ -159,7 +163,7 @@ const Skill = () => {
                         </div>
                         <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
                           <motion.div
-                            className={`h-2 rounded-full bg-gradient-to-r ${themeColor.gradient}`}
+                            className={`h-2 rounded-full bg-linear-to-r ${themeColor.gradient}`}
                             initial={{ width: 0 }}
                             animate={{
                               width:

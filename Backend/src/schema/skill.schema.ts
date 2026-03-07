@@ -33,7 +33,7 @@ const sillIdParamsSchema = z.object({
 const skillQuerySchema = z.object({
   name: z.string().optional(),
   category: z.string().optional(),
-  isActive: z.coerce.boolean().default(true).optional(),
+  isActive: z.coerce.boolean().optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),
 });

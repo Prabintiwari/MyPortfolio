@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Skill } from "../types/skills.types";
 import { skillService } from "../services/skillService";
+import { ColorVariant } from "../types/theme.types";
 
 export const useSkill = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -13,6 +14,8 @@ export const useSkill = () => {
     level: 50,
     category: "",
     icon: "",
+    order: 0,
+    variant: "" as ColorVariant,
   });
 
   const fetchskills = async () => {
@@ -55,9 +58,10 @@ export const useSkill = () => {
     }
   };
 
-  const toggleIsActive = async (id: string) => {
+  const toggleStatus = async (id: string) => {
     try {
       await skillService.toggle(id);
+      fetchskills()
     } catch (error: any) {
       setError(error.response?.data?.message || "Operation failed");
     }
@@ -70,6 +74,8 @@ export const useSkill = () => {
       level: skill.level,
       category: skill.category,
       icon: skill.icon || "",
+      order: skill.order || 0,
+      variant: skill.variant || ("" as ColorVariant),
     });
     setShowModal(true);
   };
@@ -86,7 +92,14 @@ export const useSkill = () => {
   };
 
   const resetForm = () => {
-    setFormData({ name: "", level: 50, category: "", icon: "" });
+    setFormData({
+      name: "",
+      level: 50,
+      category: "",
+      icon: "",
+      order: 0,
+      variant: "" as ColorVariant,
+    });
     setEditingSkill(null);
   };
 
@@ -103,7 +116,7 @@ export const useSkill = () => {
     setEditingSkill,
     handleSubmit,
     handleEdit,
-    toggleIsActive,
+    toggleStatus,
     handleDelete,
     resetForm,
   };
