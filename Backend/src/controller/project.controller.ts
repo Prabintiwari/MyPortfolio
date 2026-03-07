@@ -191,7 +191,6 @@ const createProject = async (req: Request, res: Response) => {
 const updateProject = async (req: Request, res: Response) => {
   try {
     const { projectId } = projectIdParamsSchema.parse(req.params);
-    console.log(req.body);
     const {
       title,
       description,

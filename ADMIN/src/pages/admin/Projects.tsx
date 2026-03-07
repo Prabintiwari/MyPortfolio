@@ -118,7 +118,7 @@ const Projects = () => {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="group bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-white/10 hover:scale-[1.02] hover:-translate-y-1.5"
+              className="group bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-white/10 hover:scale-[1.01] hover:-translate-y-1"
             >
               {/* Image */}
               <div className="aspect-video bg-gray-700 relative">
@@ -139,19 +139,20 @@ const Projects = () => {
                   </span>
                 )}
 
-                {project && (
-                  <div className="flex absolute top-2 left-2 gap-2 items-center">
-                    <input
-                      type="checkbox"
-                      className="cursor-pointer text-green-500"
-                      onChange={() => toggleStatus(project.id)}
-                      checked={project.isActive}
-                    />
-                    <p className="px-2 py-1 bg-green-500 text-white text-xs font-semibold rounded">
-                      Active
-                    </p>
-                  </div>
-                )}
+                <div className="absolute top-2 left-2 flex gap-2 items-center z-1000">
+                  <input
+                    type="checkbox"
+                    name="isActive"
+                    className="cursor-pointer text-green-500"
+                    onChange={() => toggleStatus(project.id)}
+                    checked={project.isActive}
+                  />
+                  <p
+                    className={`px-2 py-1 ${project.isActive ? "bg-green-500" : "bg-red-500"} text-white text-xs font-semibold rounded`}
+                  >
+                    {project.isActive ? "Active" : "InActive"}
+                  </p>
+                </div>
                 <motion.div
                   className="absolute inset-0 bg-linear-to-t from-gray-900/90 via-transparent to-transparent"
                   initial={{ opacity: 0 }}
