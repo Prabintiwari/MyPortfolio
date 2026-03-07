@@ -28,7 +28,7 @@ const createContactSchema = z.object({
 });
 
 const contactIdParamsSchema = z.object({
-  contactId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid contact ID"),
+  contactId: z.string().uuid("Invalid contact ID"),
 });
 
 const contactQuerySchema = z.object({

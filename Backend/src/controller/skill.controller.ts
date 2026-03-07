@@ -167,6 +167,33 @@ const updateSkill = async (req: Request, res: Response) => {
   }
 };
 
+const toggleIsActive = async (req: Request, res: Response) => {
+  try {
+    const { skillId } = sillIdParamsSchema.parse(req.params);
+
+    const skill = await prisma.skill.findUnique({
+      where: { id: skillId },
+    });
+    if (!skill) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Skill not found" });
+    }
+
+    await prisma.skill.update({
+      where: { id: skillId },
+      data: { isActive: !skill.isActive },
+    });
+
+    res.json({ success: true, message: "Availability changed successfully" });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // Delete skill
 const deleteSkill = async (req: Request, res: Response) => {
   try {
@@ -201,4 +228,4 @@ const deleteSkill = async (req: Request, res: Response) => {
   }
 };
 
-export { getAllSkills, getSkillById, createSkill, updateSkill, deleteSkill };
+export { getAllSkills, getSkillById, createSkill, updateSkill,toggleIsActive, deleteSkill };

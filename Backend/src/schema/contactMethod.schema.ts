@@ -21,9 +21,7 @@ const createContactMethodSchema = z.object({
 const updateContactMethodSchema = createContactMethodSchema.partial();
 
 const contactMethodIdParamsSchema = z.object({
-  contactMethodId: z
-    .string()
-    .regex(/^[0-9a-fA-F]{24}$/, "Invalid contactMethod ID"),
+  contactMethodId: z.string().uuid("Invalid contactMethod ID"),
 });
 
 const contactMethodQuerySchema = z.object({

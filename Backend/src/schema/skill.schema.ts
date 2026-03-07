@@ -27,7 +27,7 @@ const createSkillSchema = z.object({
 const updateSkillSchema = createSkillSchema.partial();
 
 const sillIdParamsSchema = z.object({
-  skillId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid skill ID"),
+  skillId: z.string().uuid("Invalid skill ID"),
 });
 
 const skillQuerySchema = z.object({

@@ -19,7 +19,7 @@ const createServiceSchema = z.object({
 const updateServiceSchema = createServiceSchema.partial();
 
 const serviceIdParamsSchema = z.object({
-  serviceId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid service ID"),
+  serviceId: z.string().uuid("Invalid service ID"),
 });
 
 const serviceQuerySchema = z.object({

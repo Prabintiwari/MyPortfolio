@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createSkill, deleteSkill,  updateSkill } from "../../controller/skill.controller";
+import { createSkill, deleteSkill,  toggleIsActive,  updateSkill } from "../../controller/skill.controller";
 
 import { AdminOnly, authenticateToken } from "../../middleware/auth";
 
@@ -10,6 +10,8 @@ router.use(authenticateToken, AdminOnly);
 router.post("/", createSkill);
 
 router.put("/:skillId", updateSkill);
+
+router.put("/:skillId/toggle", toggleIsActive);
 
 router.delete("/:skillId",deleteSkill)
 
