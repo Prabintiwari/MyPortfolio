@@ -4,7 +4,7 @@ import { z } from "zod";
 const createSocialLinksSchema = z.object({
   icon: z.any().refine((val) => typeof val === "function", {
     message: "Icon must be a valid React component",
-  }),
+  }).optional(),
 
   url: z.string().trim().url("Invalid URL format").max(300, "URL is too long"),
 

@@ -1,5 +1,5 @@
 import { ColorVariant } from "@prisma/client";
-import { z } from "zod";
+import { optional, z } from "zod";
 
 const createSkillSchema = z.object({
   name: z
@@ -13,9 +13,9 @@ const createSkillSchema = z.object({
     .min(0, "Level must be at least 0")
     .max(100, "Level cannot exceed 100"),
 
-  icon: z.string().min(1, "Icon is required"),
+  icon: z.string().optional(),
 
-  variant: z.nativeEnum(ColorVariant),
+  variant: z.nativeEnum(ColorVariant).default(ColorVariant.PRIMARY),
 
   category: z.string().optional(),
 

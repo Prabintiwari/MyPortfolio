@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Skill } from "../types/skills.types";
 import { skillService } from "../services/skillService";
-import api from "../services/api";
 
 export const useSkill = () => {
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -44,13 +43,21 @@ export const useSkill = () => {
 
     try {
       if (editingSkill) {
-        await api.put(`/admin/skills/${editingSkill.id}`, formData);
+        await skillService.update(editingSkill.id, formData);
       } else {
-        await api.post("/admin/skills", formData);
+        await skillService.create(formData);
       }
       fetchskills();
       resetForm();
       setShowModal(false);
+    } catch (error: any) {
+      setError(error.response?.data?.message || "Operation failed");
+    }
+  };
+
+  const toggleIsActive = async (id: string) => {
+    try {
+      await skillService.toggle(id);
     } catch (error: any) {
       setError(error.response?.data?.message || "Operation failed");
     }
@@ -71,7 +78,7 @@ export const useSkill = () => {
     if (!confirm("Are you sure you want to delete this skill?")) return;
 
     try {
-      await api.delete(`/skills/${id}`);
+      await skillService.delete(id);
       fetchskills();
     } catch (error: any) {
       setError(error.response?.data?.message || "Delete failed");
@@ -96,6 +103,7 @@ export const useSkill = () => {
     setEditingSkill,
     handleSubmit,
     handleEdit,
+    toggleIsActive,
     handleDelete,
     resetForm,
   };

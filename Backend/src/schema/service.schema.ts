@@ -11,7 +11,7 @@ const createServiceSchema = z.object({
   features: z
     .array(z.string().min(1, "Feature cannot be empty"))
     .min(1, "At least one feature is required"),
-  icon: z.string("Icon is required"),
+  icon: z.string().optional(),
   order: z.number().int().optional(),
   isActive: z.boolean().default(true),
 });

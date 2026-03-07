@@ -1,5 +1,5 @@
 import { ColorVariant } from "@prisma/client";
-import { z } from "zod";
+import { optional, z } from "zod";
 
 const createContactMethodSchema = z.object({
   title: z
@@ -7,7 +7,7 @@ const createContactMethodSchema = z.object({
     .min(1, "Title is required")
     .max(150, "Title must be less than 150 characters"),
 
-  icon: z.string().min(1, "Icon is required"),
+  icon: z.string().optional(),
 
   value: z.string().min(1, "Value is required"),
   variant: z.nativeEnum(ColorVariant),
