@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Experience } from "../types/experience.types";
 import { experienceService } from "../services/experienceService";
-import api from "../services/api";
 
 export const useExperience = () => {
   const [experiences, setExperience] = useState<Experience[]>([]);

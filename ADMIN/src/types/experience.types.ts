@@ -7,4 +7,5 @@ export interface Experience {
   endDate?: string;
   current: boolean;
   location?: string;
+  isActive?: boolean;
 }

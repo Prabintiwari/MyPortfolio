@@ -243,5 +243,6 @@ export {
   getExperienceById,
   createExperience,
   updateExperience,
+  toggleIsActive,
   deleteExperience,
 };

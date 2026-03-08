@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { createExperience, deleteExperience, getAllExperiences, getExperienceById, updateExperience } from "../../controller/experience.controller";
+import {
+  createExperience,
+  deleteExperience,
+  toggleIsActive,
+  updateExperience,
+} from "../../controller/experience.controller";
 
 import { AdminOnly, authenticateToken } from "../../middleware/auth";
 
@@ -11,7 +16,8 @@ router.post("/", createExperience);
 
 router.put("/:experienceId", updateExperience);
 
+router.put("/:experienceId/toggle", toggleIsActive);
 
-router.delete("/:experienceId",deleteExperience)
+router.delete("/:experienceId", deleteExperience);
 
-export default router
+export default router;

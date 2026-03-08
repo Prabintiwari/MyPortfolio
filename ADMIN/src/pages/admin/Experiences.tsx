@@ -1,113 +1,30 @@
-import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, X, Save, AlertCircle, Briefcase } from 'lucide-react';
-import api from '../../services/api';
-import { useExperience } from '../../hooks/useExperience';
-
-interface Experience {
-  id: string;
-  company: string;
-  position: string;
-  description: string;
-  startDate: string;
-  endDate?: string;
-  current: boolean;
-  location?: string;
-}
+import {
+  Plus,
+  Edit,
+  Trash2,
+  X,
+  Save,
+  AlertCircle,
+  Briefcase,
+} from "lucide-react";
+import { useExperience } from "../../hooks/useExperience";
 
 const Experiences = () => {
-
-  const {} = useExperience()
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [editingExperience, setEditingExperience] = useState<Experience | null>(null);
-  const [formData, setFormData] = useState({
-    company: '',
-    position: '',
-    description: '',
-    startDate: '',
-    endDate: '',
-    current: false,
-    location: '',
-  });
-
-  useEffect(() => {
-    fetchExperiences();
-  }, []);
-
-  const fetchExperiences = async () => {
-    try {
-      setLoading(true);
-      const { data } = await api.get('/experiences');
-      setExperiences(data.data.experiences || []);
-    } catch (error: any) {
-      setError(error.response?.data?.message || 'Failed to fetch experiences');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    try {
-      const payload = {
-        ...formData,
-        endDate: formData.current ? null : formData.endDate,
-      };
-
-      if (editingExperience) {
-        await api.put(`/admin/experiences/${editingExperience.id}`, payload);
-      } else {
-        await api.post('/admin/experiences', payload);
-      }
-      fetchExperiences();
-      resetForm();
-      setShowModal(false);
-    } catch (error: any) {
-      setError(error.response?.data?.message || 'Operation failed');
-    }
-  };
-
-  const handleEdit = (experience: Experience) => {
-    setEditingExperience(experience);
-    setFormData({
-      company: experience.company,
-      position: experience.position,
-      description: experience.description,
-      startDate: experience.startDate,
-      endDate: experience.endDate || '',
-      current: experience.current,
-      location: experience.location || '',
-    });
-    setShowModal(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this experience?')) return;
-
-    try {
-      await api.delete(`/admin/experiences/${id}`);
-      fetchExperiences();
-    } catch (error: any) {
-      setError(error.response?.data?.message || 'Delete failed');
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({
-      company: '',
-      position: '',
-      description: '',
-      startDate: '',
-      endDate: '',
-      current: false,
-      location: '',
-    });
-    setEditingExperience(null);
-  };
+  const {
+    experiences,
+    error,
+    loading,
+    showModal,
+    setShowModal,
+    formData,
+    setFormData,
+    editingExperience,
+    handleSubmit,
+    toggleStatus,
+    handleEdit,
+    handleDelete,
+    resetForm,
+  } = useExperience();
 
   if (loading) {
     return (
@@ -153,7 +70,23 @@ const Experiences = () => {
       ) : (
         <div className="space-y-4">
           {experiences.map((exp) => (
-            <div key={exp.id} className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all">
+            <div
+              key={exp.id}
+              className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all"
+            >
+              <div className=" flex justify-end gap-2 mb-4 items-center z-1000">
+                <input
+                  type="checkbox"
+                  className="cursor-pointer text-green-500"
+                  onChange={() => toggleStatus(exp.id)}
+                  checked={exp.isActive}
+                />
+                <p
+                  className={`px-2 py-1 ${exp.isActive ? "bg-green-500" : "bg-red-500"} text-white text-xs font-semibold rounded`}
+                >
+                  {exp.isActive ? "Active" : "InActive"}
+                </p>
+              </div>
               <div className="flex gap-4">
                 <div className="shrink-0">
                   <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
@@ -163,9 +96,15 @@ const Experiences = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h3 className="text-xl font-bold text-white">{exp.position}</h3>
-                      <p className="text-green-400 font-medium">{exp.company}</p>
-                      {exp.location && <p className="text-gray-400 text-sm">{exp.location}</p>}
+                      <h3 className="text-xl font-bold text-white">
+                        {exp.position}
+                      </h3>
+                      <p className="text-green-400 font-medium">
+                        {exp.company}
+                      </p>
+                      {exp.location && (
+                        <p className="text-gray-400 text-sm">{exp.location}</p>
+                      )}
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -183,10 +122,26 @@ const Experiences = () => {
                     </div>
                   </div>
                   <p className="text-gray-400 text-sm mb-3">
-                    {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - {exp.current ? 'Present' : new Date(exp.endDate!).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                    {exp.current && <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">Current</span>}
+                    {new Date(exp.startDate).toLocaleDateString("en-US", {
+                      month: "short",
+                      year: "numeric",
+                    })}{" "}
+                    -{" "}
+                    {exp.current
+                      ? "Present"
+                      : new Date(exp.endDate!).toLocaleDateString("en-US", {
+                          month: "short",
+                          year: "numeric",
+                        })}
+                    {exp.current && (
+                      <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">
+                        Current
+                      </span>
+                    )}
                   </p>
-                  <p className="text-gray-300 whitespace-pre-line">{exp.description}</p>
+                  <p className="text-gray-300 whitespace-pre-line">
+                    {exp.description}
+                  </p>
                 </div>
               </div>
             </div>
@@ -200,9 +155,15 @@ const Experiences = () => {
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-white">
-                  {editingExperience ? 'Edit Experience' : 'Add Experience'}
+                  {editingExperience ? "Edit Experience" : "Add Experience"}
                 </h2>
-                <button onClick={() => { setShowModal(false); resetForm(); }} className="text-gray-400 hover:text-white">
+                <button
+                  onClick={() => {
+                    setShowModal(false);
+                    resetForm();
+                  }}
+                  className="text-gray-400 hover:text-white"
+                >
                   <X size={24} />
                 </button>
               </div>
@@ -210,21 +171,29 @@ const Experiences = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Company *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Company *
+                    </label>
                     <input
                       type="text"
                       value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, company: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Position *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Position *
+                    </label>
                     <input
                       type="text"
                       value={formData.position}
-                      onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, position: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
@@ -232,21 +201,29 @@ const Experiences = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Location
+                  </label>
                   <input
                     type="text"
                     value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, location: e.target.value })
+                    }
                     placeholder="City, Country"
                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Description *</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Description *
+                  </label>
                   <textarea
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     rows={4}
                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                     required
@@ -255,21 +232,29 @@ const Experiences = () => {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Start Date *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Start Date *
+                    </label>
                     <input
                       type="date"
                       value={formData.startDate}
-                      onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, startDate: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">End Date</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      End Date
+                    </label>
                     <input
                       type="date"
                       value={formData.endDate}
-                      onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, endDate: e.target.value })
+                      }
                       disabled={formData.current}
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
                     />
@@ -281,19 +266,37 @@ const Experiences = () => {
                     <input
                       type="checkbox"
                       checked={formData.current}
-                      onChange={(e) => setFormData({ ...formData, current: e.target.checked, endDate: '' })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          current: e.target.checked,
+                          endDate: "",
+                        })
+                      }
                       className="w-4 h-4"
                     />
-                    <span className="text-sm text-gray-300">I currently work here</span>
+                    <span className="text-sm text-gray-300">
+                      I currently work here
+                    </span>
                   </label>
                 </div>
 
                 <div className="flex gap-3 pt-4">
-                  <button type="submit" className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center justify-center gap-2">
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center justify-center gap-2"
+                  >
                     <Save size={20} />
-                    {editingExperience ? 'Update' : 'Create'} Experience
+                    {editingExperience ? "Update" : "Create"} Experience
                   </button>
-                  <button type="button" onClick={() => { setShowModal(false); resetForm(); }} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowModal(false);
+                      resetForm();
+                    }}
+                    className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+                  >
                     Cancel
                   </button>
                 </div>
