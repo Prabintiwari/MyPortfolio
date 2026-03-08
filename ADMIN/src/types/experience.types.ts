@@ -3,8 +3,7 @@ export interface Experience {
   company: string;
   position: string;
   description: string;
-  startDate: string;
-  endDate?: string;
+  period: string;
   current: boolean;
   location?: string;
   isActive?: boolean;

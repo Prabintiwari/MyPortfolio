@@ -83,10 +83,12 @@ model Skill {
 
 model Experience {
   id          String   @id @default(uuid())
-  title       String
   company     String
-  period      String
+  position    String
+  location    String
   description String
+  period      String
+  current     Boolean  @default(false)
   order       Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())

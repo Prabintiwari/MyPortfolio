@@ -74,19 +74,6 @@ const Experiences = () => {
               key={exp.id}
               className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all"
             >
-              <div className=" flex justify-end gap-2 mb-4 items-center z-1000">
-                <input
-                  type="checkbox"
-                  className="cursor-pointer text-green-500"
-                  onChange={() => toggleStatus(exp.id)}
-                  checked={exp.isActive}
-                />
-                <p
-                  className={`px-2 py-1 ${exp.isActive ? "bg-green-500" : "bg-red-500"} text-white text-xs font-semibold rounded`}
-                >
-                  {exp.isActive ? "Active" : "InActive"}
-                </p>
-              </div>
               <div className="flex gap-4">
                 <div className="shrink-0">
                   <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
@@ -96,9 +83,23 @@ const Experiences = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h3 className="text-xl font-bold text-white">
-                        {exp.position}
-                      </h3>
+                      <div className=" flex justify-end gap-2 mb-4 items-center z-1000">
+                        <h3 className="text-xl font-bold text-white">
+                          {exp.position}
+                        </h3>
+                        <input
+                          type="checkbox"
+                          className="cursor-pointer text-green-500"
+                          onChange={() => toggleStatus(exp.id)}
+                          checked={exp.isActive}
+                        />
+                        <p
+                          className={`px-2 py-1 ${exp.isActive ? "bg-green-500" : "bg-red-500"} text-white text-xs font-semibold rounded`}
+                        >
+                          {exp.isActive ? "Active" : "InActive"}
+                        </p>
+                      </div>
+
                       <p className="text-green-400 font-medium">
                         {exp.company}
                       </p>
@@ -122,17 +123,6 @@ const Experiences = () => {
                     </div>
                   </div>
                   <p className="text-gray-400 text-sm mb-3">
-                    {new Date(exp.startDate).toLocaleDateString("en-US", {
-                      month: "short",
-                      year: "numeric",
-                    })}{" "}
-                    -{" "}
-                    {exp.current
-                      ? "Present"
-                      : new Date(exp.endDate!).toLocaleDateString("en-US", {
-                          month: "short",
-                          year: "numeric",
-                        })}
                     {exp.current && (
                       <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">
                         Current
@@ -233,30 +223,16 @@ const Experiences = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Start Date *
+                      Period *
                     </label>
                     <input
-                      type="date"
-                      value={formData.startDate}
+                      type="text"
+                      value={formData.period}
                       onChange={(e) =>
-                        setFormData({ ...formData, startDate: e.target.value })
+                        setFormData({ ...formData, period: e.target.value })
                       }
+                      placeholder="2024 - Present"
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      value={formData.endDate}
-                      onChange={(e) =>
-                        setFormData({ ...formData, endDate: e.target.value })
-                      }
-                      disabled={formData.current}
-                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 disabled:opacity-50"
                     />
                   </div>
                 </div>
@@ -270,7 +246,6 @@ const Experiences = () => {
                         setFormData({
                           ...formData,
                           current: e.target.checked,
-                          endDate: "",
                         })
                       }
                       className="w-4 h-4"

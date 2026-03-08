@@ -14,8 +14,7 @@ export const useExperience = () => {
     company: "",
     position: "",
     description: "",
-    startDate: "",
-    endDate: "",
+    period:"",
     current: false,
     location: "",
   });
@@ -49,7 +48,7 @@ export const useExperience = () => {
     try {
       const payload = {
         ...formData,
-        endDate: formData.current ? null : formData.endDate,
+        period: formData.current ? null : formData.period,
       };
 
       if (editingExperience) {
@@ -71,8 +70,7 @@ export const useExperience = () => {
       company: experience.company,
       position: experience.position,
       description: experience.description,
-      startDate: experience.startDate,
-      endDate: experience.endDate || "",
+      period: experience.period,
       current: experience.current,
       location: experience.location || "",
     });
@@ -104,8 +102,7 @@ export const useExperience = () => {
       company: "",
       position: "",
       description: "",
-      startDate: "",
-      endDate: "",
+      period: "",
       current: false,
       location: "",
     });

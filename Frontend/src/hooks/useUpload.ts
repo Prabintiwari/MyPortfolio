@@ -4,25 +4,18 @@ import { uploadService } from "../services/uploadService";
 export const useUpload = () => {
   const [profileImage, setProfileImage] = useState<string>("");
   const [resumeUrl, setResumeUrl] = useState<string>("");
+  const [logoUrl, setLogoUrl] = useState<string>("");
+
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const files = await uploadService.getAll();
+        const res = await uploadService.getAll();
+        const files = res.data;
+        console.log(files);
 
-        const avatar = files.find(
-          (img: any) =>
-            img.filename.toLowerCase().includes("profile") ||
-            img.filename.toLowerCase().includes("avatar") ||
-            img.filename.toLowerCase().includes("home"),
-        );
-        if (avatar) setProfileImage(avatar.url);
-
-        const resume = files.find(
-          (img: any) =>
-            img.filename.toLowerCase().includes("resume") ||
-            img.filename.toLowerCase().includes("cv"),
-        );
-        if (resume) setResumeUrl(resume.url);
+        if (files.avatar) setProfileImage(files.avatar);
+        if (files.resume) setResumeUrl(files.resume);
+        if(files.logo) setLogoUrl(files.logo)
       } catch (error) {
         console.error("Failed to fetch assets:", error);
       }
@@ -31,5 +24,5 @@ export const useUpload = () => {
     fetchAssets();
   }, []);
 
-  return { profileImage, resumeUrl };
+  return { profileImage, resumeUrl,logoUrl };
 };

@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   uploadPortfolioFiles,
 } from "../../middleware/uploadFile";
-import { deletePortfolioFile, getPortfolio, getPortfolioFiles, upsertPortfolio } from "../../controller/portfolioFiles.controller";
+import { deletePortfolioFile,  upsertPortfolio } from "../../controller/portfolioFiles.controller";
 import { AdminOnly, authenticateToken } from "../../middleware/auth";
 
 const router = Router();

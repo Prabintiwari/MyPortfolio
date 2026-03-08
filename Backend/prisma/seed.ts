@@ -225,28 +225,31 @@ async function main() {
   const experiences = await prisma.experience.createMany({
     data: [
       {
-        title: "Frontend Developer (Self Projects)",
+        position: "Frontend Developer (Self Projects)",
         company: "Personal Practice",
-        period: "2024 - Present",
+        period:"2023 - Present",
         description:
           "Built multiple frontend projects using React, Tailwind CSS, and JavaScript, focusing on responsive design and user experience.",
+          location:"Home",
         order: 1,
       },
       {
-        title: "Frontend Development Trainee",
+        position: "Frontend Development Trainee",
         company: "Skill Shikshya (Diploma Program)",
         period: "2025 - Present",
         description:
           "Currently enrolled in a diploma course focused on frontend development, learning HTML, CSS, JavaScript, and React through hands-on projects.",
+          location:"Sankhamul, Kathmandu",
         order: 2,
       },
       {
-        title: "Open Source Contributor (Beginner Level)",
+        position: "Open Source Contributor (Beginner Level)",
         company: "GitHub",
         period: "2024",
         description:
           "Contributed to small fixes in frontend projects on GitHub, improving UI bugs and adding small features. Focused on learning collaborative workflows using Git and GitHub.",
         order: 3,
+        location:"Home",
       },
     ],
   });

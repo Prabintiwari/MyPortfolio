@@ -101,17 +101,27 @@ const getExperienceById = async (req: Request, res: Response) => {
 // Create new experience
 const createExperience = async (req: Request, res: Response) => {
   try {
-    const { title, company, period, description, order, isActive } =
-      createExperienceSchema.parse(req.body);
+    const {
+      position,
+      company,
+      period,
+      location,
+      current,
+      description,
+      order,
+      isActive,
+    } = createExperienceSchema.parse(req.body);
 
     const experience = await prisma.experience.create({
       data: {
-        title,
+        position,
         company,
         period,
+        location,
+        current,
         description: description,
         order: order || 0,
-        isActive: isActive
+        isActive: isActive,
       },
     });
 

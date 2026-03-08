@@ -6,7 +6,7 @@ import { useUpload } from "../hooks/useUpload";
 
 const Home = () => {
   const { about, aboutLoading, aboutError } = useAbout();
-  const { profileImage, resumeUrl } = useUpload();
+  const { profileImage, resumeUrl,logoUrl } = useUpload();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -44,6 +44,7 @@ const Home = () => {
       },
     },
   };
+
 
   return (
     <section
@@ -255,7 +256,7 @@ const Home = () => {
                 <div className="w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-8 border-white shadow-2xl bg-gradient-to-br from-blue-100 to-purple-100">
                   {profileImage ? (
                     <img
-                      src={profileImage}
+                      src={`http://localhost:5000${profileImage}`}
                       alt={`${about?.name || "Profile"} - Portfolio Image`}
                       className="w-full h-full object-cover"
                     />

@@ -1,22 +1,27 @@
 import { z } from "zod";
 
 const createExperienceSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(150, "Title must be less than 150 characters"),
-
   company: z
     .string()
     .min(1, "Company name is required")
     .max(150, "Company must be less than 150 characters"),
 
-  period: z.string().min(1, "Period is required"), 
+  position: z
+    .string()
+    .min(1, "Position is required")
+    .max(150, "Position must be less than 150 characters"),
   description: z.string().min(1, "Description is required"),
+  location: z
+    .string()
+    .min(1, "Location is required")
+    .max(150, "Location must be less than 150 characters"),
 
-  order: z.number().int().optional(), 
+  period:z.string().min(1,"period is required"),
+  current: z.boolean().default(false).optional(),
 
-  isActive: z.boolean().optional(), 
+  order: z.number().int().optional(),
+
+  isActive: z.boolean().default(true).optional(),
 });
 
 const updateExperienceSchema = createExperienceSchema.partial();
