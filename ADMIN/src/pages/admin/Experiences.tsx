@@ -149,10 +149,10 @@ const Experiences = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {experiences.map((exp, index) => (
+          {experiences.map((exp) => (
             <div key={exp.id} className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all">
               <div className="flex gap-4">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
                     <Briefcase className="text-green-500" size={24} />
                   </div>
