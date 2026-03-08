@@ -1,14 +1,6 @@
 import { motion } from "framer-motion";
-import { Calendar, Zap, Palette, Code, BookOpen, Target } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { useExperience } from "../hooks/useExperience";
-
-const skillsIcons: Record<string, React.ElementType> = {
-  Palette: Palette,
-  Zap: Zap,
-  BookOpen: BookOpen,
-  Code: Code,
-  Target: Target,
-};
 
 const Experience = () => {
   const { experiences, error, loading } = useExperience();
@@ -106,21 +98,31 @@ const Experience = () => {
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition-opacity duration-300"></div>
                 <div className="bg-slate-800/90 backdrop-blur-sm p-10 rounded-2xl border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300">
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start justify-between mb-2">
                     <div>
                       <motion.h3
                         className="text-xl md:text-2xl font-bold text-white group-hover:text-blue-400 transition-colors"
                         layoutId={`title-${index}`}
                       >
-                        {exp.title}
+                        {exp.position}
                       </motion.h3>
                       <p className="text-lg text-blue-400 font-medium">
                         {exp.company}
                       </p>
+                      {exp.location && (
+                        <p className="text-gray-400 text-sm">{exp.location}</p>
+                      )}
                     </div>
                     <div className="flex items-center text-gray-400">
                       <Calendar className="w-5 h-5 mr-2" />
                       <span>{exp.period}</span>
+                      <p className="text-gray-400 text-sm">
+                        {exp.current && (
+                          <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-500 text-xs rounded">
+                            Current
+                          </span>
+                        )}
+                      </p>
                     </div>
                   </div>
                   <p className="text-gray-300 leading-relaxed mb-4">

@@ -6,5 +6,6 @@ export interface Experience {
   period: string;
   current: boolean;
   location?: string;
+  order?: number;
   isActive?: boolean;
 }

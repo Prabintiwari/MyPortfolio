@@ -1,9 +1,11 @@
 export interface Experience {
   id: string;
-  title: string;
+  position: string;
   company: string;
   period: string;
   description: string;
+  location: string;
+  current:boolean;
   order: number;
   isActive: number;
   createdAt: string;

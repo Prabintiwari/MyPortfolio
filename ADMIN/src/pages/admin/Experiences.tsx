@@ -83,21 +83,23 @@ const Experiences = () => {
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <div className=" flex justify-end gap-2 mb-4 items-center z-1000">
+                      <div className=" flex justify-end gap-4 mb-4 items-center z-1000">
                         <h3 className="text-xl font-bold text-white">
                           {exp.position}
                         </h3>
-                        <input
-                          type="checkbox"
-                          className="cursor-pointer text-green-500"
-                          onChange={() => toggleStatus(exp.id)}
-                          checked={exp.isActive}
-                        />
-                        <p
-                          className={`px-2 py-1 ${exp.isActive ? "bg-green-500" : "bg-red-500"} text-white text-xs font-semibold rounded`}
-                        >
-                          {exp.isActive ? "Active" : "InActive"}
-                        </p>
+                        <div className="flex gap-1">
+                          <input
+                            type="checkbox"
+                            className="cursor-pointer text-green-500"
+                            onChange={() => toggleStatus(exp.id)}
+                            checked={exp.isActive}
+                          />
+                          <p
+                            className={`px-2 py-1 ${exp.isActive ? "bg-green-500" : "bg-red-500"} text-white text-xs font-semibold rounded`}
+                          >
+                            {exp.isActive ? "Active" : "InActive"}
+                          </p>
+                        </div>
                       </div>
 
                       <p className="text-green-400 font-medium">
@@ -122,13 +124,19 @@ const Experiences = () => {
                       </button>
                     </div>
                   </div>
-                  <p className="text-gray-400 text-sm mb-3">
-                    {exp.current && (
-                      <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">
-                        Current
-                      </span>
-                    )}
-                  </p>
+                  <div className="flex items-center gap-1 mb-3">
+                    <p className="text-gray-300 whitespace-pre-line">
+                      {exp.period}
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      {exp.current && (
+                        <span className="ml-2 px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">
+                          Current
+                        </span>
+                      )}
+                    </p>
+                  </div>
+
                   <p className="text-gray-300 whitespace-pre-line">
                     {exp.description}
                   </p>
@@ -220,7 +228,7 @@ const Experiences = () => {
                   />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Period *
@@ -233,6 +241,22 @@ const Experiences = () => {
                       }
                       placeholder="2024 - Present"
                       className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Order (optional)
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.order}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          order: parseInt(e.target.value),
+                        })
+                      }
+                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
