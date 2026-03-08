@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, X, Save, AlertCircle, Briefcase } from 'lucide-react';
 import api from '../../services/api';
+import { useExperience } from '../../hooks/useExperience';
 
 interface Experience {
   id: string;
@@ -14,6 +15,8 @@ interface Experience {
 }
 
 const Experiences = () => {
+
+  const {} = useExperience()
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

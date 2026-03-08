@@ -174,6 +174,33 @@ const updateExperience = async (req: Request, res: Response) => {
   }
 };
 
+const toggleIsActive = async (req: Request, res: Response) => {
+  try {
+    const { experienceId } = experienceIdParamsSchema.parse(req.params);
+
+    const experience = await prisma.experience.findUnique({
+      where: { id: experienceId },
+    });
+    if (!experience) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Experience not found" });
+    }
+
+    await prisma.experience.update({
+      where: { id: experienceId },
+      data: { isActive: !experience.isActive },
+    });
+
+    res.json({ success: true, message: "Availability changed successfully" });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // Delete experience
 const deleteExperience = async (req: Request, res: Response) => {
   try {
