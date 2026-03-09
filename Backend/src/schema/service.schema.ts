@@ -9,11 +9,10 @@ const createServiceSchema = z.object({
   description: z.string().min(1, "Description is required"),
 
   features: z
-    .string()
-    .transform((val) => JSON.parse(val))
-    .pipe(z.array(z.string())),
+    .array(z.string().min(1, "Feature cannot be empty"))
+    .min(1, "At least one feature is required"),
   icon: z.string().optional(),
-  order: z.coerce.number().int().optional(),
+  order: z.number().int().optional(),
 });
 
 const updateServiceSchema = createServiceSchema.partial();

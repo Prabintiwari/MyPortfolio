@@ -46,29 +46,22 @@ export const useService = () => {
     setLoading(true);
 
     try {
-      const formDataToSend = new FormData();
-
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("icon", formData.icon);
-
-      formDataToSend.append(
-        "features",
-        JSON.stringify(
-          formData.features
-            .split(",")
-            .map((f) => f.trim())
-            .filter((f) => f),
-        ),
-      );
-
-      formDataToSend.append("order", String(formData.order));
-      
+      const dataToSend = {
+        title: formData.title,
+        description: formData.description,
+        icon: formData.icon,
+        features: formData.features
+          .split(",")
+          .map((f) => f.trim())
+          .filter((f) => f),
+        order: formData.order,
+        isActive: formData.isActive,
+      };
 
       if (editingService) {
-        await serviceService.update(editingService.id, formDataToSend);
+        await serviceService.update(editingService.id, dataToSend);
       } else {
-        await serviceService.create(formDataToSend);
+        await serviceService.create(dataToSend);
       }
       fetchServices();
       resetForm();

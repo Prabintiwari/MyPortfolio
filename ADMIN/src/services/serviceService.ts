@@ -11,7 +11,7 @@ export const serviceService = {
     return data;
   },
 
-  create: async (serviceData: FormData) => {
+  create: async (serviceData: object) => {
     const { data } = await api.post("/admin/services", serviceData);
     return data;
   },
@@ -21,7 +21,7 @@ export const serviceService = {
     return data;
   },
 
-  update: async (id: string, serviceData: FormData) => {
+  update: async (id: string, serviceData: object) => {
     const { data } = await api.put(`/admin/services/${id}`, serviceData);
     return data;
   },
