@@ -11,9 +11,7 @@ import { ZodError } from "zod";
 // Get all services
 const getAllServices = async (req: Request, res: Response) => {
   try {
-    const { isActive, page, limit } = serviceQuerySchema.parse(
-      req.query,
-    );
+    const { isActive, page, limit } = serviceQuerySchema.parse(req.query);
     const pageNumber = page ?? 1;
     const limitNumber = limit ?? 10;
     const skip = (pageNumber - 1) * limitNumber;
@@ -169,6 +167,33 @@ const updateService = async (req: Request, res: Response) => {
   }
 };
 
+const toggleIsActive = async (req: Request, res: Response) => {
+  try {
+    const { serviceId } = serviceIdParamsSchema.parse(req.params);
+
+    const service = await prisma.service.findUnique({
+      where: { id: serviceId },
+    });
+    if (!service) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Service not found" });
+    }
+
+    await prisma.service.update({
+      where: { id: serviceId },
+      data: { isActive: !service.isActive },
+    });
+
+    res.json({ success: true, message: "Availability changed successfully" });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // Delete service
 const deleteService = async (req: Request, res: Response) => {
   try {
@@ -212,5 +237,6 @@ export {
   getServiceById,
   createService,
   updateService,
+  toggleIsActive,
   deleteService,
 };

@@ -14,10 +14,10 @@ export const useExperience = () => {
     company: "",
     position: "",
     description: "",
-    period:"",
+    period: "",
     current: false,
     location: "",
-    order:0
+    order: 0,
   });
 
   const fetchExperience = async () => {
@@ -49,7 +49,6 @@ export const useExperience = () => {
     try {
       const payload = {
         ...formData,
-       
       };
 
       if (editingExperience) {
@@ -74,7 +73,7 @@ export const useExperience = () => {
       period: experience.period,
       current: experience.current,
       location: experience.location || "",
-      order:experience.order||0
+      order: experience.order || 0,
     });
     setShowModal(true);
   };
