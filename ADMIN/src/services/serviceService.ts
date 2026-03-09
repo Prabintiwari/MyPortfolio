@@ -11,17 +11,17 @@ export const serviceService = {
     return data;
   },
 
-  create: async (serviceData: object) => {
+  create: async (serviceData: FormData) => {
     const { data } = await api.post("/admin/services", serviceData);
     return data;
   },
 
   toggle: async (id: string) => {
-    const { data } = await api.put(`/admin/services/${id}`);
+    const { data } = await api.put(`/admin/services/${id}/toggle`);
     return data;
   },
 
-  update: async (id: string, serviceData: object) => {
+  update: async (id: string, serviceData: FormData) => {
     const { data } = await api.put(`/admin/services/${id}`, serviceData);
     return data;
   },

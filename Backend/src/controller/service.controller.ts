@@ -94,8 +94,10 @@ const getServiceById = async (req: Request, res: Response) => {
 // Create new service
 const createService = async (req: Request, res: Response) => {
   try {
-    const { icon, title, description, features, order, isActive } =
+    console.log(req.body);
+    const { icon, title, description, features, order } =
       createServiceSchema.parse(req.body);
+      console.log("object");
 
     const service = await prisma.service.create({
       data: {
@@ -104,7 +106,6 @@ const createService = async (req: Request, res: Response) => {
         description,
         features: features || [],
         order: order || 0,
-        isActive: isActive !== undefined ? isActive : true,
       },
     });
 

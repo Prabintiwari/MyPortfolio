@@ -9,11 +9,11 @@ const createServiceSchema = z.object({
   description: z.string().min(1, "Description is required"),
 
   features: z
-    .array(z.string().min(1, "Feature cannot be empty"))
-    .min(1, "At least one feature is required"),
+    .string()
+    .transform((val) => JSON.parse(val))
+    .pipe(z.array(z.string())),
   icon: z.string().optional(),
-  order: z.number().int().optional(),
-  isActive: z.boolean().default(true),
+  order: z.coerce.number().int().optional(),
 });
 
 const updateServiceSchema = createServiceSchema.partial();
@@ -23,7 +23,7 @@ const serviceIdParamsSchema = z.object({
 });
 
 const serviceQuerySchema = z.object({
-  isActive: z.coerce.boolean().default(true).optional(),
+  isActive: z.coerce.boolean().optional(),
   page: z.coerce.number().optional().default(1),
   limit: z.coerce.number().optional().default(10),
 });
