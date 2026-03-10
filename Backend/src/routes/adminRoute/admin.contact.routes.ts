@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  createContact,
   deleteContact,
   getAllContacts,
   markAsRead,
@@ -12,7 +11,7 @@ const router = Router();
 
 router.use(authenticateToken, AdminOnly);
 
-router.post("/", createContact);
+router.get("/", getAllContacts);
 
 router.put("/:contactId", markAsRead);
 
