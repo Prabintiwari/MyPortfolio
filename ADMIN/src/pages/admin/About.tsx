@@ -1,5 +1,3 @@
-// src/pages/admin/crud/About.tsx
-import { useState, useEffect } from "react";
 import {
   Save,
   AlertCircle,
@@ -9,138 +7,24 @@ import {
   Eye,
   Plus,
 } from "lucide-react";
-import api from "../../services/api";
-
-interface AboutData {
-  id: string;
-  name: string;
-  title: string;
-  subtitle: string;
-  bio: string;
-  description: string;
-  yearsExperience: number;
-  projectsCompleted: number;
-  openSource: number;
-  globalReachText: string;
-}
+import { useAbout } from "../../hooks/useAbout";
 
 const About = () => {
-  const [about, setAbout] = useState<AboutData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [viewMode, setViewMode] = useState<"view" | "edit" | "create">("view");
-
-  const [formData, setFormData] = useState({
-    name: "",
-    title: "",
-    subtitle: "",
-    bio: "",
-    description: "",
-    yearsExperience: 0,
-    projectsCompleted: 0,
-    openSource: 0,
-    globalReachText: "",
-  });
-
-  useEffect(() => {
-    fetchAbout();
-  }, []);
-
-  const fetchAbout = async () => {
-    try {
-      setLoading(true);
-      const { data } = await api.get("/about");
-
-      if (data.data.about) {
-        setAbout(data.data.about);
-        setViewMode("view");
-      } else {
-        setViewMode("create");
-      }
-    } catch (error: any) {
-      console.log("About not found, showing create form");
-      setViewMode("create");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEdit = () => {
-    if (about) {
-      setFormData({
-        name: about.name,
-        title: about.title,
-        subtitle: about.subtitle || "",
-        bio: about.bio,
-        description: about.description || "",
-        yearsExperience: about.yearsExperience,
-        projectsCompleted: about.projectsCompleted,
-        openSource: about.openSource,
-        globalReachText: about.globalReachText || "",
-      });
-      setViewMode("edit");
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-    setSaving(true);
-
-    try {
-      if (viewMode === "create") {
-        await api.post("/about", formData);
-        setSuccess("About section created successfully");
-      } else {
-        await api.put(`/about/${about?.id}`, formData);
-        setSuccess("About section updated successfully");
-      }
-
-      fetchAbout();
-      setViewMode("view");
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Operation failed");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (
-      !confirm(
-        "Are you sure you want to delete the about section? This action cannot be undone.",
-      )
-    ) {
-      return;
-    }
-
-    try {
-      await api.delete(`/about/${about?.id}`);
-      setSuccess("About section deleted successfully");
-      setAbout(null);
-      setViewMode("create");
-    } catch (error: any) {
-      setError(error.response?.data?.message || "Delete failed");
-    }
-  };
-
-  const cancelEdit = () => {
-    setViewMode("view");
-    setFormData({
-      name: "",
-      title: "",
-      subtitle: "",
-      bio: "",
-      description: "",
-      yearsExperience: 0,
-      projectsCompleted: 0,
-      openSource: 0,
-      globalReachText: "",
-    });
-  };
+  const {
+    about,
+    loading,
+    error,
+    saving,
+    success,
+    viewMode,
+    setViewMode,
+    formData,
+    setFormData,
+    handleSubmit,
+    handleEdit,
+    handleDelete,
+    cancelEdit,
+  } = useAbout();
 
   if (loading) {
     return (

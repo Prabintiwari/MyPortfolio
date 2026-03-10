@@ -60,7 +60,9 @@ export const useExperience = () => {
       resetForm();
       setShowModal(false);
     } catch (error: any) {
-      setError(error.response?.data?.message || "Operation failed");
+      const message =
+        error.response?.data?.message || error.message || "Operation failed";
+      setError(message);
     }
   };
 
@@ -83,7 +85,11 @@ export const useExperience = () => {
       await experienceService.toggle(experienceId);
       fetchExperience();
     } catch (error: any) {
-      setError(error.response?.data?.message || "toggle status failed");
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "toggle status failed";
+      setError(message);
     }
   };
 
@@ -94,7 +100,9 @@ export const useExperience = () => {
       await experienceService.delete(experienceId);
       fetchExperience();
     } catch (error: any) {
-      setError(error.response?.data?.message || "Delete failed");
+      const message =
+        error.response?.data?.message || error.message || "Delete failed";
+      setError(message);
     }
   };
 

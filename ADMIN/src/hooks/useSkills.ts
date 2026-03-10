@@ -15,7 +15,7 @@ export const useSkill = () => {
     category: "",
     icon: "",
     order: 0,
-    variant: "" as ColorVariant,
+    variant: ColorVariant.PRIMARY,
   });
 
   const fetchskills = async () => {
@@ -61,7 +61,7 @@ export const useSkill = () => {
   const toggleStatus = async (id: string) => {
     try {
       await skillService.toggle(id);
-      fetchskills()
+      fetchskills();
     } catch (error: any) {
       setError(error.response?.data?.message || "Operation failed");
     }
@@ -75,7 +75,7 @@ export const useSkill = () => {
       category: skill.category,
       icon: skill.icon || "",
       order: skill.order || 0,
-      variant: skill.variant || ("" as ColorVariant),
+      variant: skill.variant || ColorVariant.PRIMARY,
     });
     setShowModal(true);
   };

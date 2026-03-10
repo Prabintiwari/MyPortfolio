@@ -117,7 +117,8 @@ const Skills = () => {
                     const themeColor = getThemeColors(
                       skill.variant ?? ColorVariant.PRIMARY,
                     );
-                    const IconComponent = skillsIcons[skill.icon ?? "Code"];
+                    const IconComponent =
+                      skillsIcons[skill.icon ?? "Code"] ?? Code;
                     return (
                       <div
                         key={skill.id}
