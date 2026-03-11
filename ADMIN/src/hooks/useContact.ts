@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../services/api";
-
-interface Contact {
-  id: string;
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  isRead: boolean;
-  createdAt: string;
-}
+import type { Contact } from "../types/contact.types";
+import { contactService } from "../services/contactService";
 
 export const useContact = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -25,33 +16,46 @@ export const useContact = () => {
   const fetchContacts = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/admin/contacts");
-      setContacts(data.data?.contacts || data.data || []);
+      const { data } = await contactService.getAll();
+      setContacts(data.data?.contacts);
     } catch (error: any) {
-      setError(error.response?.data?.message || "Failed to fetch contacts");
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to mark as read";
+      setError(message);
+      console.error("Failed to mark as read:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const markAsRead = async (id: string) => {
+  const markAsRead = async (contactId: string) => {
     try {
-      await api.put(`/admin/contacts/${id}`, { isRead: true });
+        await contactService.markAsRead(contactId)
       fetchContacts();
     } catch (error: any) {
-      setError(error.response?.data?.message || "Failed to mark as read");
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to mark as read";
+      setError(message);
+      console.error("Failed to mark as read:", error);
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (contactId: string) => {
     if (!confirm("Are you sure you want to delete this message?")) return;
 
     try {
-      await api.delete(`/contacts/${id}`);
+        await contactService.delete(contactId)
       fetchContacts();
       setSelectedContact(null);
     } catch (error: any) {
-      setError(error.response?.data?.message || "Delete failed");
+      const message =
+        error.response?.data?.message || error.message || "Delete failed";
+      setError(message);
+      console.error("Delete failed:", error);
     }
   };
 
