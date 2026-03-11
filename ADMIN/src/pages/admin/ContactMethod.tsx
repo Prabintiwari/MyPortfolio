@@ -38,8 +38,9 @@ const ContactMethods = () => {
   const fetchMethods = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get('/contact-methods');
-      setMethods(data.data || []);
+      const  data  = await api.get('/contact-method');
+      console.log(data.data.data.contactMethods);
+      setMethods(data.data.data.contactMethods || []);
     } catch (error: any) {
       setError(error.response?.data?.message || 'Failed to fetch contact methods');
     } finally {

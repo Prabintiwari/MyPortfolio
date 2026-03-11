@@ -10,6 +10,7 @@ import {
   FileText,
   Settings,
   X,
+  Phone,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -24,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     { name: 'Skills', path: '/admin/skills', icon: Code },
     { name: 'Experiences', path: '/admin/experiences', icon: Briefcase },
     { name: 'Services', path: '/admin/services', icon: Wrench },
-    { name: 'Contacts', path: '/admin/contacts', icon: Mail },
+    { name: 'Contacts', path: '/admin/contacts', icon: Phone },
     { name: 'Contact Methods', path: '/admin/contact-methods', icon: Mail },
     { name: 'About', path: '/admin/about', icon: User },
     { name: 'Portfolio', path: '/admin/portfolio', icon: FileText },
