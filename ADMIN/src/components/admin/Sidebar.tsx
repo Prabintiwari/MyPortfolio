@@ -25,6 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
     { name: 'Experiences', path: '/admin/experiences', icon: Briefcase },
     { name: 'Services', path: '/admin/services', icon: Wrench },
     { name: 'Contacts', path: '/admin/contacts', icon: Mail },
+    { name: 'Contact Methods', path: '/admin/contact-methods', icon: Mail },
     { name: 'About', path: '/admin/about', icon: User },
     { name: 'Portfolio', path: '/admin/portfolio', icon: FileText },
     { name: 'Settings', path: '/admin/settings', icon: Settings },

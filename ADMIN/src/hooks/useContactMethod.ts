@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { ContactMethod } from "../types/contactMethod.types";
+import type { ContactMethod } from "../types/contactMethod.types";
 import { contactMethodService } from "../services/contactMethodService";
 
 export const useContactMethods = () => {
@@ -12,9 +13,7 @@ export const useContactMethods = () => {
       setError("");
       setLoading(true);
       try {
-        const data = await contactMethodService.getAll({
-          isActive: true,
-        });
+        const data = await contactMethodService.getAll();
         setContactMethods(data.data.contactMethods);
       } catch (error: any) {
         const message =

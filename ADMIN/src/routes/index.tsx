@@ -13,6 +13,7 @@ import Portfolio from "../pages/admin/Portfolio";
 import Settings from "../pages/admin/Settings";
 import AuthLayout from "../layouts/AuthLayout";
 import AdminLayout from "../layouts/AdminLayout";
+import ContactMethods from "../pages/admin/ContactMethod";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
       {
         path: "settings",
         element: <Settings />,
+      },
+      {
+        path: "contact-Methods",
+        element: <ContactMethods />,
       },
     ],
   },
