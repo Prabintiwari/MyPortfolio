@@ -93,13 +93,13 @@ const Contacts = () => {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Messages List */}
         <div className="lg:col-span-1 space-y-2 max-h-150 overflow-y-auto">
-          {filteredContacts.length === 0 ? (
+          {filteredContacts?.length === 0 ? (
             <div className="bg-gray-800 rounded-xl p-8 text-center border border-gray-700">
               <Mail className="mx-auto text-gray-500 mb-2" size={48} />
               <p className="text-gray-400">No messages</p>
             </div>
           ) : (
-            filteredContacts.map((contact) => (
+            filteredContacts?.map((contact) => (
               <div
                 key={contact.id}
                 onClick={() => handleView(contact)}

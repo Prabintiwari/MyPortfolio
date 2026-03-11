@@ -16,7 +16,7 @@ export const useContact = () => {
   const fetchContacts = async () => {
     try {
       setLoading(true);
-      const { data } = await contactService.getAll();
+      const data = await contactService.getAll();
       setContacts(data.data?.contacts);
     } catch (error: any) {
       const message =
@@ -32,7 +32,7 @@ export const useContact = () => {
 
   const markAsRead = async (contactId: string) => {
     try {
-        await contactService.markAsRead(contactId)
+      await contactService.markAsRead(contactId);
       fetchContacts();
     } catch (error: any) {
       const message =
@@ -48,7 +48,7 @@ export const useContact = () => {
     if (!confirm("Are you sure you want to delete this message?")) return;
 
     try {
-        await contactService.delete(contactId)
+      await contactService.delete(contactId);
       fetchContacts();
       setSelectedContact(null);
     } catch (error: any) {
@@ -66,7 +66,7 @@ export const useContact = () => {
     }
   };
 
-  const filteredContacts = contacts.filter((contact) => {
+  const filteredContacts = contacts?.filter((contact) => {
     if (filter === "read") return contact.isRead;
     if (filter === "unread") return !contact.isRead;
     return true;

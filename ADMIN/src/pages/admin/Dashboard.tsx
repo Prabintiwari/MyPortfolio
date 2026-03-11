@@ -42,7 +42,7 @@ const Dashboard = () => {
           api.get("/skills"),
           api.get("/experiences"),
           api.get("/services"),
-          api.get("/contacts"),
+          api.get("/admin/contacts"),
         ]);
 
       setStats({
