@@ -1,7 +1,15 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, Calendar, Code, Palette, Filter } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  Calendar,
+  Code,
+  Palette,
+  Filter,
+} from "lucide-react";
 import { useProject } from "../hooks/useProject";
+import { API_URL } from "../services/api";
 
 const categoryIcons: Record<string, React.ElementType> = {
   all: Code,
@@ -148,7 +156,7 @@ const Portfolio = () => {
                     {/* Project Image */}
                     <div className="relative overflow-hidden">
                       <motion.img
-                        src={`http://localhost:5000${project.image}`}
+                        src={`${API_URL}${project.image}`}
                         alt={project.title}
                         className="w-full h-40 object-cover"
                         whileHover={{ scale: 1.1 }}

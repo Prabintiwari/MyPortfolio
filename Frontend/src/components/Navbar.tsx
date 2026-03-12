@@ -8,17 +8,14 @@ import {
   Briefcase,
   Mail,
   FileText,
-  ImageIcon,
 } from "lucide-react";
 import { useUpload } from "../hooks/useUpload";
+import { API_URL } from "../services/api";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const { files, error, loading } = useUpload();
-  const API_URL =
-    import.meta.env.VITE_API_URL?.replace("/api", "") ||
-    "http://localhost:5000";
 
   const navItems = [
     { name: "Home", href: "#home", icon: Home },

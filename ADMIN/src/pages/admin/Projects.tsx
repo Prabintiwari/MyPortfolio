@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useProject } from "../../hooks/useProject";
 import { motion } from "framer-motion";
+import { API_URL } from "../../services/api";
 
 const categoryIcons: Record<string, React.ElementType> = {
   all: Code,
@@ -124,7 +125,7 @@ const Projects = () => {
               <div className="aspect-video bg-gray-700 relative">
                 {project.image ? (
                   <img
-                    src={`http://localhost:5000${project.image}`}
+                    src={`${API_URL}${project.image}`}
                     alt={project.title}
                     className="w-full h-full object-cover"
                   />

@@ -7,6 +7,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useUpload } from "../../hooks/useUpload";
+import { API_URL } from "../../services/api";
 
 interface PortfolioFiles {
   avatar: string | null;
@@ -25,9 +26,6 @@ const PortfolioFiles = () => {
     uploading,
   } = useUpload();
 
-  const API_URL =
-    import.meta.env.VITE_API_URL?.replace("/api", "") ||
-    "http://localhost:5000";
 
   if (loading) {
     return (

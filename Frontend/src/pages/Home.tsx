@@ -3,13 +3,11 @@ import { Download, AlertCircle } from "lucide-react";
 import SocialIcon from "../components/common/SocialIcon";
 import { useAbout } from "../hooks/useAbout";
 import { useUpload } from "../hooks/useUpload";
+import { API_URL } from "../services/api";
 
 const Home = () => {
   const { about, aboutLoading, aboutError } = useAbout();
   const { files,loading,error } = useUpload();
-  const API_URL =
-    import.meta.env.VITE_API_URL?.replace("/api", "") ||
-    "http://localhost:5000";
 
   const containerVariants = {
     hidden: { opacity: 0 },

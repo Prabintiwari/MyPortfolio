@@ -47,7 +47,7 @@ app.use(cookieParser());
 // API Routes
 app.use("/api", publicRoute);
 app.use("/api/admin", adminRoute);
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/api/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ status: "OK", message: `Server is running on ${PORT}` });
