@@ -31,15 +31,9 @@ export const useContactMethods = () => {
     fetchContactMethods();
   }, []);
 
-  const refetch = () => {
-    setLoading(true);
-    setError("");
-  };
-
   return {
     contactMethods,
     loading,
     error,
-    refetch,
   };
 };

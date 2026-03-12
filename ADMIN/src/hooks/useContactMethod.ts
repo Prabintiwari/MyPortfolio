@@ -55,9 +55,7 @@ export const useContactMethods = () => {
       setShowModal(false);
     } catch (error: any) {
       const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Operation failed";
+        error.response?.data?.message || error.message || "Operation failed";
       setError(message);
       console.error("Operation failed:", error);
     }
@@ -83,9 +81,7 @@ export const useContactMethods = () => {
       fetchContactMethods();
     } catch (error: any) {
       const message =
-        error.response?.data?.message ||
-        error.message ||
-        "Delete failed";
+        error.response?.data?.message || error.message || "Delete failed";
       setError(message);
       console.error("Delete failed:", error);
     }
@@ -96,18 +92,15 @@ export const useContactMethods = () => {
     setEditingMethod(null);
   };
 
-  const refetch = () => {
-    setLoading(true);
-    setError("");
-  };
-
   return {
     contactMethods,
     loading,
     error,
-    refetch,
+    formData,
+    setFormData,
     showModal,
     setShowModal,
+    editingMethod,
     handleSubmit,
     handleEdit,
     handleDelete,
