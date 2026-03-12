@@ -10,6 +10,7 @@ import {
   MapPin,
   AlertCircle,
   CheckCircle,
+  Globe,
 } from "lucide-react";
 import SocialIcon from "../components/common/SocialIcon";
 import Input from "../components/common/Input";
@@ -21,6 +22,7 @@ const contactMethodIcon: Record<string, React.ElementType> = {
   Mail: Mail,
   Phone: Phone,
   MapPin: MapPin,
+  Globe: Globe,
 };
 
 const Contact = () => {
@@ -151,7 +153,7 @@ const Contact = () => {
                           className="flex items-center group cursor-pointer"
                         >
                           <motion.div
-                            className={`w-12 h-12 bg-gradient-to-r ${themeColor.gradient} rounded-lg flex items-center justify-center mr-4`}
+                            className={`w-12 h-12 bg-linear-to-r ${themeColor.gradient} rounded-lg flex items-center justify-center mr-4`}
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             transition={{
                               type: "spring",

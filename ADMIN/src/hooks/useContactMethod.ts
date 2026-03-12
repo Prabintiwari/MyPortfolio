@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ContactMethod } from "../types/contactMethod.types";
 import { contactMethodService } from "../services/contactMethodService";
-import api from "../services/api";
+import { ColorVariant } from "../types/theme.types";
 
 export const useContactMethods = () => {
   const [contactMethods, setContactMethods] = useState<ContactMethod[]>([]);
@@ -12,10 +12,12 @@ export const useContactMethods = () => {
     null,
   );
   const [formData, setFormData] = useState({
-    type: "",
+    title: "",
+    description: "",
     value: "",
     icon: "Phone",
     order: 0,
+    variant: ColorVariant.PRIMARY,
   });
 
   const fetchContactMethods = async () => {
@@ -46,9 +48,9 @@ export const useContactMethods = () => {
 
     try {
       if (editingMethod) {
-        await api.put(`/contact-methods/${editingMethod.id}`, formData);
+        await contactMethodService.update(editingMethod.id,formData)
       } else {
-        await api.post("/contact-methods", formData);
+        await contactMethodService.create(formData)
       }
       fetchContactMethods();
       resetForm();
@@ -64,20 +66,22 @@ export const useContactMethods = () => {
   const handleEdit = (method: ContactMethod) => {
     setEditingMethod(method);
     setFormData({
-      type: method.type,
+      title: method.title,
+      description: method.description,
       value: method.value,
       icon: method.icon || "Phone",
+      variant: method.variant || ColorVariant.PRIMARY,
       order: method.order,
     });
     setShowModal(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (methodId: string) => {
     if (!confirm("Are you sure you want to delete this contact method?"))
       return;
 
     try {
-      await api.delete(`/contact-methods/${id}`);
+      await contactMethodService.delete(methodId)
       fetchContactMethods();
     } catch (error: any) {
       const message =
@@ -88,7 +92,14 @@ export const useContactMethods = () => {
   };
 
   const resetForm = () => {
-    setFormData({ type: "", value: "", icon: "Phone", order: 0 });
+    setFormData({
+      title: "",
+      description: "",
+      value: "",
+      icon: "Phone",
+      order: 0,
+      variant: ColorVariant.PRIMARY,
+    });
     setEditingMethod(null);
   };
 

@@ -23,7 +23,7 @@ router.use("/skills", skillsRoute);
 
 router.use("/experiences", experiencesRoute);
 
-router.use("/contact-method", contactMethodRoute);
+router.use("/contact-methods", contactMethodRoute);
 
 router.use("/contacts", contactsRoute);
 

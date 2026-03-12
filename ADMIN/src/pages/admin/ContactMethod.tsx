@@ -11,6 +11,8 @@ import {
   Globe,
 } from "lucide-react";
 import { useContactMethods } from "../../hooks/useContactMethod";
+import { ColorVariant } from "../../types/theme.types";
+import { getThemeColors } from "../../config/theme";
 
 const iconMap: Record<string, any> = {
   Phone: Phone,
@@ -81,22 +83,28 @@ const ContactMethods = () => {
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {contactMethods.map((method) => {
+            const themeColor = getThemeColors(
+              method.variant ?? ColorVariant.PRIMARY,
+            );
             const Icon = iconMap[method.icon || "Phone"] || Phone;
             return (
               <div
                 key={method.id}
-                className="bg-gray-800 rounded-xl p-6 border border-gray-700"
+                className={`bg-blue-500/10 rounded-xl p-6 border border-gray-700`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                      <Icon className="text-blue-500" size={24} />
+                    <div className={`w-12 h-12 bg-linear-to-r ${themeColor.gradient} rounded-lg flex items-center justify-center mr-4`}>
+                      <Icon className="text-white" size={24} />
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold">
-                        {method.type}
-                      </h3>
-                      <p className="text-gray-400 text-sm">{method.value}</p>
+                      <p className="text-sm text-gray-400">{method.title}</p>
+                      <p className="text-lg font-medium text-white group-hover:text-purple-400 transition-colors">
+                        {method.value}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {method.description}
+                      </p>
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -142,13 +150,28 @@ const ContactMethods = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Type *
+                    Title *
                   </label>
                   <input
                     type="text"
-                    value={formData.type}
+                    value={formData.title}
                     onChange={(e) =>
-                      setFormData({ ...formData, type: e.target.value })
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                    placeholder="Email, Phone, Location..."
+                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Description *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
                     }
                     placeholder="Email, Phone, Location..."
                     className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -187,6 +210,27 @@ const ContactMethods = () => {
                       {Object.keys(iconMap).map((icon) => (
                         <option key={icon} value={icon}>
                           {icon}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Variant
+                    </label>
+                    <select
+                      value={formData.variant}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          variant: e.target.value as ColorVariant,
+                        })
+                      }
+                      className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      {Object.values(ColorVariant).map((variant) => (
+                        <option key={variant} value={variant}>
+                          {variant}
                         </option>
                       ))}
                     </select>

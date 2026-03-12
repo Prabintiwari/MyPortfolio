@@ -1,5 +1,5 @@
 import { ColorVariant } from "@prisma/client";
-import { optional, z } from "zod";
+import {  z } from "zod";
 
 const createContactMethodSchema = z.object({
   title: z
