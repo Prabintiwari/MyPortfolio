@@ -1,10 +1,24 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, User, Briefcase, Mail, FileText } from "lucide-react";
+import {
+  Menu,
+  X,
+  Home,
+  User,
+  Briefcase,
+  Mail,
+  FileText,
+  ImageIcon,
+} from "lucide-react";
+import { useUpload } from "../hooks/useUpload";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const { files, error, loading } = useUpload();
+  const API_URL =
+    import.meta.env.VITE_API_URL?.replace("/api", "") ||
+    "http://localhost:5000";
 
   const navItems = [
     { name: "Home", href: "#home", icon: Home },
@@ -54,20 +68,28 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
+              initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.7 }}
               className="flex-shrink-0"
             >
-              <motion.a
-                href="#home"
-                whileHover={{ scale: 1.04 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-                className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent cursor-pointer"
-                onClick={() => handleNavClick("home")}
-              >
-                Prabin Tiwari
-              </motion.a>
+              {files?.logo ? (
+                <img
+                  src={`${API_URL}${files.logo}`}
+                  alt="Avatar"
+                  className="w-40 h-16 mt-10 object-cover"
+                />
+              ) : (
+                <motion.a
+                  href="#home"
+                  whileHover={{ scale: 1.04 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent cursor-pointer"
+                  onClick={() => handleNavClick("home")}
+                >
+                  Prabin Tiwari
+                </motion.a>
+              )}
             </motion.div>
 
             {/* Desktop Menu */}

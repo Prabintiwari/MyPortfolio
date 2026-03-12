@@ -6,7 +6,10 @@ import { useUpload } from "../hooks/useUpload";
 
 const Home = () => {
   const { about, aboutLoading, aboutError } = useAbout();
-  const { profileImage, resumeUrl,logoUrl } = useUpload();
+  const { files,loading,error } = useUpload();
+  const API_URL =
+    import.meta.env.VITE_API_URL?.replace("/api", "") ||
+    "http://localhost:5000";
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -183,9 +186,9 @@ const Home = () => {
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
             >
               {/* Download CV  */}
-              {resumeUrl ? (
+              {files.resume ? (
                 <motion.a
-                  href={resumeUrl}
+                  href={`${API_URL}${files.resume}`}
                   download
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -254,9 +257,9 @@ const Home = () => {
             >
               <motion.div className="relative z-10">
                 <div className="w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden border-8 border-white shadow-2xl bg-gradient-to-br from-blue-100 to-purple-100">
-                  {profileImage ? (
+                  {files.avatar ? (
                     <img
-                      src={`http://localhost:5000${profileImage}`}
+                        src={`${API_URL}${files.avatar}`}
                       alt={`${about?.name || "Profile"} - Portfolio Image`}
                       className="w-full h-full object-cover"
                     />

@@ -1,28 +1,41 @@
 import { useEffect, useState } from "react";
 import { uploadService } from "../services/uploadService";
 
+interface PortfolioFiles {
+  avatar: string | null;
+  logo: string | null;
+  resume: string | null;
+}
+
 export const useUpload = () => {
-  const [profileImage, setProfileImage] = useState<string>("");
-  const [resumeUrl, setResumeUrl] = useState<string>("");
-  const [logoUrl, setLogoUrl] = useState<string>("");
+  const [files, setFiles] = useState<PortfolioFiles>({
+    avatar: null,
+    logo: null,
+    resume: null,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchAssets = async () => {
-      try {
-        const res = await uploadService.getAll();
-        const files = res.data;
-        console.log(files);
-
-        if (files.avatar) setProfileImage(files.avatar);
-        if (files.resume) setResumeUrl(files.resume);
-        if(files.logo) setLogoUrl(files.logo)
-      } catch (error) {
-        console.error("Failed to fetch assets:", error);
-      }
-    };
-
-    fetchAssets();
+    fetchFiles();
   }, []);
 
-  return { profileImage, resumeUrl,logoUrl };
+  const fetchFiles = async () => {
+    try {
+      setLoading(true);
+      const data = await uploadService.getAll();
+      setFiles(data.data);
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to fetch files";
+      setError(message);
+      console.error("Failed to fetch files:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { files, loading, error };
 };
