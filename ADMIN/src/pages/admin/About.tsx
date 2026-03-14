@@ -50,7 +50,7 @@ const About = () => {
         </div>
 
         {viewMode === "view" && about && (
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <button
               onClick={handleEdit}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2"

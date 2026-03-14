@@ -26,7 +26,6 @@ const PortfolioFiles = () => {
     uploading,
   } = useUpload();
 
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -97,7 +96,7 @@ const PortfolioFiles = () => {
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <Upload size={18} />
-                    {files.avatar?"Change Avatar":"Upload Avatar"}
+                    {files.avatar ? "Change Avatar" : "Upload Avatar"}
                   </span>
                 )}
               </div>
@@ -153,7 +152,7 @@ const PortfolioFiles = () => {
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <Upload size={18} />
-                    {files.logo?"Change Logo":"Upload Logo"}
+                    {files.logo ? "Change Logo" : "Upload Logo"}
                   </span>
                 )}
               </div>
@@ -172,10 +171,14 @@ const PortfolioFiles = () => {
 
         {/* Resume */}
         <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <FileText size={20} />
-            Resume / CV
-          </h3>
+          <div className="flex flex-col gap-2 mb-4">
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <FileText size={20} />
+              Resume / CV
+              <p className="text-xs text-gray-500 ">( PDF files only )</p>
+            </h3>
+          </div>
+
           <div className="aspect-square bg-gray-700 rounded-lg mb-4 flex items-center justify-center">
             {files.resume ? (
               <div className="text-center">
@@ -217,8 +220,7 @@ const PortfolioFiles = () => {
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <Upload size={18} />
-                    {files.resume?"Change Resume":"Upload Resume"}
-                   
+                    {files.resume ? "Change Resume" : "Upload Resume"}
                   </span>
                 )}
               </div>
@@ -233,7 +235,6 @@ const PortfolioFiles = () => {
               </button>
             )}
           </div>
-          <p className="text-xs text-gray-500 mt-2">PDF files only</p>
         </div>
       </div>
     </div>

@@ -36,7 +36,7 @@ const Contacts = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-xl md:text-3xl font-bold text-white mb-2">
             Contact Messages
           </h1>
           <p className="text-gray-400">
@@ -50,7 +50,7 @@ const Contacts = () => {
         <div className="flex gap-2">
           <button
             onClick={() => setFilter("all")}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-3 py-1 md:px-4 md:py-2 rounded-lg ${
               filter === "all"
                 ? "bg-blue-600 text-white"
                 : "bg-gray-700 text-gray-300"
@@ -60,7 +60,7 @@ const Contacts = () => {
           </button>
           <button
             onClick={() => setFilter("unread")}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-3 py-1 md:px-4 md:py-2  rounded-lg ${
               filter === "unread"
                 ? "bg-blue-600 text-white"
                 : "bg-gray-700 text-gray-300"
@@ -70,7 +70,7 @@ const Contacts = () => {
           </button>
           <button
             onClick={() => setFilter("read")}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-3 py-1 md:px-4 md:py-2  rounded-lg ${
               filter === "read"
                 ? "bg-blue-600 text-white"
                 : "bg-gray-700 text-gray-300"
