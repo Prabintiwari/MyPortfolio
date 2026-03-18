@@ -190,10 +190,7 @@ const createProject = async (req: Request, res: Response) => {
 // Update project
 const updateProject = async (req: Request, res: Response) => {
   try {
-    console.log(req.params);
     const { projectId } = projectIdParamsSchema.parse(req.params);
-    console.log(req.body)
-    console.log(req.file);
     const {
       title,
       description,
