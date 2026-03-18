@@ -190,7 +190,10 @@ const createProject = async (req: Request, res: Response) => {
 // Update project
 const updateProject = async (req: Request, res: Response) => {
   try {
+    console.log(req.params);
     const { projectId } = projectIdParamsSchema.parse(req.params);
+    console.log(req.body)
+    console.log(req.file);
     const {
       title,
       description,
@@ -206,6 +209,7 @@ const updateProject = async (req: Request, res: Response) => {
     console.log(updateProjectSchema.parse(req.body));
 
     const file = req.file;
+    
 
     const existingProject = await prisma.project.findUnique({
       where: { id: projectId },

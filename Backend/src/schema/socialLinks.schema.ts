@@ -22,7 +22,7 @@ const createSocialLinksSchema = z.object({
 const updateSocialLinkSchema = createSocialLinksSchema.partial();
 
 const socialLinkIdParamsSchema = z.object({
-  socialLinkId: z.string().uuid("Invalid social link ID"),
+  socialLinkId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid social link ID")
 });
 
 const socialLinkQuerySchema = z.object({

@@ -27,7 +27,7 @@ const createExperienceSchema = z.object({
 const updateExperienceSchema = createExperienceSchema.partial();
 
 const experienceIdParamsSchema = z.object({
-  experienceId: z.string().uuid("Invalid experience ID"),
+  experienceId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid experience ID"),
 });
 
 const experienceQuerySchema = z.object({

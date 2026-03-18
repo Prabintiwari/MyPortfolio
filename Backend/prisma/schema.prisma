@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -12,29 +12,27 @@ enum UserRole {
 }
 
 enum ColorVariant {
-  PRIMARY     
-  SECONDARY    
-  SUCCESS     
-  WARNING      
-  DANGER       
-  INFO         
-  ACCENT       
+  PRIMARY
+  SECONDARY
+  SUCCESS
+  WARNING
+  DANGER
+  INFO
+  ACCENT
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String   @unique
   password  String
   name      String
-  role      UserRole   @default(ADMIN)
+  role      UserRole @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("users")
 }
 
 model Project {
-  id          String   @id @default(uuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
   image       String
@@ -48,12 +46,10 @@ model Project {
   date        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  @@map("projects")
 }
 
 model Service {
-  id          String   @id @default(uuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   icon        String?
   title       String
   description String
@@ -62,12 +58,10 @@ model Service {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  @@map("services")
 }
 
 model Skill {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   level     Int
   icon      String?
@@ -77,12 +71,10 @@ model Skill {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("skills")
 }
 
 model Experience {
-  id          String   @id @default(uuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   company     String
   position    String
   location    String
@@ -93,12 +85,10 @@ model Experience {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  @@map("experiences")
 }
 
 model Contact {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String
   subject   String?
@@ -106,12 +96,10 @@ model Contact {
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("contacts")
 }
 
 model SocialLink {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   icon      String?
   label     String
   url       String
@@ -120,46 +108,34 @@ model SocialLink {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("social_links")
 }
 
 model About {
-  id               String   @id @default(uuid())
-  name             String
-  title            String   
-  subtitle         String?  
-  bio              String   
-  description      String?  
-  
-  // Stats for display
-  yearsExperience  Int     
-  projectsCompleted Int    
-  openSource       Int      
-  
-  // Additional info
-  globalReachText  String?  @default("Creating solutions that connect people worldwide")
-  
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  @@map("about")
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  title             String
+  subtitle          String?
+  bio               String
+  description       String?
+  yearsExperience   Int
+  projectsCompleted Int
+  openSource        Int
+  globalReachText   String? @default("Creating solutions that connect people worldwide")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
-model UploadFile  {
-  id               String   @id @default(uuid())
-  avatar           String?
-  resume           String?  
-  logo             String?
-  
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  @@map("uploadFile ")
+model UploadFile {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  avatar    String?
+  resume    String?
+  logo      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ContactMethod {
-  id          String   @id @default(uuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   icon        String?
   title       String
   value       String
@@ -169,8 +145,4 @@ model ContactMethod {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  @@map("contact_methods")
 }
-
-

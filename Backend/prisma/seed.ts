@@ -39,7 +39,7 @@ async function main() {
 
   // Create About/Profile
    const about = await prisma.about.upsert({
-    where: { id: '1' },
+    where: { id: '65f123abc123abc123abc123' },
     update: {},
     create: {
       name: 'Prabin Tiwari',

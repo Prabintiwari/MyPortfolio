@@ -23,7 +23,7 @@ const projectSchema = z.object({
 const updateProjectSchema = projectSchema.partial();
 
 const projectIdParamsSchema = z.object({
-  projectId: z.string().uuid("Invalid project ID"),
+  projectId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid project ID"),
 });
 
 const projectQuerySchema = z.object({
