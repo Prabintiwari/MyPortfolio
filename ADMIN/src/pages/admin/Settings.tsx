@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
+import { authService } from "../../services/authService";
 
 const Settings = () => {
   const { user, logout } = useAuth();
@@ -101,11 +102,14 @@ const Settings = () => {
     setSaving(true);
 
     try {
-      await api.put("/auth/password", {
+      await authService.changePassword({
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       });
       setSuccess("Password changed successfully");
+      setTimeout(() => {
+        setSuccess("");
+      }, 5000);
       setPasswordData({
         currentPassword: "",
         newPassword: "",

@@ -8,6 +8,6 @@ router.post("/login", login);
 
 router.get("/me", authenticateToken, getCurrentUser);
 
-router.get("/password", authenticateToken, changePassword);
+router.put("/password", authenticateToken, changePassword);
 
 export default router;

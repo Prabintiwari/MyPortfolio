@@ -8,3 +8,7 @@ export interface User {
   name: string;
   role: string;
 }
+export interface changePassword {
+  currentPassword: string;
+  newPassword: string;
+}

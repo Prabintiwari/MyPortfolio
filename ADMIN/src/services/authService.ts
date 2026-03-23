@@ -1,4 +1,4 @@
-import type { Auth } from "../types/auth.types";
+import type { Auth, changePassword } from "../types/auth.types";
 import api from "./api";
 
 export const authService = {
@@ -22,5 +22,9 @@ export const authService = {
   getUser: () => {
     const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
+  },
+  changePassword: async (credentials: changePassword) => {
+    const { data } = await api.put("/auth/password", credentials);
+    return data;
   },
 };
