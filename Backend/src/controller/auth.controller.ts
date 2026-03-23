@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { AuthRequest, generateToken } from "../middleware/auth";
 import prisma from "../config/prisma";
-import { loginSchema } from "../schema";
+import { loginSchema, passwordChangeSchema } from "../schema";
 import { ZodError } from "zod";
 
 // Login admin
@@ -100,16 +100,10 @@ const getCurrentUser = async (req: AuthRequest, res: Response) => {
 // change password
 const changePassword = async (req: AuthRequest, res: Response) => {
   try {
-    const { currentPassword, newPassword,email } = req.body;
-    const normalizedEmail = email.toLowerCase();
-    if (!normalizedEmail) {
-      return res.status(400).json({
-        success: false,
-        message: "Email is required!",
-      });
-    }
+    const { currentPassword, newPassword } = passwordChangeSchema.parse(req.body);
+    const userId = req.id;
     const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -129,7 +123,7 @@ const changePassword = async (req: AuthRequest, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await prisma.user.update({
-      where: { id: user.id },
+      where: { id: userId },
       data: { password: hashedPassword },
     });
 

@@ -7,9 +7,12 @@ const loginSchema = z
   })
 
   const passwordChangeSchema = z.object({
-    currentPassword: z.string().min(1, "Password is required"),
-    newPassword: z.string().min(1, "Password is required"),
+    currentPassword: z.string().min(1, "currentPassword is required"),
+    newPassword: z.string().min(1, "newPassword is required"),
+  }).refine((data) => data.currentPassword !== data.newPassword, {
+    message: "New password must be different from current password",
+    path: ["newPassword"],
   })
 
 
-export {  loginSchema };
+export {  loginSchema,passwordChangeSchema };
