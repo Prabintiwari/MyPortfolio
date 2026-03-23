@@ -99,25 +99,50 @@ const getCurrentUser = async (req: AuthRequest, res: Response) => {
 
 // change password
 const changePassword = async (req: AuthRequest, res: Response) => {
-  const { currentPassword, newPassword, email } = req.body();
-  const userId = req.id;
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      createdAt: true,
-    },
-  });
+  try {
+    const { currentPassword, newPassword,email } = req.body;
+    const normalizedEmail = email.toLowerCase();
+    if (!normalizedEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required!",
+      });
+    }
+    const user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
 
-  if (!user) {
-    return res.status(404).json({
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (error: any) {
+    res.status(500).json({
       success: false,
-      message: "User not found",
+      message: error.message,
     });
   }
 };
 
-export { login, getCurrentUser };
+export { login, getCurrentUser, changePassword };
